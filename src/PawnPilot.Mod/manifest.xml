@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Manifest>
+  <ID>pawnpilot</ID>
+  <Name>PawnPilot</Name>
+  <Author>detyse</Author>
+  <ModVersion>0.1.0</ModVersion>
+  <Description>Local AI bridge. Exposes selected visible game state and allows an attached MCP client to perform game actions. Actions can affect your current run and its saves. Disabling the mod removes remote control; it does not undo actions already taken. No custom items or save format are added.</Description>
+  <!-- Do not equate Steam patch labels with the game's internal VERSION string.
+       Add exact supported versions after the first in-game compatibility test. -->
+  <GameVersions />
+  <Prerequisites />
+  <Assemblies>
+    <Assembly>PawnPilot.Contracts.dll</Assembly>
+    <Assembly>PawnPilot.Mod.dll</Assembly>
+  </Assemblies>
+  <Capabilities>
+    <Capability>network</Capability>
+  </Capabilities>
+</Manifest>
