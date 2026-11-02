@@ -6,9 +6,9 @@ using System.Text.Json;
 using ModelContextProtocol.Client;
 using ModelContextProtocol.Protocol;
 using Newtonsoft.Json;
-using PawnPilot.Contracts;
-using PawnPilot.Mcp;
-using PawnPilot.Mod;
+using PSMcp.Contracts;
+using PSMcp.Server;
+using PSMcp.Mod;
 
 var passed = 0;
 void Check(bool condition, string name)
@@ -63,7 +63,7 @@ using (var queue = new MainThreadQueue())
     Check((await queue.Enqueue(() => BridgeResponse.Ok()).Completion).ErrorCode == "bridge_stopped", "shutdown refuses new work");
 }
 
-var outputRoot = Path.Combine(Path.GetTempPath(), "PawnPilot-tests-" + Guid.NewGuid().ToString("N"));
+var outputRoot = Path.Combine(Path.GetTempPath(), "probably-stolen-mcp-tests-" + Guid.NewGuid().ToString("N"));
 Directory.CreateDirectory(outputRoot);
 var connectionFile = Path.Combine(outputRoot, "connection.json");
 using var probe = new TcpListener(IPAddress.Loopback, 0);
@@ -87,7 +87,7 @@ var gameThread = new Thread(() =>
         networkQueue.Drain();
         Thread.Sleep(5);
     }
-}) { IsBackground = true, Name = "PawnPilot fake game main thread" };
+}) { IsBackground = true, Name = "Probably Stolen MCP fake game main thread" };
 gameThread.Start();
 ready.Wait();
 try
@@ -117,12 +117,12 @@ try
     using var badClient = new BridgeClient(badFile);
     Check((await badClient.Health()).ErrorCode == "invalid_connection", "MCP cannot send the token to a remote host");
 
-    var mcpDll = args.Length == 1 ? Path.GetFullPath(args[0]) : Path.Combine(AppContext.BaseDirectory, "PawnPilot.Mcp.dll");
+    var mcpDll = args.Length == 1 ? Path.GetFullPath(args[0]) : Path.Combine(AppContext.BaseDirectory, "PSMcp.Server.dll");
     var dotnet = Environment.GetEnvironmentVariable("DOTNET_HOST_PATH") ?? "dotnet";
     using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(30));
     var transport = new StdioClientTransport(new StdioClientTransportOptions
     {
-        Name = "PawnPilot integration test",
+        Name = "Probably Stolen MCP integration test",
         Command = dotnet,
         Arguments = [mcpDll, "--connection", connectionFile]
     });

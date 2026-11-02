@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/PSMcp.Contracts/PSMcp.Contracts.csproj" />
+    <Project Path="src/PSMcp.Mod/PSMcp.Mod.csproj" />
+    <Project Path="src/PSMcp.Server/PSMcp.Server.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/PSMcp.SmokeTests/PSMcp.SmokeTests.csproj" />
+  </Folder>
+</Solution>

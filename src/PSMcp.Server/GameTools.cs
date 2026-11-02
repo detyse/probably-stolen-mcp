@@ -2,15 +2,15 @@ using System.ComponentModel;
 using System.Text.Json;
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
-using PawnPilot.Contracts;
+using PSMcp.Contracts;
 
-namespace PawnPilot.Mcp;
+namespace PSMcp.Server;
 
 [McpServerToolType]
 public sealed class GameTools(BridgeClient bridge)
 {
     [McpServerTool(Name = "get_bridge_status", ReadOnly = true, OpenWorld = false)]
-    [Description("Check whether the authenticated PawnPilot game bridge is reachable. This does not require a loaded save. Use get_game_state to inspect readiness.")]
+    [Description("Check whether the authenticated Probably Stolen MCP game bridge is reachable. This does not require a loaded save. Use get_game_state to inspect readiness.")]
     public async Task<CallToolResult> GetBridgeStatus(CancellationToken cancellationToken) => Reply(await bridge.Health(cancellationToken));
 
     [McpServerTool(Name = "get_game_state", ReadOnly = true, OpenWorld = false)]

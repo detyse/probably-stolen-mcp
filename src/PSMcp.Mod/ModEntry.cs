@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Concurrent;
 using Newtonsoft.Json;
-using PawnPilot.Contracts;
+using PSMcp.Contracts;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace PawnPilot.Mod
+namespace PSMcp.Mod
 {
     public sealed class ModEntry : IMod
     {
@@ -29,7 +29,7 @@ namespace PawnPilot.Mod
                 var queue = new MainThreadQueue();
                 var errors = new ConcurrentQueue<string>();
                 session = new GameSession(new GameAdapter(), state => JsonConvert.SerializeObject(state, HttpBridge.JsonSettings));
-                host = new GameObject("PawnPilot.Bridge");
+                host = new GameObject("PSMcp.Bridge");
                 UnityEngine.Object.DontDestroyOnLoad(host);
                 var pump = host.AddComponent<BridgePump>();
                 pump.Initialize(queue, errors, message => log?.Error(message));

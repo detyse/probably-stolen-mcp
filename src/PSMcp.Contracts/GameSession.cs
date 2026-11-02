@@ -1,4 +1,4 @@
-namespace PawnPilot.Contracts;
+namespace PSMcp.Contracts;
 
 /// <summary>Implemented by the game adapter; every call must run on the game thread.</summary>
 public interface IGameAdapter
