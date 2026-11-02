@@ -1,4 +1,4 @@
-# PawnPilot
+# Probably Automated
 
 《深空当铺：可能是偷的》（Probably Stolen）的全 C# AI 接入项目。它提供游戏 Mod 和 MCP 服务，让支持 MCP 的 AI 客户端读取游戏状态、执行当前允许的操作。模型与决策由 AI 客户端负责，项目本身不内置模型。
 
