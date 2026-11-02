@@ -6,9 +6,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using PawnPilot.Contracts;
+using PSMcp.Contracts;
 
-namespace PawnPilot.Mod
+namespace PSMcp.Mod
 {
     public sealed class HttpBridge : IDisposable
     {
@@ -86,7 +86,7 @@ namespace PawnPilot.Mod
                 var path = request.Url?.AbsolutePath;
                 if (path == "/health" && request.HttpMethod == "GET")
                 {
-                    await Reply(context, 200, BridgeResponse.Ok(message: "PawnPilot bridge is listening. Use /state to check game readiness."));
+                    await Reply(context, 200, BridgeResponse.Ok(message: "Probably Stolen MCP bridge is listening. Use /state to check game readiness."));
                     return;
                 }
 

@@ -4,7 +4,7 @@
     <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="../PawnPilot.Contracts/PawnPilot.Contracts.csproj" />
+    <ProjectReference Include="../PSMcp.Contracts/PSMcp.Contracts.csproj" />
     <PackageReference Include="ModelContextProtocol" Version="2.3.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.14" />
   </ItemGroup>

@@ -1,4 +1,4 @@
-# Probably Automated
+# Probably Stolen MCP
 
 《深空当铺：可能是偷的》（Probably Stolen）的全 C# AI 接入项目。它提供游戏 Mod 和 MCP 服务，让支持 MCP 的 AI 客户端读取游戏状态、执行当前允许的操作。模型与决策由 AI 客户端负责，项目本身不内置模型。
 
@@ -10,10 +10,10 @@
 Agent / AI 客户端
        │ MCP / stdio：客户端启动并管理服务进程
        ▼
-PawnPilot.Mcp（.NET 10）
+PSMcp.Server（.NET 10）
        │ HTTP：127.0.0.1:15527，Bearer 令牌
        ▼
-PawnPilot.Mod（.NET Standard 2.1）
+PSMcp.Mod（.NET Standard 2.1）
        │ 主线程队列
        ▼
 游戏状态与原生操作接口
@@ -46,14 +46,14 @@ Python、uv、Unity Editor 和完整 Visual Studio 均非必需。Mod 与 MCP �
 
 ## 快速开始
 
-以下示例使用项目目录 `D:\Projects\PawnPilot`，游戏目录 `D:\Apps\Steam\steamapps\common\Probably Stolen`。请按自己的安装位置调整。已有构建产物时，可从第 2 步开始。
+以下示例使用项目目录 `D:\Projects\probably-stolen-mcp`，游戏目录 `D:\Apps\Steam\steamapps\common\Probably Stolen`。请按自己的安装位置调整。已有构建产物时，可从第 2 步开始。
 
 ### 1. 构建项目
 
 在 PowerShell 中执行：
 
 ```powershell
-Set-Location 'D:\Projects\PawnPilot'
+Set-Location 'D:\Projects\probably-stolen-mcp'
 .\scripts\Build.ps1 -GamePath 'D:\Apps\Steam\steamapps\common\Probably Stolen'
 ```
 
@@ -61,12 +61,12 @@ Set-Location 'D:\Projects\PawnPilot'
 
 ```text
 artifacts/
-  mod/PawnPilot/
+  mod/probably-stolen-mcp/
     manifest.xml
-    PawnPilot.Mod.dll
-    PawnPilot.Contracts.dll
+    PSMcp.Mod.dll
+    PSMcp.Contracts.dll
   mcp/
-    PawnPilot.Mcp.dll
+    PSMcp.Server.dll
     ... MCP 的运行依赖
   mcp-config.json
 ```
@@ -75,6 +75,8 @@ artifacts/
 
 ### 2. 安装并启用 Mod
 
+**从 PawnPilot 升级。** 先在游戏内停用旧 Mod，退出后将旧的 `Mods/PawnPilot` 文件夹移出 `Mods`。按下面的步骤启用新 Mod，它会创建新的连接文件。若设置过自定义端口，请在新 Mod 配置中重新设置。重新构建后，用生成的 `mcp-config.json` 替换客户端中的旧服务条目，并更新自定义连接路径及环境变量 `PSMCP_CONNECTION_FILE`、`PSMCP_GAME_PATH`。
+
 **先关闭游戏。** 在仓库根目录执行以下命令，将三个 Mod 文件复制到游戏中：
 
 ```powershell
@@ -82,31 +84,31 @@ $gamePath = 'D:\Apps\Steam\steamapps\common\Probably Stolen'
 if (!(Test-Path -LiteralPath (Join-Path $gamePath 'Probably Stolen.exe'))) {
     throw '游戏目录不正确，请修改 $gamePath。'
 }
-$modPath = Join-Path $gamePath 'Mods\PawnPilot'
+$modPath = Join-Path $gamePath 'Mods\probably-stolen-mcp'
 New-Item -ItemType Directory -Path $modPath -Force | Out-Null
-foreach ($file in @('manifest.xml', 'PawnPilot.Mod.dll', 'PawnPilot.Contracts.dll')) {
-    Copy-Item -LiteralPath (Join-Path '.\artifacts\mod\PawnPilot' $file) -Destination $modPath -Force
+foreach ($file in @('manifest.xml', 'PSMcp.Mod.dll', 'PSMcp.Contracts.dll')) {
+    Copy-Item -LiteralPath (Join-Path '.\artifacts\mod\probably-stolen-mcp' $file) -Destination $modPath -Force
 }
 ```
 
-也可以手动把 `artifacts/mod/PawnPilot` 文件夹复制到游戏的 `Mods` 目录。最终结构应为：
+也可以手动把 `artifacts/mod/probably-stolen-mcp` 文件夹复制到游戏的 `Mods` 目录。最终结构应为：
 
 ```text
 Probably Stolen/
   Probably Stolen.exe
   Mods/
-    PawnPilot/
+    probably-stolen-mcp/
       manifest.xml
-      PawnPilot.Mod.dll
-      PawnPilot.Contracts.dll
+      PSMcp.Mod.dll
+      PSMcp.Contracts.dll
 ```
 
-启动游戏，在 Mods 菜单启用 PawnPilot，并按提示重启。Mod 目录中只放上述三个文件；MCP 的依赖留在 `artifacts/mcp`，游戏的 Unity、Harmony、Newtonsoft.Json 等库由游戏提供。
+启动游戏，在 Mods 菜单启用 Probably Stolen MCP，并按提示重启。Mod 目录中只放上述三个文件；MCP 的依赖留在 `artifacts/mcp`，游戏的 Unity、Harmony、Newtonsoft.Json 等库由游戏提供。
 
 Mod 成功启动后监听 `127.0.0.1:15527`，生成本次运行的认证令牌，并写入：
 
 ```text
-%USERPROFILE%\AppData\LocalLow\Questing Goose Studio\Probably Stolen\ModData\pawnpilot\connection.json
+%USERPROFILE%\AppData\LocalLow\Questing Goose Studio\Probably Stolen\ModData\probably-stolen-mcp\connection.json
 ```
 
 以 Mod 日志输出的实际路径为准。文件中包含连接地址和控制游戏所需的令牌，不要分享或提交到仓库。端口可在游戏的 Mod 配置中修改，重启生效；MCP 每次调用会重新读取连接文件。
@@ -115,17 +117,17 @@ Mod 成功启动后监听 `127.0.0.1:15527`，生成本次运行的认证令牌�
 
 ### 3. 配置 MCP 客户端
 
-构建生成的 [artifacts/mcp-config.json](artifacts/mcp-config.json) 包含本机可用的绝对路径。对于采用 `mcpServers` JSON 格式的客户端，将其中的 `pawnpilot` 条目合并到已有配置，保留其他服务。
+构建生成的 [artifacts/mcp-config.json](artifacts/mcp-config.json) 包含本机可用的绝对路径。对于采用 `mcpServers` JSON 格式的客户端，将其中的 `probably-stolen-mcp` 条目合并到已有配置，保留其他服务。
 
 本例对应的配置为：
 
 ```json
 {
   "mcpServers": {
-    "pawnpilot": {
+    "probably-stolen-mcp": {
       "command": "C:\\Program Files\\dotnet\\dotnet.exe",
       "args": [
-        "D:\\Projects\\PawnPilot\\artifacts\\mcp\\PawnPilot.Mcp.dll"
+        "D:\\Projects\\probably-stolen-mcp\\artifacts\\mcp\\PSMcp.Server.dll"
       ]
     }
   }
@@ -137,7 +139,7 @@ Mod 成功启动后监听 `127.0.0.1:15527`，生成本次运行的认证令牌�
 通常由客户端启动服务，无需提前在终端手动运行。以下命令仅用于检查启动方式：
 
 ```powershell
-& 'C:\Program Files\dotnet\dotnet.exe' '.\artifacts\mcp\PawnPilot.Mcp.dll' --help
+& 'C:\Program Files\dotnet\dotnet.exe' '.\artifacts\mcp\PSMcp.Server.dll' --help
 ```
 
 不加 `--help` 会启动 stdio 服务并等待协议请求，这是正常行为。日志写入 stderr，stdout 专用于 MCP 协议。
@@ -146,13 +148,13 @@ Mod 成功启动后监听 `127.0.0.1:15527`，生成本次运行的认证令牌�
 
 ```json
 [
-  "D:\\Projects\\PawnPilot\\artifacts\\mcp\\PawnPilot.Mcp.dll",
+  "D:\\Projects\\probably-stolen-mcp\\artifacts\\mcp\\PSMcp.Server.dll",
   "--connection",
-  "C:\\实际数据目录\\ModData\\pawnpilot\\connection.json"
+  "C:\\实际数据目录\\ModData\\probably-stolen-mcp\\connection.json"
 ]
 ```
 
-也可设置 MCP 进程的环境变量 `PAWNPILOT_CONNECTION_FILE`；`--connection` 优先。客户端需要能启动本地进程并访问游戏的连接文件；仅支持云端远程 MCP 的客户端无法直接使用这个 stdio 服务。
+也可设置 MCP 进程的环境变量 `PSMCP_CONNECTION_FILE`；`--connection` 优先。客户端需要能启动本地进程并访问游戏的连接文件；仅支持云端远程 MCP 的客户端无法直接使用这个 stdio 服务。
 
 ### 4. 验证连接
 
@@ -193,7 +195,7 @@ Mod 成功启动后监听 `127.0.0.1:15527`，生成本次运行的认证令牌�
 
 先做只读检查：
 
-> 使用 pawnpilot 的 get_bridge_status 和 get_game_state 检查连接，告诉我是否载入存档、当前现金、顾客和可用动作。先不要执行动作。
+> 使用 probably-stolen-mcp 的 get_bridge_status 和 get_game_state 检查连接，告诉我是否载入存档、当前现金、顾客和可用动作。先不要执行动作。
 
 确认连接后，可做一次操作：
 
@@ -223,9 +225,9 @@ Mod 成功启动后监听 `127.0.0.1:15527`，生成本次运行的认证令牌�
 在 PowerShell 中定义下面的辅助函数。它每次调用都读取当前令牌，不会把令牌打印出来：
 
 ```powershell
-$connectionPath = Join-Path $env:USERPROFILE 'AppData\LocalLow\Questing Goose Studio\Probably Stolen\ModData\pawnpilot\connection.json'
+$connectionPath = Join-Path $env:USERPROFILE 'AppData\LocalLow\Questing Goose Studio\Probably Stolen\ModData\probably-stolen-mcp\connection.json'
 
-function Invoke-PawnPilot {
+function Invoke-PSMcp {
     param(
         [Parameter(Mandatory)]
         [ValidateSet('health', 'state', 'actions')]
@@ -248,8 +250,8 @@ function Invoke-PawnPilot {
     Invoke-RestMethod @requestArgs
 }
 
-Invoke-PawnPilot -Path health
-$stateReply = Invoke-PawnPilot -Path state
+Invoke-PSMcp -Path health
+$stateReply = Invoke-PSMcp -Path state
 $stateReply | ConvertTo-Json -Depth 12
 ```
 
@@ -260,13 +262,13 @@ $stateReply | ConvertTo-Json -Depth 12
 以下示例会改变游戏进度。在同一个 PowerShell 会话中执行，先查看可用动作，再输入你要执行的完整动作名：
 
 ```powershell
-$stateReply = Invoke-PawnPilot -Path state
+$stateReply = Invoke-PSMcp -Path state
 if (!$stateReply.success) { throw $stateReply.message }
 $stateReply.state.availableActions | Format-Table name, description
 $actionName = Read-Host '输入上表中要执行的完整动作名'
 
 # 输入期间游戏可能变化，提交前再取一次快照。
-$stateReply = Invoke-PawnPilot -Path state
+$stateReply = Invoke-PSMcp -Path state
 if (!$stateReply.success) { throw $stateReply.message }
 if ($actionName -notin @($stateReply.state.availableActions.name)) {
     throw '这个动作当前不可用，请重新观察。'
@@ -277,9 +279,9 @@ $actionJson = [ordered]@{
     requestId = [guid]::NewGuid().ToString('D')
 } | ConvertTo-Json -Compress
 
-$actionReply = Invoke-PawnPilot -Path actions -ActionJson $actionJson
+$actionReply = Invoke-PSMcp -Path actions -ActionJson $actionJson
 $actionReply | ConvertTo-Json -Depth 12
-Invoke-PawnPilot -Path state | ConvertTo-Json -Depth 12
+Invoke-PSMcp -Path state | ConvertTo-Json -Depth 12
 ```
 
 如果响应丢失，先查状态。重试同一次命令时，复用上面的 `$actionJson`，不要重新生成 UUID。POST 请求必须是带 Content-Length 的 JSON，正文不超过 16 KiB；上述 PowerShell 调用会按此方式发送。
@@ -292,7 +294,7 @@ Invoke-PawnPilot -Path state | ConvertTo-Json -Depth 12
 |---|---|
 | 找不到 `dotnet` | 安装 SDK 后重新打开终端；构建脚本也会尝试 `C:\Program Files\dotnet\dotnet.exe`。客户端可直接填写绝对路径。 |
 | 缺少游戏程序集 / GamePath 错误 | `-GamePath` 应指向包含 `Probably Stolen.exe` 和 `Probably Stolen_Data` 的目录。 |
-| Mods 菜单找不到 PawnPilot | 检查是否多套了一层目录，以及 `Mods/PawnPilot/manifest.xml` 是否存在。 |
+| Mods 菜单找不到 Probably Stolen MCP | 检查是否多套了一层目录，以及 `Mods/probably-stolen-mcp/manifest.xml` 是否存在。 |
 | `connection_file_unavailable` | 确认 Mod 已启用并重启游戏；查看日志中的真实连接文件路径，必要时配置 `--connection`。 |
 | `bridge_unavailable` | 游戏可能未启动、Mod 启动失败，或连接文件来自上一次运行。查看游戏日志。 |
 | HTTP 401 / `unauthorized` | 令牌已失效；重新读取当前连接文件。MCP 和上面的辅助函数会自动重读。 |
@@ -310,7 +312,7 @@ Invoke-PawnPilot -Path state | ConvertTo-Json -Depth 12
 %USERPROFILE%\AppData\LocalLow\Questing Goose Studio\Probably Stolen\Player.log
 ```
 
-若默认端口被占用，在游戏的 Mod 配置中修改 PawnPilot 的 `port`，重启后再连接。
+若默认端口被占用，在游戏的 Mod 配置中修改 Probably Stolen MCP 的 `port`，重启后再连接。
 
 **Windows 应用控制拦截：** 若运行时出现 `0x800711C7` 或“应用程序控制策略已阻止此文件”，表示系统拒绝加载 DLL。编译成功仍可能遇到此问题。查看事件查看器中的 `Microsoft-Windows-CodeIntegrity/Operational`，核实被拦截文件和适用策略，并由设备策略管理方按本机开发软件流程处理；本文不提供关闭安全策略的步骤。`-SkipTests` 只能跳过测试完成打包，不能解决运行拦截。
 
@@ -320,7 +322,7 @@ Invoke-PawnPilot -Path state | ConvertTo-Json -Depth 12
 
 移动项目目录后，重新构建以更新 `artifacts/mcp-config.json` 中的绝对路径，并同步修改客户端配置。
 
-在 Mods 菜单停用 PawnPilot 并重启游戏，即可停止游戏桥接；同时可从 AI 客户端移除服务配置。停用不会撤销已经发生的游戏操作。本版本不添加自定义物品或存档格式。
+在 Mods 菜单停用 Probably Stolen MCP 并重启游戏，即可停止游戏桥接；同时可从 AI 客户端移除服务配置。停用不会撤销已经发生的游戏操作。本版本不添加自定义物品或存档格式。
 
 ## 开发与验证
 
@@ -329,7 +331,7 @@ Invoke-PawnPilot -Path state | ConvertTo-Json -Depth 12
 | 参数 / 环境变量 | 用途 |
 |---|---|
 | `-GamePath <目录>` | 指定本机游戏目录 |
-| `PAWNPILOT_GAME_PATH` | 设置后可省略 `-GamePath` |
+| `PSMCP_GAME_PATH` | 设置后可省略 `-GamePath` |
 | `-NoRestore` | 使用当前目录中已还原的依赖；首次构建或迁移目录后应先还原 |
 | `-SkipTests` | 跳过测试、只构建和打包；不能据此声称运行验证通过 |
 
@@ -344,7 +346,7 @@ Invoke-PawnPilot -Path state | ConvertTo-Json -Depth 12
 截至 **2026-10-31** 的开发验证记录：
 
 - 迁移前，29 项协议与 MCP 检查全部通过，包括对发布产物的验证。
-- 迁至 `D:\Projects\PawnPilot` 后，编译与打包成功，0 警告、0 错误；测试运行被 Windows 应用控制策略拦截，新目录运行验证尚未完成。
+- 更名前迁移开发目录后，编译与打包成功，0 警告、0 错误；测试运行被 Windows 应用控制策略拦截，新目录运行验证尚未完成。
 - 尚未完成真实游戏中的 Mod 加载、扫描与动作验证。
 
 ### 主线程与动作处理
@@ -353,7 +355,7 @@ Invoke-PawnPilot -Path state | ConvertTo-Json -Depth 12
 
 ### 实机验证顺序
 
-1. 按[官方指南](https://github.com/dragonpan2/probably-stolen-modding/blob/main/ModdingGuide.zh-CN.md)在游戏可执行文件旁创建空的 `dev.txt`，用 F8 打开开发控制台，执行 `mod-scan pawnpilot`。确认能力声明覆盖扫描结果且无拒绝项；当前清单声明 `network`。
+1. 按[官方指南](https://github.com/dragonpan2/probably-stolen-modding/blob/main/ModdingGuide.zh-CN.md)在游戏可执行文件旁创建空的 `dev.txt`，用 F8 打开开发控制台，执行 `mod-scan probably-stolen-mcp`。确认能力声明覆盖扫描结果且无拒绝项；当前清单声明 `network`。
 2. 启用 Mod 并重启，在主菜单检查 `get_bridge_status` 和未载入存档的状态。
 3. 载入测试存档，对比现金、租金、顾客、对话选项和背包。
 4. 执行一个当前允许的动作并检查效果；用相同 UUID 和参数重试，确认没有重复操作。
@@ -363,10 +365,10 @@ Invoke-PawnPilot -Path state | ConvertTo-Json -Depth 12
 
 | 路径 | 职责 |
 |---|---|
-| [src/PawnPilot.Contracts](src/PawnPilot.Contracts) | 协议模型、快照版本、请求去重和主线程队列 |
-| [src/PawnPilot.Mod](src/PawnPilot.Mod) | 官方 IMod 入口、游戏适配器和本机 HTTP 服务 |
-| [src/PawnPilot.Mcp](src/PawnPilot.Mcp) | 官方 C# MCP SDK、stdio 工具和桥接客户端 |
-| [tests/PawnPilot.SmokeTests](tests/PawnPilot.SmokeTests) | 行为测试和端到端协议测试 |
+| [src/PSMcp.Contracts](src/PSMcp.Contracts) | 协议模型、快照版本、请求去重和主线程队列 |
+| [src/PSMcp.Mod](src/PSMcp.Mod) | 官方 IMod 入口、游戏适配器和本机 HTTP 服务 |
+| [src/PSMcp.Server](src/PSMcp.Server) | 官方 C# MCP SDK、stdio 工具和桥接客户端 |
+| [tests/PSMcp.SmokeTests](tests/PSMcp.SmokeTests) | 行为测试和端到端协议测试 |
 | [scripts/Build.ps1](scripts/Build.ps1) | 构建、测试、打包并生成客户端配置 |
 | [scripts/Inspect-GameApi.ps1](scripts/Inspect-GameApi.ps1) | 只读查看本机游戏程序集元数据，不执行游戏代码 |
 

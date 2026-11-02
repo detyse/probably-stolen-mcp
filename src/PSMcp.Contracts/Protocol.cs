@@ -1,10 +1,10 @@
-namespace PawnPilot.Contracts;
+namespace PSMcp.Contracts;
 
 public static class Protocol
 {
     public const int Version = 1;
     public const int DefaultPort = 15527;
-    public const string ModId = "pawnpilot";
+    public const string ModId = "probably-stolen-mcp";
 }
 
 public sealed class ConnectionInfo

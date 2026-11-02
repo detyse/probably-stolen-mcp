@@ -1,15 +1,16 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using PawnPilot.Mcp;
+using PSMcp.Contracts;
+using PSMcp.Server;
 
 if (args.Contains("--help"))
 {
-    Console.WriteLine("PawnPilot MCP server (stdio)\nUsage: PawnPilot.Mcp [--connection <connection.json>]\nEnvironment: PAWNPILOT_CONNECTION_FILE overrides the default Unity ModData path.\nEnable the game Mod first; it creates connection.json on startup.");
+    Console.WriteLine("Probably Stolen MCP server (stdio)\nUsage: PSMcp.Server [--connection <connection.json>]\nEnvironment: PSMCP_CONNECTION_FILE overrides the default Unity ModData path.\nEnable the game Mod first; it creates connection.json on startup.");
     return;
 }
 
-string? connectionFile = Environment.GetEnvironmentVariable("PAWNPILOT_CONNECTION_FILE");
+string? connectionFile = Environment.GetEnvironmentVariable("PSMCP_CONNECTION_FILE");
 for (var i = 0; i < args.Length; i++)
 {
     if (args[i] == "--connection" && i + 1 < args.Length) connectionFile = args[++i];
@@ -21,7 +22,7 @@ for (var i = 0; i < args.Length; i++)
     }
 }
 connectionFile ??= Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-    "AppData", "LocalLow", "Questing Goose Studio", "Probably Stolen", "ModData", "pawnpilot", "connection.json");
+    "AppData", "LocalLow", "Questing Goose Studio", "Probably Stolen", "ModData", Protocol.ModId, "connection.json");
 
 var builder = Host.CreateApplicationBuilder(new HostApplicationBuilderSettings { Args = [] });
 builder.Logging.ClearProviders();

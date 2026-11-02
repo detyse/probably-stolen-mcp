@@ -1,6 +1,6 @@
 using System.Collections.Concurrent;
 
-namespace PawnPilot.Contracts;
+namespace PSMcp.Contracts;
 
 /// <summary>Bounded queue. Expired queued actions can never run in a later frame.</summary>
 public sealed class MainThreadQueue : IDisposable
@@ -63,7 +63,7 @@ public sealed class WorkTicket
     {
         if (Interlocked.CompareExchange(ref state, 1, 0) != 0) return;
         try { completion.TrySetResult(work()); }
-        catch { completion.TrySetResult(BridgeResponse.Error("game_error", "Unable to read the game. Check the PawnPilot game log.")); }
+        catch { completion.TrySetResult(BridgeResponse.Error("game_error", "Unable to read the game. Check the Probably Stolen MCP game log.")); }
         finally { Interlocked.Exchange(ref state, 2); }
     }
 }

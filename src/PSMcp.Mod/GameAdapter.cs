@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using PawnPilot.Contracts;
+using PSMcp.Contracts;
 
-namespace PawnPilot.Mod
+namespace PSMcp.Mod
 {
     /// <summary>Only this adapter touches game objects. Called exclusively from BridgePump.Update.</summary>
     public sealed class GameAdapter : IGameAdapter

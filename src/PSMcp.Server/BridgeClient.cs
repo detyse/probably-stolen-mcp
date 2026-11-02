@@ -1,9 +1,9 @@
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using PawnPilot.Contracts;
+using PSMcp.Contracts;
 
-namespace PawnPilot.Mcp;
+namespace PSMcp.Server;
 
 public sealed class BridgeClient : IDisposable
 {
@@ -32,7 +32,7 @@ public sealed class BridgeClient : IDisposable
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or JsonException)
         {
-            return BridgeResponse.Error("connection_file_unavailable", "Enable PawnPilot in the game's Mods menu and restart the game. Set --connection or PAWNPILOT_CONNECTION_FILE to the connection.json path shown in the Mod log.");
+            return BridgeResponse.Error("connection_file_unavailable", "Enable Probably Stolen MCP in the game's Mods menu and restart the game. Set --connection or PSMCP_CONNECTION_FILE to the connection.json path shown in the Mod log.");
         }
 
         if (connection?.ProtocolVersion != Protocol.Version)
@@ -68,7 +68,7 @@ public sealed class BridgeClient : IDisposable
         catch (HttpRequestException)
         {
             return BridgeResponse.Error(action == null ? "bridge_unavailable" : "action_outcome_unknown",
-                action == null ? "Cannot reach the Mod. Start the game with PawnPilot enabled."
+                action == null ? "Cannot reach the Mod. Start the game with Probably Stolen MCP enabled."
                     : "The connection failed; execution may have started. Read state before issuing a new action.", action?.RequestId);
         }
         catch (JsonException)

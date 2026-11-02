@@ -2,11 +2,11 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <ImplicitUsings>disable</ImplicitUsings>
-    <GamePath Condition="'$(GamePath)' == ''">$(PAWNPILOT_GAME_PATH)</GamePath>
+    <GamePath Condition="'$(GamePath)' == ''">$(PSMCP_GAME_PATH)</GamePath>
     <GameManagedPath>$(GamePath)/Probably Stolen_Data/Managed</GameManagedPath>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="../PawnPilot.Contracts/PawnPilot.Contracts.csproj" />
+    <ProjectReference Include="../PSMcp.Contracts/PSMcp.Contracts.csproj" />
     <Reference Include="Assembly-CSharp" HintPath="$(GameManagedPath)/Assembly-CSharp.dll" Private="false" />
     <Reference Include="UnityEngine.CoreModule" HintPath="$(GameManagedPath)/UnityEngine.CoreModule.dll" Private="false" />
     <Reference Include="UnityEngine" HintPath="$(GameManagedPath)/UnityEngine.dll" Private="false" />
@@ -16,6 +16,6 @@
     <None Update="manifest.xml" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
   <Target Name="ValidateGamePath" BeforeTargets="ResolveReferences">
-    <Error Condition="!Exists('$(GameManagedPath)/Assembly-CSharp.dll')" Text="Game DLLs not found. Set PAWNPILOT_GAME_PATH or pass -p:GamePath=&quot;path to Probably Stolen&quot;. Game DLLs must not be copied into the repository." />
+    <Error Condition="!Exists('$(GameManagedPath)/Assembly-CSharp.dll')" Text="Game DLLs not found. Set PSMCP_GAME_PATH or pass -p:GamePath=&quot;path to Probably Stolen&quot;. Game DLLs must not be copied into the repository." />
   </Target>
 </Project>
