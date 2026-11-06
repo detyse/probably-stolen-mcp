@@ -18,6 +18,13 @@ void Check(bool condition, string name)
     passed++;
 }
 
+if (args is ["--help-only", var helpServer])
+{
+    await HelpChecks.Run(helpServer, Check);
+    Console.WriteLine($"All {passed} standalone help checks passed. Game HTTP tests were not run.");
+    return;
+}
+
 GameSession Session(FakeGame game) => new(game, s => JsonConvert.SerializeObject(s, HttpBridge.JsonSettings));
 ActionRequest Command(GameSnapshot state, string action = "next_customer") => new()
 {
@@ -88,6 +95,9 @@ if (args.Length == 1 && args[0] == "--offline")
     Console.WriteLine($"All {passed} offline checks passed. HTTP connections and MCP end-to-end checks were NOT run; run scripts/Test.ps1 without -Offline for the full suite.");
     return;
 }
+
+var mcpDll = args.Length == 1 ? Path.GetFullPath(args[0]) : Path.Combine(AppContext.BaseDirectory, "PSMcp.Server.dll");
+await HelpChecks.Run(mcpDll, Check);
 
 var outputRoot = Path.Combine(Path.GetTempPath(), "PSMcp-tests-" + Guid.NewGuid().ToString("N"));
 Directory.CreateDirectory(outputRoot);
@@ -164,7 +174,6 @@ try
     using var badClient = new BridgeClient(badFile);
     Check((await badClient.Health()).ErrorCode == "invalid_connection", "MCP cannot send the token to a remote host");
 
-    var mcpDll = args.Length == 1 ? Path.GetFullPath(args[0]) : Path.Combine(AppContext.BaseDirectory, "PSMcp.Server.dll");
     var dotnet = Environment.GetEnvironmentVariable("DOTNET_HOST_PATH") ?? "dotnet";
     using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(30));
     var transport = new StdioClientTransport(new StdioClientTransportOptions
@@ -175,7 +184,7 @@ try
     });
     await using var client = await McpClient.CreateAsync(transport, cancellationToken: timeout.Token);
     var tools = await client.ListToolsAsync(cancellationToken: timeout.Token);
-    Check(tools.Select(t => t.Name).Order().SequenceEqual(new[] { "get_action_status", "get_available_actions", "get_bridge_status", "get_entity", "get_game_state", "get_inventory", "get_trade_state", "get_ui_state", "get_view", "perform_action" }), "real stdio MCP handshake exposes all ten tools");
+    Check(tools.Select(t => t.Name).Order().SequenceEqual(new[] { "get_action_status", "get_available_actions", "get_bridge_status", "get_entity", "get_game_state", "get_help", "get_inventory", "get_trade_state", "get_ui_state", "get_view", "perform_action" }), "real stdio MCP handshake exposes all eleven tools");
     var mcpState = await client.CallToolAsync("get_game_state", cancellationToken: timeout.Token);
     Check(mcpState.IsError != true && mcpState.StructuredContent.HasValue, "MCP returns structured game state");
     var state = mcpState.StructuredContent!.Value.GetProperty("state");
@@ -187,10 +196,17 @@ try
     var actionsResult = await client.CallToolAsync("get_available_actions", cancellationToken: timeout.Token);
     Check(actionsResult.IsError != true && actionsResult.StructuredContent!.Value.GetProperty("interaction").GetProperty("kind").GetString() == "ready",
         "available-action responses include the interaction wait state");
+    var actionBody = actionsResult.StructuredContent!.Value;
+    Check(actionBody.GetProperty("snapshotId").GetString() == state.GetProperty("snapshotId").GetString()
+        && actionBody.GetProperty("availableActions")[0].GetProperty("name").GetString() == "next_customer"
+        && actionBody.GetProperty("availableActions")[1].GetProperty("parameters")[0].GetProperty("name").GetString() == "value"
+        && actionBody.GetProperty("usage").GetProperty("tool").GetString() == "perform_action"
+        && actionBody.GetProperty("usage").GetProperty("helpTopic").GetString() == "actions"
+        && actionBody.TryGetProperty("limitations", out _), "action usage preserves real action names, parameter constraints and snapshots");
     var mcpArgs = new Dictionary<string, object?>
     {
-        ["action"] = "next_customer",
-        ["expectedSnapshotId"] = state.GetProperty("snapshotId").GetString(),
+        ["action"] = actionBody.GetProperty("availableActions")[0].GetProperty("name").GetString(),
+        ["expectedSnapshotId"] = actionBody.GetProperty("snapshotId").GetString(),
         ["requestId"] = Guid.NewGuid().ToString()
     };
     var actionResult = await client.CallToolAsync("perform_action", mcpArgs, cancellationToken: timeout.Token);
@@ -234,6 +250,12 @@ try
     using var unknownBody = new StringContent(System.Text.Json.JsonSerializer.Serialize(new { action = "set_value", requestId = Guid.NewGuid().ToString(),
         expectedSnapshotId = parameterState.State.SnapshotId, arguments = new { unexpected = "ignored?" } }), Encoding.UTF8, "application/json");
     Check((await http.PostAsync(connection.BaseUrl + "actions", unknownBody)).StatusCode == HttpStatusCode.BadRequest, "HTTP rejects unknown argument members instead of silently dropping them");
+
+    networkGame.GameLoaded = false;
+    var emptyActions = await client.CallToolAsync("get_available_actions", cancellationToken: timeout.Token);
+    Check(emptyActions.IsError != true && emptyActions.StructuredContent!.Value.GetProperty("availableActions").GetArrayLength() == 0
+        && emptyActions.StructuredContent.Value.GetProperty("usage").GetProperty("emptyList").GetString()!.Length > 0
+        && networkGame.Actions == 3, "empty action lists explain the next step without executing a command");
 
     File.Delete(connectionFile);
     var unavailable = await client.CallToolAsync("get_bridge_status", cancellationToken: timeout.Token);

@@ -10,11 +10,11 @@ namespace PSMcp.Server;
 public sealed class GameTools(BridgeClient bridge)
 {
     [McpServerTool(Name = "get_bridge_status", ReadOnly = true, OpenWorld = false)]
-    [Description("Check whether the authenticated Probably Automated game bridge is reachable. This does not require a loaded save. Use get_game_state to inspect readiness.")]
+    [Description("Check whether the authenticated Probably Automated game bridge is reachable. success means connected, not that a save is loaded. Use get_game_state for readiness. get_help works even if this connection check fails.")]
     public async Task<CallToolResult> GetBridgeStatus(CancellationToken cancellationToken) => Reply(await bridge.Health(cancellationToken));
 
     [McpServerTool(Name = "get_game_state", ReadOnly = true, OpenWorld = false)]
-    [Description("Read a main-thread snapshot of Probably Stolen: phase, cash, rent, customer, dialogue, inventory, current trade (counter items, known features, quotes and visible UI), interaction wait state and available actions. Use snapshotId for the next action. Unknown values may be null. public_claim features are unverified; quotes are UI prices, not true values. Re-read after actions or animations.")]
+    [Description("Read a main-thread snapshot: phase, cash, rent, customer, dialogue, visible inventory, trade, controls, interaction and availableActions. Fields are under state. Copy state.availableActions[].name into perform_action.action and state.snapshotId into expectedSnapshotId; use only that action's parameters for arguments. public_claim features are unverified; quotes are UI prices, not true values. Re-read after actions/animations. See get_help(topic=actions) when unsure.")]
     public async Task<CallToolResult> GetGameState(CancellationToken cancellationToken) => Reply(await bridge.State(cancellationToken));
 
     [McpServerTool(Name = "get_trade_state", ReadOnly = true, OpenWorld = false)]
@@ -29,7 +29,7 @@ public sealed class GameTools(BridgeClient bridge)
     }
 
     [McpServerTool(Name = "get_inventory", ReadOnly = true, OpenWorld = false)]
-    [Description("Read rendered containers and their items: IDs, ownership, shape, grid position and known features. Opened nested containers appear separately with parentItemId; unopened contents are not read. Optionally filter by a current container ID and paginate items. Use item_move actions for exact quantities and placement.")]
+    [Description("Read rendered containers and their items: entityId, ownership, shape, position and known features. Opened nested containers appear separately; unopened contents are not read. Filter by a current containerId and paginate. This query does not use or move items: find current item actions via get_available_actions or get_entity, then perform_action. Use entityId candidates from parameters, not numeric item IDs. See get_help(topic=items).")]
     public async Task<CallToolResult> GetInventory(CancellationToken cancellationToken,
         [Description("Current container entityId, or omit for all rendered containers.")] string? containerId = null,
         int offset = 0, int limit = 100)
@@ -47,16 +47,28 @@ public sealed class GameTools(BridgeClient bridge)
     }
 
     [McpServerTool(Name = "get_available_actions", ReadOnly = true, OpenWorld = false)]
-    [Description("List currently available native actions, target references and parameter constraints, plus dialogue and interaction wait state. Only listed actions may be used. UI actions cover currently visible trading, bargaining, inspection, machine, service, contact and night panels. Parameter choices are current entity IDs, never internal object paths.")]
+    [Description("Return snapshotId, gameLoaded, availableActions, interaction, limitations and usage at the top level. Copy an exact action.name into perform_action.action; kind is its category, description explains it, and targetId identifies the object the action belongs to. Fill arguments only from that action's parameters (required, min/max/step, choices). For item_use_on, arguments.targetId is a legal destination target, distinct from action.targetId (the tool). Never invent dynamic action names or references. Empty lists require inspecting interaction, not guessing a command. See get_help(topic=actions).")]
     public async Task<CallToolResult> GetAvailableActions(CancellationToken cancellationToken)
     {
         var result = await bridge.State(cancellationToken);
         if (!result.Success || result.State == null) return Reply(result);
-        return Content(new { result.ProtocolVersion, result.State.SnapshotId, result.State.GameLoaded, result.State.AvailableActions, result.State.DialogueChoices, result.State.Interaction });
+        return Content(new { result.ProtocolVersion, result.State.SnapshotId, result.State.GameLoaded, result.State.AvailableActions, result.State.DialogueChoices, result.State.Interaction,
+            result.State.Limitations,
+            Usage = new
+            {
+                Tool = "perform_action",
+                Action = "Copy availableActions[].name exactly; kind, description and targetId are not action names.",
+                ExpectedSnapshotId = "Use snapshotId from the observation on which this decision is based.",
+                RequestId = "New UUID for a new decision. Retry an uncertain command only with the original action, snapshot, UUID and arguments unchanged.",
+                Arguments = "Use only parameters listed by the chosen action. Respect required, min/max/step and choices. Omit arguments for parameterless actions. action.targetId identifies the source object; arguments.targetId may select a different legal target.",
+                AfterDispatch = "Re-read state to verify the effect; dispatched does not mean animations or confirmations are complete.",
+                EmptyList = "Inspect interaction.waitingFor, blockers and limitations. Wait for a transition or report the unsupported input; do not invent a command.",
+                HelpTopic = "actions"
+            } });
     }
 
     [McpServerTool(Name = "get_ui_state", ReadOnly = true, OpenWorld = false)]
-    [Description("Read visible game text and rendered UI controls, including labels, values, options, enabled state and action IDs. Useful for trade confirmations, machines, recipes, phone, computer, services, requests, night travel and reports. Disabled/occluded controls cannot be invoked. Use get_view for visual-only evidence.")]
+    [Description("Read visible text and controls with labels, values, options, enabled state and actions. Match a control's actions to availableActions; use the exact action name and parameters. For duplicate labels compare windowTitle, nearbyText and bounds with get_view. Disabled/occluded controls cannot be invoked. Useful for confirmations, appraisal, machines, services and night panels; see get_help(topic=menus) or get_help(topic=appraisal).")]
     public async Task<CallToolResult> GetUiState(CancellationToken cancellationToken)
     {
         var result = await bridge.State(cancellationToken);
@@ -101,9 +113,9 @@ public sealed class GameTools(BridgeClient bridge)
     }
 
     [McpServerTool(Name = "perform_action", ReadOnly = false, Destructive = true, OpenWorld = false)]
-    [Description("Dispatch one action listed in availableActions. Requires a fresh snapshotId and a caller-generated UUID requestId. Use the identical UUID AND arguments for retries after uncertain outcomes; never blindly retry with a new UUID. On stale_snapshot, inspect the returned state and make a new decision. Success means dispatched; animations and dialogue may still be running. Actions affect the current run and may be saved by the game.")]
+    [Description("Dispatch one exact availableActions[].name with the same observation's snapshotId and a caller-generated UUID. arguments is a JSON object containing only the chosen action's parameters; omit for parameterless actions. For uncertain outcomes first inspect get_action_status and current state; retries must preserve action, expectedSnapshotId, requestId AND arguments. On stale_snapshot inspect state and make a new decision with a new UUID. dispatched means the handler ran, not that animations/confirmations finished. Actions affect progress and may be saved. See get_help(topic=actions).")]
     public async Task<CallToolResult> PerformAction(
-        [Description("Exact name from availableActions, for example next_customer or dialogue_choice:0.")] string action,
+        [Description("Copy a currently listed availableActions[].name exactly, including dynamic suffixes. Never use kind, description or an entity ID as the action.")] string action,
         [Description("snapshotId from the observation on which this decision is based.")] string expectedSnapshotId,
         [Description("New UUID for a new decision; reuse it with unchanged arguments only for retrying that same command.")] string requestId,
         CancellationToken cancellationToken,

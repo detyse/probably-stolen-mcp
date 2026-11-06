@@ -8,4 +8,8 @@
     <PackageReference Include="ModelContextProtocol" Version="2.3.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.14" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="../../docs/help/*.md" LogicalName="PSMcp.Help.%(Filename)%(Extension)" />
+    <EmbeddedResource Include="../../docs/capabilities.md" LogicalName="PSMcp.Help.capabilities.md" />
+  </ItemGroup>
 </Project>

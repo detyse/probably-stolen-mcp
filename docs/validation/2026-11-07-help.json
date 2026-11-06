@@ -1,0 +1,38 @@
+{
+  "date": "2026-11-07",
+  "timezone": "Asia/Shanghai",
+  "repository": "D:\\Projects\\probably-stolen-mcp",
+  "serverVersion": "0.2.5",
+  "protocolVersion": 2,
+  "scope": "MCP built-in help, tool descriptions and availableActions usage",
+  "build": {
+    "errors": 0,
+    "warnings": 0
+  },
+  "fullSuite": {
+    "passed": 151,
+    "command": ".\\scripts\\Test.ps1 -NoRestore"
+  },
+  "publishedHelp": {
+    "workingDirectory": "fresh temporary directory",
+    "gameConnection": "missing file",
+    "topics": [
+      "actions",
+      "appraisal",
+      "capabilities",
+      "items",
+      "machines",
+      "menus",
+      "night",
+      "overview",
+      "trade"
+    ],
+    "passed": 21,
+    "command": "dotnet tests/PSMcp.SmokeTests/bin/Release/net10.0/PSMcp.SmokeTests.dll --help-only artifacts/mcp/PSMcp.Server.dll"
+  },
+  "artifact": {
+    "path": "artifacts/mcp/PSMcp.Server.dll",
+    "sha256": "73F42F834F7273EEB95F9D6A1115282DAB34032783741C3F138CC4CA19D41451"
+  },
+  "realGameActionsPerformed": false
+}

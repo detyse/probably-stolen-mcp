@@ -1,10 +1,12 @@
-# Probably Stolen MCP
+# Probably Stolen MCP — Probably Automated
 
-《深空当铺：可能是偷的》（Probably Stolen）的全 C# AI 接入项目。它提供游戏 Mod 和 MCP 服务，让支持 MCP 的 AI 客户端读取游戏状态、执行当前允许的操作。模型与决策由 AI 客户端负责，项目本身不内置模型。
+[English](README.en.md) · [中文使用指南](docs/usage-guide.zh-CN.md) · [English user guide](docs/usage-guide.md)
 
-**当前版本：0.2.5 开发版，桥接协议 2，Mod 显示名 Probably Automated。** 已接入 10 个 MCP 工具、结构化业务动作、原生 UI、物品与容器操作和游戏截图。已实机验证一天经营、展示柜、电话与升级、举报、夜间拾荒、整理和垃圾桶；各场景的结果与未验证范围见 [当前能力清单](docs/capabilities.md)。
+《深空当铺：可能是偷的》（Probably Stolen）的独立全 C# AI 接入项目。它提供游戏 Mod 和 MCP 服务，让支持 MCP 的 AI 客户端读取游戏状态、执行当前允许的操作。模型与决策由 AI 客户端负责，项目本身不内置模型。
 
-项目和程序集沿用 `PSMcp.*`，Mod ID、目录和 MCP 配置键仍为 `probably-stolen-mcp`，环境变量仍用 `PSMCP_*`。本仓库是后续开发、构建、提交和推送的默认仓库。
+**当前版本：0.2.5 实验性开发版，桥接协议 2，Mod 显示名 Probably Automated。** 已接入 11 个 MCP 工具（含离线可读的内置帮助）、结构化业务动作、原生 UI、物品与容器操作和游戏截图。一天经营、展示柜、电话与升级、举报、夜间拾荒、整理和垃圾桶已有迁移前构建的实机记录；更名后的 Mod 尚未重跑完整流程。各场景的结果与未验证范围见 [当前能力清单](docs/capabilities.md)。
+
+项目和程序集沿用 `PSMcp.*`，Mod ID、目录和 MCP 配置键仍为 `probably-stolen-mcp`，环境变量仍用 `PSMCP_*`。首次使用请从[安装与操作指南](docs/usage-guide.zh-CN.md)开始；公开状态评估见[公开准备说明](docs/public-readiness.zh-CN.md)。
 
 ## 工作方式
 
@@ -21,7 +23,7 @@ PSMcp.Mod（.NET Standard 2.1）
 游戏状态与原生操作接口
 ```
 
-每次查询都会请求当前游戏状态，以 JSON 返回。`get_view` 可按需返回当前游戏帧；当前使用请求—响应方式，不持续推送状态或画面。Agent 完成一次操作后需要再次查询，确认游戏的变化。
+游戏查询请求当前状态，以 JSON 返回；`get_help` 直接读取 MCP 内置文档，无需游戏连接。`get_view` 可按需返回当前游戏帧；当前使用请求—响应方式，不持续推送状态或画面。Agent 完成一次操作后需要再次查询，确认游戏的变化。
 
 HTTP 服务仅监听本机，无需部署公网服务器。**AI 客户端应配置 stdio MCP 的启动命令；`http://127.0.0.1:15527` 是 Mod 的内部桥接地址，不是 Streamable HTTP MCP 地址。**
 
@@ -31,6 +33,10 @@ HTTP 服务仅监听本机，无需部署公网服务器。**AI 客户端应配�
 - [手动 HTTP 调用](#手动-http-调用)
 - [常见问题](#常见问题)
 - [开发与验证](#开发与验证)
+
+## 数据流与游戏进度
+
+操作会正常影响当前游戏及自动保存。Mod 与 MCP 之间只使用本机认证连接；AI 客户端会接收请求的游戏状态和游戏截图，使用云端模型时可能将这些结果发送给该服务商，取决于客户端设置。本项目不内置模型账号，也不实现独立遥测上传。请勿分享含控制令牌的 `connection.json`。
 
 ## 环境要求
 
@@ -119,7 +125,7 @@ Mod 成功启动后监听 `127.0.0.1:15527`，生成本次运行的认证令牌�
 
 ### 3. 配置 MCP 客户端
 
-构建生成的 [artifacts/mcp-config.json](artifacts/mcp-config.json) 包含本机可用的绝对路径。对于采用 `mcpServers` JSON 格式的客户端，将其中的 `probably-stolen-mcp` 条目合并到已有配置，保留其他服务。
+构建生成的 `artifacts/mcp-config.json` 包含本机可用的绝对路径。对于采用 `mcpServers` JSON 格式的客户端，将其中的 `probably-stolen-mcp` 条目合并到已有配置，保留其他服务。
 
 本例对应的配置为：
 
@@ -165,7 +171,7 @@ Mod 成功启动后监听 `127.0.0.1:15527`，生成本次运行的认证令牌�
 3. 载入测试存档，再次调用 `get_game_state`。对比游戏界面与返回的现金、顾客和库存。
 4. 调用 `get_available_actions` 查看当前允许的操作。确认状态正确后，再执行一个动作并读取新状态。
 
-看到十个 MCP 工具只代表服务注册成功；应完成上述检查，确认它确实连上正在运行的游戏。
+看到十一个 MCP 工具只代表服务注册成功；应完成上述检查，确认它确实连上正在运行的游戏。游戏未启动时也可调用 `get_help` 检查内置帮助。
 
 ## Agent 使用方式
 
@@ -173,11 +179,12 @@ Mod 成功启动后监听 `127.0.0.1:15527`，生成本次运行的认证令牌�
 
 | MCP 工具 | 参数 | 返回内容 / 行为 |
 |---|---|---|
+| `get_help` | `topic?` | 默认返回简短入门和主题目录；按主题读取内置说明，无需游戏连接 |
 | `get_bridge_status` | 无 | 检查认证连接，不要求已载入存档 |
 | `get_game_state` | 无 | 天数、经营阶段、现金、顾客、交易、容器、界面和可用动作 |
 | `get_trade_state` | 无 | 当前柜台与交易方向、公开报价和交互等待 |
 | `get_inventory` | `containerId?`、`offset?`、`limit?` | 已呈现容器与已打开嵌套内容；归属、形状、位置和分页 |
-| `get_available_actions` | 无 | 当前动作、参数范围、合法候选引用及 `snapshotId` |
+| `get_available_actions` | 无 | 当前动作、参数范围、合法候选引用、`snapshotId`、`limitations` 与调用说明 `usage` |
 | `get_ui_state` | 无 | 可见文字、控件、禁用原因、当前面板与动作 |
 | `get_entity` | `entityId` | 查询本次已暴露的物品、容器或控件 |
 | `get_view` | 无 | 最长边 1600 像素的游戏帧及对应观察 |
@@ -185,6 +192,24 @@ Mod 成功启动后监听 `127.0.0.1:15527`，生成本次运行的认证令牌�
 | `perform_action` | `action`、`expectedSnapshotId`、`requestId`、`arguments?` | 执行一个当前允许的原生动作 |
 
 状态查询的完整数据位于 `get_game_state` 返回的 `state` 中；`get_inventory` 和 `get_available_actions` 会把所需字段放在结果顶层。MCP 同时返回结构化 JSON 和文本内容，工具错误标记为 `isError`。
+
+复制 `availableActions[].name` 为 `perform_action.action`；`kind` 是类别，`description` 说明效果，`targetId` 是动作所属对象。`arguments` 只填该动作 `parameters` 列出的字段，遵守必填项、范围、步长和候选引用。例如工具动作自身 `targetId` 指工具，`arguments.targetId` 才是要作用的目标。`usage` 会直接说明这些对应关系、执行后检查和空列表处理。
+
+### 按需查询内置帮助
+
+Agent 通常直接读状态、执行当前动作并检查结果，不清楚时调用：
+
+```text
+get_help()                    简短入门和全部主题
+get_help(topic="actions")     动作参数、快照、UUID 和重试
+get_help(topic="items")       物品激活、工具使用、容器和移动
+get_help(topic="appraisal")   验货、图像线索、真假声明和估价
+get_help(topic="machines")    机器槽位、参数与生产流程
+```
+
+其他主题有 `trade`、`night`、`menus`、`capabilities`；以返回的 `topics` 为准。主题忽略大小写；未知主题返回 `unknown_help_topic` 和有效目录。帮助随 MCP 程序集内嵌，离开仓库、游戏未运行时仍可读取，不把 topic 当成本机路径或 URL。工具说明和初始化消息会提示此入口。帮助标明接入与验收边界；具体动作始终以实时列表为准。
+
+### 当前动作
 
 | 动作名 | 行为 |
 |---|---|
@@ -351,11 +376,18 @@ Invoke-PSMcp -Path state | ConvertTo-Json -Depth 12
 .\scripts\Test.ps1
 ```
 
+GitHub [自动检查](.github/workflows/ci.yml) 在 Windows / .NET 10 上运行同一套无需游戏文件的测试；它不编译依赖游戏 DLL 的 Mod，也不替代实机验收。
+
 测试使用模拟游戏状态，运行生产 HTTP 桥接代码、真实 MCP 服务进程和官方 MCP 客户端，覆盖主线程调度、过期状态、重复动作、部分失败、排队超时、认证和 stdio 工具调用。它不能代替游戏内测试。
+
+完整测试包含内置帮助的 stdio 验证；也可单独运行 `.\scripts\Test.ps1 -HelpOnly`。该模式从临时工作目录启动 MCP，使用不存在的游戏连接文件，检查所有主题、工具声明和非法主题处理；不验证游戏 HTTP 桥接。`-HelpOnly` 与 `-Offline` 互斥。
+
+扩展帮助只需在 [docs/help](docs/help) 增加小写英文文件名的 Markdown，以 `# 标题` 开头，然后重新构建／发布 MCP。文件名即 topic，自动列入目录，无需新增工具或注册表。同步更新 [能力清单](docs/capabilities.md) 的支持和验证状态；帮助固定为构建时内容，更新后重启 MCP 生效。
 
 截至 **2026-11-07**：
 
 - 当前目录完成 0.2.5 构建和打包，128 项协议、HTTP 与官方 MCP 客户端检查通过。
+- 内置帮助更新后，完整 151 项检查通过（含 21 项独立帮助检查），构建 0 警告、0 错误；本次未新增真实游戏操作验证。
 - 迁移前的同一功能实现已完成真实游戏中的一天经营及扩展测试；[能力清单](docs/capabilities.md)记录版本、调用、实际后果和证据。
 - 本次迁移保留目标仓库既有的 `PSMcp.*` 命名与 Mod ID；历史实测 JSON 和截图保持原样，其中旧名称属于证据来源，不是当前安装路径。迁移后命名版本的整套游戏流程未重复验收。
 - 自动检查使用游戏替身；单独列出 MCP 工具或编译成功不能证明全部游戏行为通过。
@@ -391,4 +423,4 @@ Invoke-PSMcp -Path state | ConvertTo-Json -Depth 12
 - [官方 C# MCP SDK](https://github.com/modelcontextprotocol/csharp-sdk)
 - [STS2MCP 架构参考](https://github.com/Gennadiyev/STS2MCP)
 
-MIT License，见 [LICENSE](LICENSE)。游戏程序与资源属于其各自权利人，不随本项目分发。
+项目原创代码与文档使用 [MIT License](LICENSE)。游戏名称、游戏内文字和实测截图属于各自权利人，不因本仓库 MIT 许可证获得额外授权；游戏程序、反编译代码和提取素材不随项目分发。依赖保留各自许可证。本项目是独立 Mod，不是游戏官方发行。分发边界见[官方模组行为准则](https://github.com/dragonpan2/probably-stolen-modding/blob/main/CodeOfConduct.zh-CN.md)。

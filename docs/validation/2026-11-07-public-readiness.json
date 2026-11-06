@@ -1,0 +1,46 @@
+{
+  "date": "2026-11-07",
+  "sourceBaseline": "e5c0c40d681ba74a0177e76e4307ed38437b9fb6",
+  "version": "0.2.5",
+  "protocolVersion": 2,
+  "scope": "Bundled help, bilingual onboarding, documentation consistency, public source preparation",
+  "build": {
+    "checksPassed": 151,
+    "errors": 0,
+    "success": true,
+    "warnings": 0,
+    "command": "./scripts/Build.ps1 -GamePath <local game directory>"
+  },
+  "publishedHelp": {
+    "sha256": "85889C529BD3C8D3D35C804DD94BF617B6BADB4B58610AD80A874DCC4D1AFE75",
+    "checksPassed": 21,
+    "workingDirectory": "fresh temporary directory",
+    "artifact": "artifacts/mcp/PSMcp.Server.dll",
+    "gameConnection": "missing file"
+  },
+  "documentation": {
+    "matchedGuideSections": 10,
+    "relativeLinksChecked": 96,
+    "examplesExecuted": false,
+    "workflowYamlValid": true,
+    "jsonExamplesParsed": 10,
+    "powershellExamplesParsed": 15
+  },
+  "repositoryScan": {
+    "limitations": "Pattern and file checks only; not a comprehensive security audit.",
+    "trackedGameBinaries": 0,
+    "historicalCommitsScanned": 6,
+    "gameplayScreenshotsChecked": 9,
+    "credentialPatternFindings": 0,
+    "personalHomePathFindings": 0,
+    "screenshotPersonalMetadataFindings": 0
+  },
+  "dependencies": {
+    "source": "https://api.nuget.org/v3/index.json",
+    "reportedVulnerabilities": 0,
+    "projects": 4,
+    "command": "dotnet list PSMcp.slnx package --vulnerable --include-transitive --no-restore --format json"
+  },
+  "realGameActionsPerformed": false,
+  "cleanMachineInstallationTested": false
+}

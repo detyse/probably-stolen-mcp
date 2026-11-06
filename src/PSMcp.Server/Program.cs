@@ -28,5 +28,10 @@ var builder = Host.CreateApplicationBuilder(new HostApplicationBuilderSettings {
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole(options => options.LogToStandardErrorThreshold = LogLevel.Trace);
 builder.Services.AddSingleton(new BridgeClient(connectionFile));
-builder.Services.AddMcpServer().WithStdioServerTransport().WithTools<GameTools>();
+builder.Services.AddMcpServer(options => options.ServerInstructions =
+    "Observe with get_game_state, choose an exact availableActions[].name, then call perform_action with that observation's snapshotId and a new UUID. " +
+    "Supply only arguments listed in that action's parameters, using its current choices and ranges. Re-read state after actions. " +
+    "For uncertain retries preserve the original action, snapshot, UUID and arguments. " +
+    "Use get_help when unsure about an operation; omit topic for the introduction and topic list. Help works while the game is offline.")
+    .WithStdioServerTransport().WithTools<GameTools>().WithTools<HelpTools>();
 await builder.Build().RunAsync();

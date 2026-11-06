@@ -9,3 +9,19 @@ TestResults/
 *.local.json
 Directory.Build.local.props
 
+# Local bridge credentials and private configuration
+connection.json
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.pfx
+*.p12
+
+# Compiled binaries and local game data are not source distributions
+*.dll
+*.exe
+*.pdb
+ModData/
+Saves/
