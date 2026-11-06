@@ -7,5 +7,6 @@
     <ProjectReference Include="../../src/PSMcp.Server/PSMcp.Server.csproj" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <Compile Include="../../src/PSMcp.Mod/HttpBridge.cs" Link="Production/HttpBridge.cs" />
+    <Compile Include="../../src/PSMcp.Mod/LoopbackHttpConnection.cs" Link="Production/LoopbackHttpConnection.cs" />
   </ItemGroup>
 </Project>

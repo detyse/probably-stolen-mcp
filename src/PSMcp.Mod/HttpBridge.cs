@@ -1,7 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using System.Text;
+using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -16,19 +17,25 @@ namespace PSMcp.Mod
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver(),
             TypeNameHandling = TypeNameHandling.None,
+            MissingMemberHandling = MissingMemberHandling.Error,
             MaxDepth = 32
         };
 
-        private readonly HttpListener listener = new HttpListener();
-        private readonly SemaphoreSlim clients = new SemaphoreSlim(8);
+        private readonly TcpListener listener;
+        private readonly object lifecycle = new object();
+        private readonly HashSet<TcpClient> clients = new HashSet<TcpClient>();
         private readonly MainThreadQueue queue;
         private readonly GameSession session;
         private readonly string token;
         private readonly string authority;
         private readonly Action<string> logError;
+        private readonly MainThreadQueue? viewQueue;
+        private readonly Func<BridgeResponse>? captureView;
         private volatile bool stopped;
+        private bool started;
 
-        public HttpBridge(int port, string token, MainThreadQueue queue, GameSession session, Action<string> logError)
+        public HttpBridge(int port, string token, MainThreadQueue queue, GameSession session, Action<string> logError,
+            MainThreadQueue? viewQueue = null, Func<BridgeResponse>? captureView = null)
         {
             if (port < 1024 || port > 65535) throw new ArgumentOutOfRangeException(nameof(port));
             if (string.IsNullOrEmpty(token) || token.Length < 32) throw new ArgumentException("A bridge token of at least 32 characters is required.", nameof(token));
@@ -36,88 +43,128 @@ namespace PSMcp.Mod
             this.queue = queue;
             this.session = session;
             this.logError = logError;
+            this.viewQueue = viewQueue;
+            this.captureView = captureView;
             authority = "127.0.0.1:" + port;
-            listener.Prefixes.Add("http://" + authority + "/");
+            // HttpListener uses HTTP.sys on Windows, whose initialization can fail
+            // in restricted hosts before any URL is registered. Use sockets on
+            // both .NET and Unity/Mono, with an explicit IPv4 loopback binding.
+            listener = new TcpListener(IPAddress.Loopback, port) { ExclusiveAddressUse = true };
         }
 
         public void Start()
         {
-            listener.Start();
-            _ = Task.Run(AcceptLoop);
+            lock (lifecycle)
+            {
+                if (stopped) throw new ObjectDisposedException(nameof(HttpBridge));
+                if (started) return;
+                listener.Start(8);
+                started = true;
+                _ = Task.Run(AcceptLoop);
+            }
         }
 
         private async Task AcceptLoop()
         {
             while (!stopped)
             {
-                HttpListenerContext context;
-                try { context = await listener.GetContextAsync().ConfigureAwait(false); }
-                catch (Exception ex) when (ex is HttpListenerException || ex is ObjectDisposedException)
+                TcpClient client;
+                try { client = await listener.AcceptTcpClientAsync().ConfigureAwait(false); }
+                catch (Exception ex) when (ex is SocketException || ex is ObjectDisposedException || ex is InvalidOperationException)
                 {
                     if (!stopped) logError("Bridge listener stopped: " + ex.GetType().Name);
                     break;
                 }
-                if (!clients.Wait(0))
+                bool accepted;
+                lock (lifecycle)
                 {
-                    context.Response.StatusCode = 503;
-                    context.Response.Close();
+                    if (stopped)
+                    {
+                        client.Dispose();
+                        return;
+                    }
+                    accepted = clients.Count < 8;
+                    clients.Add(client);
+                }
+                if (!accepted)
+                {
+                    // Track and finish this rejection before accepting another client,
+                    // so overload responses are bounded and closed during shutdown too.
+                    await Handle(client, busy: true).ConfigureAwait(false);
                     continue;
                 }
-                _ = Handle(context);
+                _ = Handle(client);
             }
         }
 
-        private async Task Handle(HttpListenerContext context)
+        private async Task Handle(TcpClient client, bool busy = false)
         {
+            LoopbackHttpConnection? context = null;
             try
             {
-                var request = context.Request;
-                if (!string.Equals(request.Headers["Host"], authority, StringComparison.OrdinalIgnoreCase)
-                    || !string.IsNullOrEmpty(request.Headers["Origin"]))
+                context = new LoopbackHttpConnection(client);
+                if (busy)
+                {
+                    await Reply(context, 503, BridgeResponse.Error("bridge_busy", "The bridge has too many open connections."));
+                    return;
+                }
+                await ReadInput(context.ReadHeaders()).ConfigureAwait(false);
+                if (!string.Equals(context.Headers["Host"], authority, StringComparison.OrdinalIgnoreCase)
+                    || context.Headers.ContainsKey("Origin"))
                 {
                     await Reply(context, 403, BridgeResponse.Error("forbidden_origin", "Only local non-browser bridge requests are accepted."));
                     return;
                 }
-                if (!string.Equals(request.Headers["Authorization"], "Bearer " + token, StringComparison.Ordinal))
+                if (!context.Headers.TryGetValue("Authorization", out var authorization)
+                    || !string.Equals(authorization, "Bearer " + token, StringComparison.Ordinal))
                 {
                     await Reply(context, 401, BridgeResponse.Error("unauthorized", "Load the current connection file written by the Mod."));
                     return;
                 }
-                var path = request.Url?.AbsolutePath;
-                if (path == "/health" && request.HttpMethod == "GET")
+                var path = context.Path;
+                if (path == "/health" && context.Method == "GET")
                 {
-                    await Reply(context, 200, BridgeResponse.Ok(message: "Probably Stolen MCP bridge is listening. Use /state to check game readiness."));
+                    await Reply(context, 200, BridgeResponse.Ok(message: "PSMcp bridge is listening. Use /state to check game readiness."));
                     return;
                 }
 
                 WorkTicket ticket;
-                if (path == "/state" && request.HttpMethod == "GET")
+                if (path == "/state" && context.Method == "GET")
                 {
                     ticket = queue.Enqueue(() => BridgeResponse.Ok(session.Observe()));
                 }
-                else if (path == "/actions" && request.HttpMethod == "POST")
+                else if (path == "/view" && context.Method == "GET")
                 {
-                    if (request.ContentLength64 < 0 || request.ContentLength64 > 16384
-                        || !(request.ContentType ?? "").StartsWith("application/json", StringComparison.OrdinalIgnoreCase))
+                    if (viewQueue == null || captureView == null)
+                    {
+                        await Reply(context, 200, BridgeResponse.Error("view_unavailable", "The current host does not provide game-frame capture."));
+                        return;
+                    }
+                    ticket = viewQueue.Enqueue(captureView);
+                }
+                else if (path.StartsWith("/actions/", StringComparison.Ordinal) && context.Method == "GET")
+                {
+                    var requestId = path.Substring("/actions/".Length);
+                    ticket = queue.Enqueue(() => session.GetActionStatus(requestId));
+                }
+                else if (path == "/actions" && context.Method == "POST")
+                {
+                    if (!context.ContentLength.HasValue
+                        || !context.Headers.TryGetValue("Content-Type", out var contentType)
+                        || !string.Equals(contentType.Split(';')[0].Trim(), "application/json", StringComparison.OrdinalIgnoreCase))
                     {
                         await Reply(context, 400, BridgeResponse.Error("invalid_request", "Use a JSON body with Content-Length, at most 16 KiB."));
                         return;
                     }
-                    var readTask = ReadBody(request.InputStream);
-                    if (await Task.WhenAny(readTask, Task.Delay(5000)).ConfigureAwait(false) != readTask)
-                    {
-                        request.InputStream.Close();
-                        _ = readTask.ContinueWith(t => { _ = t.Exception; }, TaskContinuationOptions.OnlyOnFaulted);
-                        await Reply(context, 408, BridgeResponse.Error("request_timeout", "Request body was not received in time."));
-                        return;
-                    }
+                    var readTask = context.ReadBody();
+                    await ReadInput(readTask).ConfigureAwait(false);
                     var command = JsonConvert.DeserializeObject<ActionRequest>(await readTask.ConfigureAwait(false), JsonSettings);
                     if (command == null) throw new JsonException("Empty command.");
                     ticket = queue.Enqueue(() => session.Perform(command));
                 }
                 else
                 {
-                    await Reply(context, 404, BridgeResponse.Error("not_found", "Supported routes: GET /health, GET /state, POST /actions."));
+                    await Reply(context, 404, BridgeResponse.Error("not_found", "Supported routes: GET /health, GET /state, GET /view, GET /actions/{requestId}, POST /actions."));
                     return;
                 }
 
@@ -131,9 +178,18 @@ namespace PSMcp.Mod
                 }
                 await Reply(context, 200, await ticket.Completion.ConfigureAwait(false));
             }
+            catch (HttpRequestError ex)
+            {
+                await TryReply(context, ex.Status, BridgeResponse.Error(ex.Code, ex.Message));
+                if (ex.Status == 400) await FinishRejectedRequest(client);
+            }
             catch (JsonException)
             {
                 await TryReply(context, 400, BridgeResponse.Error("invalid_json", "The request must contain a valid action JSON object."));
+            }
+            catch (Exception ex) when (ex is IOException || ex is SocketException || ex is ObjectDisposedException || ex is TimeoutException)
+            {
+                // Disconnection or shutdown: never retry a possibly dispatched action.
             }
             catch (Exception ex)
             {
@@ -142,47 +198,81 @@ namespace PSMcp.Mod
             }
             finally
             {
-                try { context.Response.Close(); }
-                catch (Exception) { /* Listener shutdown can close an in-flight response. */ }
-                finally { clients.Release(); }
+                client.Dispose();
+                lock (lifecycle) clients.Remove(client);
             }
         }
 
-        private static async Task<string> ReadBody(Stream stream)
+        private static async Task FinishRejectedRequest(TcpClient client)
         {
-            using var output = new MemoryStream();
-            var buffer = new byte[4096];
-            int read;
-            while ((read = await stream.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false)) > 0)
+            // On Windows, closing with an unread request body can reset the socket and
+            // discard the error response. Send FIN, then drain a bounded amount of input.
+            try
             {
-                if (output.Length + read > 16384) throw new JsonException("Request is too large.");
-                output.Write(buffer, 0, read);
+                client.Client.Shutdown(SocketShutdown.Send);
+                var stream = client.GetStream();
+                var buffer = new byte[4096];
+                var deadline = Task.Delay(100);
+                for (var received = 0; received < 65536;)
+                {
+                    var read = stream.ReadAsync(buffer, 0, buffer.Length);
+                    if (await Task.WhenAny(read, deadline).ConfigureAwait(false) != read)
+                    {
+                        _ = read.ContinueWith(t => { _ = t.Exception; }, TaskContinuationOptions.OnlyOnFaulted);
+                        return;
+                    }
+                    var count = await read.ConfigureAwait(false);
+                    if (count == 0) return;
+                    received += count;
+                }
             }
-            return new UTF8Encoding(false, true).GetString(output.ToArray());
+            catch (Exception ex) when (ex is IOException || ex is SocketException || ex is ObjectDisposedException || ex is InvalidOperationException) { }
         }
 
-        private static async Task Reply(HttpListenerContext context, int status, BridgeResponse result)
+        private static async Task ReadInput(Task task)
         {
-            var bytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(result, JsonSettings));
-            context.Response.StatusCode = status;
-            context.Response.ContentType = "application/json; charset=utf-8";
-            context.Response.KeepAlive = false;
-            context.Response.Headers["Cache-Control"] = "no-store";
-            context.Response.ContentLength64 = bytes.Length;
-            await context.Response.OutputStream.WriteAsync(bytes, 0, bytes.Length).ConfigureAwait(false);
+            try { await WithIoTimeout(task).ConfigureAwait(false); }
+            catch (TimeoutException) { throw new HttpRequestError(408, "request_timeout", "Request headers or body were not received in time."); }
         }
 
-        private static async Task TryReply(HttpListenerContext context, int status, BridgeResponse result)
+        private static async Task WithIoTimeout(Task task)
         {
+            using var deadline = new CancellationTokenSource();
+            try
+            {
+                if (await Task.WhenAny(task, Task.Delay(5000, deadline.Token)).ConfigureAwait(false) != task)
+                {
+                    // Closing the client in Handle's finally also cancels pending I/O
+                    // on Mono versions that do not support stream cancellation tokens.
+                    _ = task.ContinueWith(t => { _ = t.Exception; }, CancellationToken.None,
+                        TaskContinuationOptions.OnlyOnFaulted, TaskScheduler.Default);
+                    throw new TimeoutException();
+                }
+                await task.ConfigureAwait(false);
+            }
+            finally { deadline.Cancel(); }
+        }
+
+        private static Task Reply(LoopbackHttpConnection context, int status, BridgeResponse result) => WithIoTimeout(context.Reply(status, result));
+
+        private static async Task TryReply(LoopbackHttpConnection? context, int status, BridgeResponse result)
+        {
+            if (context == null) return;
             try { await Reply(context, status, result).ConfigureAwait(false); }
             catch (Exception) { /* The caller may already have disconnected. */ }
         }
 
         public void Dispose()
         {
-            stopped = true;
-            listener.Close();
-            queue.Dispose();
+            lock (lifecycle)
+            {
+                if (stopped) return;
+                stopped = true;
+                listener.Stop();
+                foreach (var client in clients) client.Dispose();
+                queue.Dispose();
+                viewQueue?.Dispose();
+            }
         }
     }
 }

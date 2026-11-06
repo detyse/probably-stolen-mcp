@@ -8,6 +8,9 @@ public sealed class MainThreadQueue : IDisposable
     private readonly ConcurrentQueue<WorkTicket> queue = new();
     private readonly object sync = new();
     private bool stopped;
+    private readonly Action<Exception>? reportError;
+
+    public MainThreadQueue(Action<Exception>? reportError = null) => this.reportError = reportError;
 
     public WorkTicket Enqueue(Func<BridgeResponse> work)
     {
@@ -15,7 +18,7 @@ public sealed class MainThreadQueue : IDisposable
         {
             if (stopped) return WorkTicket.Rejected("bridge_stopped", "The game bridge is shutting down.");
             if (queue.Count >= 64) return WorkTicket.Rejected("bridge_busy", "The game command queue is full.");
-            var ticket = new WorkTicket(work);
+            var ticket = new WorkTicket(work, reportError);
             queue.Enqueue(ticket);
             return ticket;
         }
@@ -39,11 +42,13 @@ public sealed class MainThreadQueue : IDisposable
 public sealed class WorkTicket
 {
     private readonly Func<BridgeResponse> work;
+    private readonly Action<Exception>? reportError;
     private readonly TaskCompletionSource<BridgeResponse> completion = new(TaskCreationOptions.RunContinuationsAsynchronously);
     private int state; // 0 = queued, 1 = running, 2 = finished or cancelled
     public Task<BridgeResponse> Completion => completion.Task;
 
-    internal WorkTicket(Func<BridgeResponse> work) => this.work = work;
+    internal WorkTicket(Func<BridgeResponse> work, Action<Exception>? reportError = null)
+    { this.work = work; this.reportError = reportError; }
 
     internal static WorkTicket Rejected(string code, string message)
     {
@@ -63,7 +68,11 @@ public sealed class WorkTicket
     {
         if (Interlocked.CompareExchange(ref state, 1, 0) != 0) return;
         try { completion.TrySetResult(work()); }
-        catch { completion.TrySetResult(BridgeResponse.Error("game_error", "Unable to read the game. Check the Probably Stolen MCP game log.")); }
+        catch (Exception error)
+        {
+            try { reportError?.Invoke(error); } catch { /* Logging must not strand the request. */ }
+            completion.TrySetResult(BridgeResponse.Error("game_error", "Unable to read the game. Check the Probably Automated game log."));
+        }
         finally { Interlocked.Exchange(ref state, 2); }
     }
 }

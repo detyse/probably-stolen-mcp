@@ -9,9 +9,14 @@
     <ProjectReference Include="../PSMcp.Contracts/PSMcp.Contracts.csproj" />
     <Reference Include="Assembly-CSharp" HintPath="$(GameManagedPath)/Assembly-CSharp.dll" Private="false" />
     <Reference Include="UnityEngine.CoreModule" HintPath="$(GameManagedPath)/UnityEngine.CoreModule.dll" Private="false" />
+    <Reference Include="UnityEngine.PhysicsModule" HintPath="$(GameManagedPath)/UnityEngine.PhysicsModule.dll" Private="false" />
+    <Reference Include="UnityEngine.Physics2DModule" HintPath="$(GameManagedPath)/UnityEngine.Physics2DModule.dll" Private="false" />
     <Reference Include="UnityEngine" HintPath="$(GameManagedPath)/UnityEngine.dll" Private="false" />
     <Reference Include="Unity.TextMeshPro" HintPath="$(GameManagedPath)/Unity.TextMeshPro.dll" Private="false" />
     <Reference Include="UnityEngine.UI" HintPath="$(GameManagedPath)/UnityEngine.UI.dll" Private="false" />
+    <Reference Include="UnityEngine.UIModule" HintPath="$(GameManagedPath)/UnityEngine.UIModule.dll" Private="false" />
+    <Reference Include="UnityEngine.IMGUIModule" HintPath="$(GameManagedPath)/UnityEngine.IMGUIModule.dll" Private="false" />
+    <Reference Include="UnityEngine.ImageConversionModule" HintPath="$(GameManagedPath)/UnityEngine.ImageConversionModule.dll" Private="false" />
     <Reference Include="Newtonsoft.Json" HintPath="$(GameManagedPath)/Newtonsoft.Json.dll" Private="false" />
     <None Update="manifest.xml" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>

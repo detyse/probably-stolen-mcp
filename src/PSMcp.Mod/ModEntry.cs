@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections;
 using Newtonsoft.Json;
 using PSMcp.Contracts;
 using UnityEngine;
@@ -26,16 +27,18 @@ namespace PSMcp.Mod
         {
             try
             {
-                var queue = new MainThreadQueue();
+                var queue = new MainThreadQueue(error => log?.Error(error.ToString()));
+                var views = new MainThreadQueue(error => log?.Error(error.ToString()));
                 var errors = new ConcurrentQueue<string>();
                 session = new GameSession(new GameAdapter(), state => JsonConvert.SerializeObject(state, HttpBridge.JsonSettings));
                 host = new GameObject("PSMcp.Bridge");
                 UnityEngine.Object.DontDestroyOnLoad(host);
                 var pump = host.AddComponent<BridgePump>();
-                pump.Initialize(queue, errors, message => log?.Error(message));
+                NativeInput.Initialize(pump);
+                pump.Initialize(queue, views, errors, message => log?.Error(message));
                 var token = Guid.NewGuid().ToString("N") + Guid.NewGuid().ToString("N");
                 var listenPort = port!.Value;
-                bridge = new HttpBridge(listenPort, token, queue, session, errors.Enqueue);
+                bridge = new HttpBridge(listenPort, token, queue, session, errors.Enqueue, views, () => ViewCapture.Capture(session));
                 bridge.Start();
                 ModHelper.WriteModDataFileText(Protocol.ModId, "connection.json", JsonConvert.SerializeObject(
                     new ConnectionInfo { BaseUrl = "http://127.0.0.1:" + listenPort + "/", Token = token }, HttpBridge.JsonSettings));
@@ -50,11 +53,12 @@ namespace PSMcp.Mod
             }
         }
 
-        private void OnGameLoaded() => session?.Reset();
-        private void OnSceneChanged(Scene previous, Scene next) => session?.Reset();
+        private void OnGameLoaded() { NativeInput.Cancel(); session?.Reset(); }
+        private void OnSceneChanged(Scene previous, Scene next) { NativeInput.Cancel(); session?.Reset(); }
 
         public void OnDisable()
         {
+            NativeInput.Cancel();
             ModHook.OnGameLoadedLate -= OnGameLoaded;
             SceneManager.activeSceneChanged -= OnSceneChanged;
             bridge?.Dispose();
@@ -68,14 +72,23 @@ namespace PSMcp.Mod
     public sealed class BridgePump : MonoBehaviour
     {
         private MainThreadQueue? queue;
+        private MainThreadQueue? views;
         private ConcurrentQueue<string>? errors;
         private Action<string>? logError;
 
-        public void Initialize(MainThreadQueue queue, ConcurrentQueue<string> errors, Action<string> logError)
+        public void Initialize(MainThreadQueue queue, MainThreadQueue views, ConcurrentQueue<string> errors, Action<string> logError)
         {
             this.queue = queue;
+            this.views = views;
             this.errors = errors;
             this.logError = logError;
+            StartCoroutine(CaptureFrames());
+        }
+
+        private IEnumerator CaptureFrames()
+        {
+            var end = new WaitForEndOfFrame();
+            while (true) { yield return end; views?.Drain(1); }
         }
 
         private void Update()
@@ -84,6 +97,6 @@ namespace PSMcp.Mod
             for (var i = 0; i < 8 && errors != null && errors.TryDequeue(out var message); i++) logError?.Invoke(message);
         }
 
-        private void OnDestroy() => queue?.Dispose();
+        private void OnDestroy() { queue?.Dispose(); views?.Dispose(); NativeInput.Reset(); }
     }
 }

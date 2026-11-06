@@ -2,7 +2,9 @@
 
 《深空当铺：可能是偷的》（Probably Stolen）的全 C# AI 接入项目。它提供游戏 Mod 和 MCP 服务，让支持 MCP 的 AI 客户端读取游戏状态、执行当前允许的操作。模型与决策由 AI 客户端负责，项目本身不内置模型。
 
-**当前版本：0.1.0 开发版。** 已实现状态读取、主线程动作队列和五个 MCP 工具；买卖、议价等经营操作尚未接入，暂时不能自主完成一天的经营。游戏内加载、模组扫描和真实操作仍待验证。
+**当前版本：0.2.5 开发版，桥接协议 2，Mod 显示名 Probably Automated。** 已接入 10 个 MCP 工具、结构化业务动作、原生 UI、物品与容器操作和游戏截图。已实机验证一天经营、展示柜、电话与升级、举报、夜间拾荒、整理和垃圾桶；各场景的结果与未验证范围见 [当前能力清单](docs/capabilities.md)。
+
+项目和程序集沿用 `PSMcp.*`，Mod ID、目录和 MCP 配置键仍为 `probably-stolen-mcp`，环境变量仍用 `PSMCP_*`。本仓库是后续开发、构建、提交和推送的默认仓库。
 
 ## 工作方式
 
@@ -19,7 +21,7 @@ PSMcp.Mod（.NET Standard 2.1）
 游戏状态与原生操作接口
 ```
 
-每次查询都会请求当前游戏状态，以 JSON 返回。当前使用请求—响应方式，不持续推送状态或游戏画面。Agent 完成一次操作后需要再次查询，确认游戏的变化。
+每次查询都会请求当前游戏状态，以 JSON 返回。`get_view` 可按需返回当前游戏帧；当前使用请求—响应方式，不持续推送状态或画面。Agent 完成一次操作后需要再次查询，确认游戏的变化。
 
 HTTP 服务仅监听本机，无需部署公网服务器。**AI 客户端应配置 stdio MCP 的启动命令；`http://127.0.0.1:15527` 是 Mod 的内部桥接地址，不是 Streamable HTTP MCP 地址。**
 
@@ -42,7 +44,7 @@ HTTP 服务仅监听本机，无需部署公网服务器。**AI 客户端应配�
 
 Python、uv、Unity Editor 和完整 Visual Studio 均非必需。Mod 与 MCP 服务都是 C#，但目标框架不同：SDK 10 编译 `netstandard2.1` Mod，外部 MCP 服务运行在 .NET 10 上。
 
-已使用 SDK **10.0.403** 编译；当前游戏引用来自 Steam App **4348910**、Build **26284217**。游戏 DLL 仅供本机编译引用，不随项目分发。清单暂未声明经过实机验证的游戏版本；Steam 补丁标签不能直接代替游戏内部版本字符串。
+已使用 SDK **10.0.403** 编译；当前游戏引用来自 Steam App **4348910**、Build **26337366**。游戏 DLL 仅供本机编译引用，不随项目分发。实测画面版本为 `VERSION 100-REV6`、Unity 2021.3.45f2；Mod 审计内部版本为 `0.46D`，因此清单暂不限制版本，不代表未来版本兼容。
 
 ## 快速开始
 
@@ -103,7 +105,7 @@ Probably Stolen/
       PSMcp.Contracts.dll
 ```
 
-启动游戏，在 Mods 菜单启用 Probably Stolen MCP，并按提示重启。Mod 目录中只放上述三个文件；MCP 的依赖留在 `artifacts/mcp`，游戏的 Unity、Harmony、Newtonsoft.Json 等库由游戏提供。
+启动游戏，在 Mods 菜单启用 Probably Automated，并按提示重启。Mod 目录中只放上述三个文件；MCP 的依赖留在 `artifacts/mcp`，游戏的 Unity、Harmony、Newtonsoft.Json 等库由游戏提供。
 
 Mod 成功启动后监听 `127.0.0.1:15527`，生成本次运行的认证令牌，并写入：
 
@@ -163,7 +165,7 @@ Mod 成功启动后监听 `127.0.0.1:15527`，生成本次运行的认证令牌�
 3. 载入测试存档，再次调用 `get_game_state`。对比游戏界面与返回的现金、顾客和库存。
 4. 调用 `get_available_actions` 查看当前允许的操作。确认状态正确后，再执行一个动作并读取新状态。
 
-看到五个 MCP 工具只代表服务注册成功；应完成上述检查，确认它确实连上正在运行的游戏。
+看到十个 MCP 工具只代表服务注册成功；应完成上述检查，确认它确实连上正在运行的游戏。
 
 ## Agent 使用方式
 
@@ -172,10 +174,15 @@ Mod 成功启动后监听 `127.0.0.1:15527`，生成本次运行的认证令牌�
 | MCP 工具 | 参数 | 返回内容 / 行为 |
 |---|---|---|
 | `get_bridge_status` | 无 | 检查认证连接，不要求已载入存档 |
-| `get_game_state` | 无 | 营业阶段、现金、租金、顾客、最近对话、可见选项、主背包及可用动作 |
-| `get_inventory` | 无 | 主背包顶层物品的运行期 ID、显示名和数量 |
-| `get_available_actions` | 无 | 当前动作、可见对话选项及 `snapshotId` |
-| `perform_action` | `action`、`expectedSnapshotId`、`requestId` | 执行一个当前允许的动作 |
+| `get_game_state` | 无 | 天数、经营阶段、现金、顾客、交易、容器、界面和可用动作 |
+| `get_trade_state` | 无 | 当前柜台与交易方向、公开报价和交互等待 |
+| `get_inventory` | `containerId?`、`offset?`、`limit?` | 已呈现容器与已打开嵌套内容；归属、形状、位置和分页 |
+| `get_available_actions` | 无 | 当前动作、参数范围、合法候选引用及 `snapshotId` |
+| `get_ui_state` | 无 | 可见文字、控件、禁用原因、当前面板与动作 |
+| `get_entity` | `entityId` | 查询本次已暴露的物品、容器或控件 |
+| `get_view` | 无 | 最长边 1600 像素的游戏帧及对应观察 |
+| `get_action_status` | `requestId` | 查询保留的命令结果，不重复执行 |
+| `perform_action` | `action`、`expectedSnapshotId`、`requestId`、`arguments?` | 执行一个当前允许的原生动作 |
 
 状态查询的完整数据位于 `get_game_state` 返回的 `state` 中；`get_inventory` 和 `get_available_actions` 会把所需字段放在结果顶层。MCP 同时返回结构化 JSON 和文本内容，工具错误标记为 `isError`。
 
@@ -186,10 +193,13 @@ Mod 成功启动后监听 `127.0.0.1:15527`，生成本次运行的认证令牌�
 | `dismiss_customer` | 送走当前顾客，不自动呼叫下一位 |
 | `close_shop` | 使用原生卷帘门按钮关店 |
 | `dialogue_choice:<index>` | 选择当前可见且可点击的对话选项；使用返回的实际 index |
+| `advance_dialogue` | 继续明确等待玩家输入的对话 |
+| `sleep` | 打开原生睡眠结算，之后按面板选择服务并确认 |
+| 动态动作 | 物品移动、整理／撤销、原生 UI、长按举报、升级卡片、夜间目的地等；名称、参数和引用以当前返回值为准 |
 
-仅执行 `availableActions` 中返回的完整动作名。开关店可能出现确认面板，该面板尚未接入；动作列表为空时，可能需要等待动画，或由玩家完成当前尚未支持的交互。
+仅执行 `availableActions` 中返回的完整动作名。开关店、升级、夜间返回等可能出现原生确认；操作后读取新状态并使用当前面板动作。业务操作使用原生阶段、Can/May、锁、所有权和容量规则；普通 UI 另检查遮挡与可交互性。
 
-**尚未实现：** 物品移动、柜台货物导出、买卖、议价、验货、鉴定、手动推进对话、夜间行动和生产流程。库存不会递归展开容器，也不导出隐藏真假、NPC 隐藏身份、未来事件或真实物品价值。
+**仍有未验收场景：** 共用入口不代表所有交易、议价、鉴定、生产和夜间地点已通过实机测试。新游戏选人完整流程也未验收。库存只包含已呈现容器和已打开内容，不导出隐藏真假、NPC 隐藏身份、未来事件或真实物品价值。覆盖和限制见 [实现说明](docs/mcp-implementation.md)。
 
 ### 可以直接发给 Agent 的指令
 
@@ -207,7 +217,7 @@ Mod 成功启动后监听 `127.0.0.1:15527`，生成本次运行的认证令牌�
 2. 为这次决定生成一个标准 UUID（`xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`），传入 `requestId`；将快照 ID 传入 `expectedSnapshotId`。
 3. `success: true`、`actionStatus: dispatched` 表示游戏处理函数已执行。动画或对话可能尚未完成，应再读状态确认效果。
 4. `stale_snapshot` 表示局面已变化。根据返回的新状态重新判断，并为新决定使用新 UUID。
-5. 超时或断线后先读状态。如需重试原命令，使用**相同 requestId、相同 action、相同 expectedSnapshotId**，不能仅为重试换一个 UUID。
+5. 超时或断线后先用 `get_action_status` 查询原结果。如需重试原命令，使用**相同 requestId、相同 action、相同 expectedSnapshotId 和完整 arguments**，不能仅为重试换一个 UUID。
 6. 桥接运行期间保留近期 256 条已处理命令的结果；记录尚在缓存中时，相同请求直接返回原结果。游戏重启后不会保留该缓存，旧快照也会失效，应重新观察。
 
 ## 手动 HTTP 调用
@@ -284,9 +294,9 @@ $actionReply | ConvertTo-Json -Depth 12
 Invoke-PSMcp -Path state | ConvertTo-Json -Depth 12
 ```
 
-如果响应丢失，先查状态。重试同一次命令时，复用上面的 `$actionJson`，不要重新生成 UUID。POST 请求必须是带 Content-Length 的 JSON，正文不超过 16 KiB；上述 PowerShell 调用会按此方式发送。
+如果响应丢失，先通过 `GET /actions/<requestId>` 查询原结果。重试同一次命令时，复用上面的 `$actionJson`，不要重新生成 UUID。POST 请求必须是带 Content-Length 的 JSON，正文不超过 16 KiB；上述 PowerShell 调用会按此方式发送。
 
-桥接只接受 `127.0.0.1` 对应的 Host，并拒绝携带 Origin 的请求。请使用 MCP 客户端或上述 PowerShell 示例，不要从网页脚本直接访问。
+桥接使用 `TcpListener`，不依赖 HTTP.sys。支持 `GET /health`、`GET /state`、`GET /view`、`GET /actions/<requestId>` 和 `POST /actions`。桥接只接受 `127.0.0.1` 对应的 Host，并拒绝携带 Origin 的请求。请使用 MCP 客户端或上述 PowerShell 示例，不要从网页脚本直接访问。
 
 ## 常见问题
 
@@ -294,14 +304,14 @@ Invoke-PSMcp -Path state | ConvertTo-Json -Depth 12
 |---|---|
 | 找不到 `dotnet` | 安装 SDK 后重新打开终端；构建脚本也会尝试 `C:\Program Files\dotnet\dotnet.exe`。客户端可直接填写绝对路径。 |
 | 缺少游戏程序集 / GamePath 错误 | `-GamePath` 应指向包含 `Probably Stolen.exe` 和 `Probably Stolen_Data` 的目录。 |
-| Mods 菜单找不到 Probably Stolen MCP | 检查是否多套了一层目录，以及 `Mods/probably-stolen-mcp/manifest.xml` 是否存在。 |
+| Mods 菜单找不到 Probably Automated | 检查是否多套了一层目录，以及 `Mods/probably-stolen-mcp/manifest.xml` 是否存在。 |
 | `connection_file_unavailable` | 确认 Mod 已启用并重启游戏；查看日志中的真实连接文件路径，必要时配置 `--connection`。 |
 | `bridge_unavailable` | 游戏可能未启动、Mod 启动失败，或连接文件来自上一次运行。查看游戏日志。 |
 | HTTP 401 / `unauthorized` | 令牌已失效；重新读取当前连接文件。MCP 和上面的辅助函数会自动重读。 |
 | HTTP 403 / `forbidden_origin` | 使用连接文件中的 `127.0.0.1` 地址，不改成 `localhost`；不要附加 Origin。 |
 | `queue_timeout` / `bridge_timeout` | 让游戏保持响应并回到前台；失焦、暂停或加载期间可能不处理主线程请求。 |
 | `stale_snapshot` / `action_unavailable` | 重新读取状态与动作列表，根据新状态决定。 |
-| `request_id_conflict` | 一个 UUID 被用于不同参数；原命令的重试必须保持三个参数一致，新决定使用新 UUID。 |
+| `request_id_conflict` | 一个 UUID 被用于不同参数；原命令的重试必须保持动作、快照和完整 arguments 一致，新决定使用新 UUID。 |
 | `action_outcome_unknown` | 动作可能已经发生，先查状态；不要用新 UUID 盲目重试。 |
 | `protocol_mismatch` | 同时更新 Mod 和 MCP，避免混用不同协议版本。 |
 | MCP 启动后终端一直等待 | stdio 服务在等待客户端请求；应由支持 MCP 的客户端连接。 |
@@ -312,7 +322,7 @@ Invoke-PSMcp -Path state | ConvertTo-Json -Depth 12
 %USERPROFILE%\AppData\LocalLow\Questing Goose Studio\Probably Stolen\Player.log
 ```
 
-若默认端口被占用，在游戏的 Mod 配置中修改 Probably Stolen MCP 的 `port`，重启后再连接。
+若默认端口被占用，在游戏的 Mod 配置中修改 Probably Automated 的 `port`，重启后再连接。
 
 **Windows 应用控制拦截：** 若运行时出现 `0x800711C7` 或“应用程序控制策略已阻止此文件”，表示系统拒绝加载 DLL。编译成功仍可能遇到此问题。查看事件查看器中的 `Microsoft-Windows-CodeIntegrity/Operational`，核实被拦截文件和适用策略，并由设备策略管理方按本机开发软件流程处理；本文不提供关闭安全策略的步骤。`-SkipTests` 只能跳过测试完成打包，不能解决运行拦截。
 
@@ -322,7 +332,7 @@ Invoke-PSMcp -Path state | ConvertTo-Json -Depth 12
 
 移动项目目录后，重新构建以更新 `artifacts/mcp-config.json` 中的绝对路径，并同步修改客户端配置。
 
-在 Mods 菜单停用 Probably Stolen MCP 并重启游戏，即可停止游戏桥接；同时可从 AI 客户端移除服务配置。停用不会撤销已经发生的游戏操作。本版本不添加自定义物品或存档格式。
+在 Mods 菜单停用 Probably Automated 并重启游戏，即可停止游戏桥接；同时可从 AI 客户端移除服务配置。停用不会撤销已经发生的游戏操作。本版本不添加自定义物品或存档格式。
 
 ## 开发与验证
 
@@ -343,11 +353,12 @@ Invoke-PSMcp -Path state | ConvertTo-Json -Depth 12
 
 测试使用模拟游戏状态，运行生产 HTTP 桥接代码、真实 MCP 服务进程和官方 MCP 客户端，覆盖主线程调度、过期状态、重复动作、部分失败、排队超时、认证和 stdio 工具调用。它不能代替游戏内测试。
 
-截至 **2026-10-31** 的开发验证记录：
+截至 **2026-11-07**：
 
-- 迁移前，29 项协议与 MCP 检查全部通过，包括对发布产物的验证。
-- 更名前迁移开发目录后，编译与打包成功，0 警告、0 错误；测试运行被 Windows 应用控制策略拦截，新目录运行验证尚未完成。
-- 尚未完成真实游戏中的 Mod 加载、扫描与动作验证。
+- 当前目录完成 0.2.5 构建和打包，128 项协议、HTTP 与官方 MCP 客户端检查通过。
+- 迁移前的同一功能实现已完成真实游戏中的一天经营及扩展测试；[能力清单](docs/capabilities.md)记录版本、调用、实际后果和证据。
+- 本次迁移保留目标仓库既有的 `PSMcp.*` 命名与 Mod ID；历史实测 JSON 和截图保持原样，其中旧名称属于证据来源，不是当前安装路径。迁移后命名版本的整套游戏流程未重复验收。
+- 自动检查使用游戏替身；单独列出 MCP 工具或编译成功不能证明全部游戏行为通过。
 
 ### 主线程与动作处理
 

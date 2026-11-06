@@ -6,7 +6,7 @@ using PSMcp.Server;
 
 if (args.Contains("--help"))
 {
-    Console.WriteLine("Probably Stolen MCP server (stdio)\nUsage: PSMcp.Server [--connection <connection.json>]\nEnvironment: PSMCP_CONNECTION_FILE overrides the default Unity ModData path.\nEnable the game Mod first; it creates connection.json on startup.");
+    Console.WriteLine("Probably Automated MCP server (stdio)\nUsage: PSMcp.Server [--connection <connection.json>]\nEnvironment: PSMCP_CONNECTION_FILE overrides the default Unity ModData path.\nEnable the game Mod first; it creates connection.json on startup.");
     return;
 }
 

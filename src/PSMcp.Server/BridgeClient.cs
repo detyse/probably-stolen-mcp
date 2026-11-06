@@ -19,6 +19,8 @@ public sealed class BridgeClient : IDisposable
 
     public Task<BridgeResponse> Health(CancellationToken cancellation = default) => Send("health", null, cancellation);
     public Task<BridgeResponse> State(CancellationToken cancellation = default) => Send("state", null, cancellation);
+    public Task<BridgeResponse> View(CancellationToken cancellation = default) => Send("view", null, cancellation);
+    public Task<BridgeResponse> ActionStatus(string requestId, CancellationToken cancellation = default) => Send("actions/" + Uri.EscapeDataString(requestId), null, cancellation);
     public Task<BridgeResponse> Perform(ActionRequest action, CancellationToken cancellation = default) => Send("actions", action, cancellation);
 
     private async Task<BridgeResponse> Send(string path, ActionRequest? action, CancellationToken cancellation)
@@ -32,7 +34,7 @@ public sealed class BridgeClient : IDisposable
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or JsonException)
         {
-            return BridgeResponse.Error("connection_file_unavailable", "Enable Probably Stolen MCP in the game's Mods menu and restart the game. Set --connection or PSMCP_CONNECTION_FILE to the connection.json path shown in the Mod log.");
+            return BridgeResponse.Error("connection_file_unavailable", "Enable Probably Automated in the game's Mods menu and restart the game. Set --connection or PSMCP_CONNECTION_FILE to the connection.json path shown in the Mod log.");
         }
 
         if (connection?.ProtocolVersion != Protocol.Version)
@@ -68,7 +70,7 @@ public sealed class BridgeClient : IDisposable
         catch (HttpRequestException)
         {
             return BridgeResponse.Error(action == null ? "bridge_unavailable" : "action_outcome_unknown",
-                action == null ? "Cannot reach the Mod. Start the game with Probably Stolen MCP enabled."
+                action == null ? "Cannot reach the Mod. Start the game with Probably Automated enabled."
                     : "The connection failed; execution may have started. Read state before issuing a new action.", action?.RequestId);
         }
         catch (JsonException)

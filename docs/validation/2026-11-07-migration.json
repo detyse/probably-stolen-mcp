@@ -1,0 +1,27 @@
+{
+  "date": "2026-11-07",
+  "version": "0.2.5",
+  "protocol": 2,
+  "projects": "PSMcp",
+  "modId": "probably-stolen-mcp",
+  "modDisplayName": "Probably Automated",
+  "build": {
+    "command": "./scripts/Build.ps1 -GamePath '<local game directory>'",
+    "warnings": 0,
+    "success": true,
+    "checksPassed": 128,
+    "errors": 0
+  },
+  "liveDriver": {
+    "errorCode": "bridge_unavailable",
+    "readOnlyQuerySucceeded": false,
+    "buildSucceeded": true,
+    "registeredTools": 10,
+    "reason": "The game process was not running during the additional migration check."
+  },
+  "historicalEvidence": {
+    "path": "2026-11-07.json",
+    "note": "Gameplay validation used the pre-migration PawnPilot-named build. Renamed Mod gameplay has not been replayed.",
+    "unchanged": true
+  }
+}

@@ -6,27 +6,38 @@ using PSMcp.Contracts;
 namespace PSMcp.Mod
 {
     /// <summary>Only this adapter touches game objects. Called exclusively from BridgePump.Update.</summary>
-    public sealed class GameAdapter : IGameAdapter
+    public sealed class GameAdapter : IGameAdapter, IResettableGameAdapter
     {
         private StoreClientInstance? previousCustomer;
         private string visitId = "";
+        private readonly ActionRegistry registry = new ActionRegistry();
 
         public GameSnapshot Capture()
         {
+            registry.Clear();
             var state = new GameSnapshot
             {
                 GameVersion = PlayerStore.VERSION,
+                Interaction = ObservationRules.Describe(new InteractionSignals(), false),
                 Limitations = new[]
                 {
-                    "Inventory includes only top-level items in the main inventory; nested contents and other containers are not exported.",
-                    "Hidden authenticity, NPC identities, future events and true item values are not exported.",
-                    "Item movement, trading, bargaining, inspection, manual dialogue advance and night activities are not implemented yet."
+                    "Inventory covers rendered containers and opened nested contents, not all assets or unopened containers. UI references are valid only in the returned snapshot. Wholesale quotes may include items outside the counter.",
+                    "Unrevealed authenticity, NPC identities, future events and true item values are not exported. public_claim features are unverified claims; quotes are current UI prices, not appraisals.",
+                    "Only availableActions are callable. UI controls use native callbacks; disabled or occluded controls have no action. Hold gestures take real time and cancel if their target disappears. Screenshot evidence is available via get_view. Native behavior requires scenario-by-scenario in-game verification."
                 }
             };
-            if (!PlayerStore.HasInstance) return state;
+            if (!PlayerStore.HasInstance)
+            {
+                VisibleUi.Capture(state, registry, false);
+                state.AvailableActions = registry.Actions.OrderBy(a => a.Name, StringComparer.Ordinal).ToArray();
+                state.Interaction.McpSupported = state.AvailableActions.Length > 0;
+                ApplyInputLock(state);
+                return state;
+            }
             var store = PlayerStore.Instance;
             state.GameLoaded = true;
             state.Phase = store.storeState.ToString().ToLowerInvariant();
+            state.Day = StoreStation.Instance != null ? StoreStation.Instance.dayCounter : (int?)null;
             state.Cash = store.GetCash();
             state.Rent = store.GetRentValue();
             state.DaysUntilRent = store.GetRentDayCounter();
@@ -49,11 +60,6 @@ namespace PSMcp.Mod
                 };
             }
 
-            var inventory = store.GetStoreInventory();
-            state.Inventory = inventory?.childItems?.Where(item => item != null)
-                .Select(item => new InventoryItem { Id = item.uniqueId, DisplayName = item.GetDisplayName(true), Count = item.unitCount })
-                .OrderBy(item => item.Id).ToArray() ?? Array.Empty<InventoryItem>();
-
             var dialogue = DialogUIManager.Instance;
             var choices = new List<DialogueChoice>();
             if (dialogue != null && dialogue.dialogChoiceBubbles != null)
@@ -66,33 +72,111 @@ namespace PSMcp.Mod
             }
             state.DialogueChoices = choices.OrderBy(choice => choice.Index).ToArray();
 
+            var ui = UiObservation.Capture();
+            var storeUi = StoreUIManager.Instance;
+            var specialMode = storeUi != null && (storeUi.isShootingMode || storeUi.isMagnifyingMode);
+            state.Trade = TradeObservation.Capture(store, state.Customer, ui);
+            var signals = new InteractionSignals
+            {
+                GameLoaded = true, InStore = !ModHelper.IsOutsideStore(),
+                ConfirmationVisible = ui.ConfirmationVisible, InspectionVisible = ui.InspectionVisible,
+                OtherModalVisible = ui.OtherModalVisible, GlobalLocked = store.lockAllFlag != 0,
+                TradeLocked = state.Trade?.Locked == true,
+                ManualDialogueAdvance = dialogue != null && dialogue.isWaitingForManualAdvance,
+                ConversationActive = dialogue != null && dialogue.isConversationActiveFlag > 0,
+                ChoiceCount = choices.Count, EnabledChoiceCount = choices.Count(choice => choice.Enabled),
+                TradeActive = state.Trade != null && !state.Trade.BusinessComplete
+                    && (state.Trade.Direction != "other" || state.Trade.PanelOpen),
+                BargainingOpen = ui.BargainingOpen
+            };
+
             var actions = new List<AvailableAction>();
-            var inStore = !ModHelper.IsOutsideStore();
-            if (inStore && store.lockAllFlag == 0)
+            if (signals.ManualDialogueAdvance && !signals.ConfirmationVisible && !signals.OtherModalVisible && !signals.InspectionVisible)
+                registry.AddNamed("advance_dialogue", "dialogue_advance", null, "Advance the dialogue that is explicitly waiting for player input.", _ => () => DialogUIManager.Instance.OnAdvancePressed());
+            if (!specialMode && !ObservationRules.BlocksDialogueChoices(signals))
             {
                 foreach (var choice in state.DialogueChoices.Where(choice => choice.Enabled))
                     Add(actions, "dialogue_choice:" + choice.Index, "Choose visible dialogue option: " + choice.Text);
-                var talking = dialogue != null && (dialogue.isConversationActiveFlag > 0 || dialogue.isWaitingForManualAdvance);
-                if (!talking && choices.Count == 0)
+                if (!ObservationRules.BlocksShopActions(signals))
                 {
-                    if (StoreShutterButton.Instance != null && store.lockShutterButtonFlag == 0 && store.CanStartDay()) Add(actions, "open_shop", "Open the shop using the game's shutter button.");
-                    if (store.lockNextBellFlag == 0 && store.CanNextClient()) Add(actions, "next_customer", "Call the next customer.");
-                    if (store.lockClientClickFlag == 0 && store.CanDismissCurrentClient()) Add(actions, "dismiss_customer", "Dismiss the current customer without automatically calling another.");
-                    if (StoreShutterButton.Instance != null && store.lockShutterButtonFlag == 0 && store.CanEndDay()) Add(actions, "close_shop", "Use the game's shutter button; a confirmation may appear.");
+                    if (StoreShutterButton.Instance != null && store.storeState == PlayerStore.StoreState.MORNING && store.lockShutterButtonFlag == 0 && !store.isClientBeingArrested && !store.isHandlingShootout && store.CanStartDay()) Add(actions, "open_shop", "Open the shop using the game's shutter button.");
+                    if (store.storeState == PlayerStore.StoreState.OPEN && store.lockNextBellFlag == 0 && store.CanNextClient()) Add(actions, "next_customer", "Call the next customer.");
+                    if (store.isClientArrived && store.currentClientInstance != null && store.lockClientClickFlag == 0 && store.CanDismissCurrentClient()) Add(actions, "dismiss_customer", "Dismiss the current customer without automatically calling another.");
+                    if (StoreShutterButton.Instance != null && store.storeState == PlayerStore.StoreState.OPEN && store.lockShutterButtonFlag == 0 && !store.isClientBeingArrested && !store.isHandlingShootout && store.CanEndDay()) Add(actions, "close_shop", "Use the game's shutter button; a confirmation may appear.");
                 }
             }
-            state.AvailableActions = actions.ToArray();
+            foreach (var action in actions)
+            {
+                var name = action.Name;
+                registry.AddNamed(name, name.StartsWith("dialogue_choice:", StringComparison.Ordinal) ? "dialogue_choice" : "shop", null, action.Description, _ => () => ExecuteLegacy(name));
+            }
+            var free = !signals.GlobalLocked && !signals.TradeLocked && !signals.ConfirmationVisible
+                && !signals.InspectionVisible && !signals.OtherModalVisible && !signals.ManualDialogueAdvance
+                && !signals.ConversationActive && signals.ChoiceCount == 0 && !specialMode;
+            if (free && signals.InStore && store.storeState == PlayerStore.StoreState.CLOSED)
+            {
+                var bed = UnityEngine.Object.FindObjectOfType<StoreBedroll>();
+                if (bed != null && bed.isActiveAndEnabled)
+                    registry.AddNamed("sleep", "shop", null, "Open the native sleep/day-end summary. Review its food, costs and confirmation before advancing the day.", _ => () => bed.OnClick());
+            }
+            VisibleUi.Capture(state, registry, free, !signals.GlobalLocked || ui.BlockingRoots.Count > 0, ui.BlockingRoots);
+            InventoryAccess.Capture(state, registry, free && !ItemPinHelper.BlocksClicks
+                && (ItemMouseDragHandler.current == null || !ItemMouseDragHandler.current.IsDraggingItem));
+            if (storeUi != null && !signals.GlobalLocked && !signals.ConfirmationVisible && !signals.OtherModalVisible)
+            {
+                if (storeUi.isMagnifyingMode && storeUi.magnifyingScreen != null && storeUi.magnifyingScreen.activeInHierarchy)
+                {
+                    registry.AddNamed("toggle_customer_zoom", "inspection_zoom", null, "Toggle the magnified view of the current customer.", _ => () => storeUi.ToggleMagnifyZoom());
+                    registry.AddNamed("exit_customer_inspection", "inspection_exit", null, "Return from the magnified customer view.", _ => () => storeUi.ExitMagnifyingMode());
+                }
+                if (storeUi.isShootingMode && storeUi.arm != null && storeUi.arm.activeInHierarchy)
+                {
+                    registry.AddNamed("put_away_shotgun", "defence_exit", null, "Put away the shotgun using the native exit handler; this may dismiss the customer.", _ => () => storeUi.ExitShootingMode());
+                    if (storeUi.CanShoot()) registry.AddNamed("fire_shotgun", "defence_fire", null, "Fire at the current customer in the game's active aiming mode. The normal permanent gameplay consequences apply.", _ => () => storeUi.Shoot());
+                }
+            }
+            state.AvailableActions = registry.Actions.OrderBy(a => a.Name, StringComparer.Ordinal).ToArray();
+            state.Context = new GameContext
+            {
+                Location = TransitUI.IsOpen ? "transit_map" : signals.InStore ? "store" : MapUIManager.Instance?.Current?.Id ?? "outside_store",
+                Mode = storeUi != null && storeUi.isShootingMode ? "aiming" : storeUi != null && storeUi.isMagnifyingMode ? "customer_inspection" : "normal",
+                DialogueState = signals.ChoiceCount > 0 ? "choice" : signals.ManualDialogueAdvance ? "manual_advance" : signals.ConversationActive ? "playing" : "idle",
+                InputLocks = new[] { signals.GlobalLocked ? "global" : null, signals.TradeLocked ? "trade" : null }.Where(x => x != null).Select(x => x!).ToArray(),
+                ModalPanels = ui.BlockingPanels.Select(p => p.Kind).ToArray()
+            };
+            state.Interaction = ObservationRules.Describe(signals, state.AvailableActions.Length > 0);
+            if (state.Interaction.WaitingFor == "player")
+                state.Interaction.McpSupported = state.AvailableActions.Any(a => a.Kind.StartsWith("ui_", StringComparison.Ordinal)
+                    || a.Kind.StartsWith("dialogue_", StringComparison.Ordinal) || a.Kind == "trade_open" || (!signals.TradeActive && free));
+            if (state.Context.Mode != "normal" && state.AvailableActions.Any(a => a.Kind.StartsWith("inspection_", StringComparison.Ordinal) || a.Kind.StartsWith("defence_", StringComparison.Ordinal)))
+                state.Interaction = new InteractionInfo { Kind = state.Context.Mode, WaitingFor = "player", McpSupported = true,
+                    Message = "Use the listed actions for the current special input mode. get_view provides the visible evidence.", RequiredInput = state.Context.Mode };
+            state.Interaction.Panels = ui.BlockingPanels.ToArray();
+            ApplyInputLock(state);
             return state;
+        }
+
+        private void ApplyInputLock(GameSnapshot state)
+        {
+            if (NativeInput.Busy)
+            {
+                registry.Clear(); state.AvailableActions = Array.Empty<AvailableAction>();
+                foreach (var control in state.Controls) { control.Enabled = false; control.Actions = Array.Empty<string>(); control.DisabledReason = "native_hold"; }
+                state.Context.InputLocks = state.Context.InputLocks.Concat(new[] { "native_hold" }).ToArray();
+                state.Interaction = new InteractionInfo { Kind = "input_in_progress", WaitingFor = "game", Message = "A hold gesture is in progress. Observe again after it releases or cancels.", Blockers = new[] { "native_hold" } };
+            }
         }
 
         private static void Add(List<AvailableAction> actions, string name, string description) =>
             actions.Add(new AvailableAction { Name = name, Description = description });
 
-        public void Execute(string action)
+        public Action Prepare(string action, ActionArguments arguments) => registry.Prepare(action, arguments);
+
+        public void ResetReferences() { registry.Reset(); previousCustomer = null; visitId = ""; }
+
+        private void ExecuteLegacy(string action)
         {
-            // Re-check on the main thread; never bypass the game's normal UI handlers.
-            if (!Capture().AvailableActions.Any(candidate => candidate.Name == action))
-                throw new InvalidOperationException("Action is no longer available.");
+            // GameSession has just rebuilt and validated the registry on this same main-thread turn.
             var store = PlayerStore.Instance;
             switch (action)
             {
