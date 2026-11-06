@@ -26,7 +26,7 @@ namespace PSMcp.Mod
                     "Only availableActions are callable. UI controls use native callbacks; disabled or occluded controls have no action. Hold gestures take real time and cancel if their target disappears. Screenshot evidence is available via get_view. Native behavior requires scenario-by-scenario in-game verification."
                 }
             };
-            if (!PlayerStore.HasInstance)
+            if (MainMenuUIController.Instance != null || !PlayerStore.HasInstance)
             {
                 VisibleUi.Capture(state, registry, false);
                 state.AvailableActions = registry.Actions.OrderBy(a => a.Name, StringComparer.Ordinal).ToArray();
@@ -113,6 +113,13 @@ namespace PSMcp.Mod
             var free = !signals.GlobalLocked && !signals.TradeLocked && !signals.ConfirmationVisible
                 && !signals.InspectionVisible && !signals.OtherModalVisible && !signals.ManualDialogueAdvance
                 && !signals.ConversationActive && signals.ChoiceCount == 0 && !specialMode;
+            // Use the same escape resolver as the native back key. It closes the
+            // topmost item window or selection before opening the pause menu.
+            if (storeUi != null && storeUi.escapeUIManager != null
+                && (free || (!signals.GlobalLocked && ui.BlockingPanels.Any(p => p.Kind == "pause_menu"))))
+                registry.AddNamed("navigate_back", "ui_back", null,
+                    "Use the native back action: close the current window/selection, or open/close the pause menu. Read state after each call.",
+                    _ => () => storeUi.ResolveEscape());
             if (free && signals.InStore && store.storeState == PlayerStore.StoreState.CLOSED)
             {
                 var bed = UnityEngine.Object.FindObjectOfType<StoreBedroll>();

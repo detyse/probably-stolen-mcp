@@ -4,7 +4,7 @@
 
 An independent C# Mod and MCP server that lets an AI client observe and play *Probably Stolen* through native game actions. Bring your own MCP client and model.
 
-**Status: experimental, version 0.2.5 / bridge protocol 2.** Suitable for developers and players willing to build from source. This is not a claim of complete gameplay or game-version coverage.
+**Status: experimental, version 0.2.6 / bridge protocol 2.** Suitable for developers and players willing to build from source. This is not a claim of complete gameplay or game-version coverage.
 
 ## Start here
 
@@ -44,11 +44,11 @@ Use **observe → choose a current action → execute → verify**. The server r
 
 ## What is verified
 
-Recorded gameplay covers a business day, showcases, phone services and an upgrade, reporting, night scavenging, inventory placement/sorting, and trash cleanup. Those records came from the pre-migration build. The renamed Mod has not repeated the complete gameplay acceptance run.
+Recorded gameplay covers a business day, showcases, phone services and an upgrade, reporting, night scavenging, inventory placement/sorting, and trash cleanup. Those records came from the pre-migration build. Version 0.2.6 additionally tested all 9 startable professions and their item operations with the renamed Mod; the complete business day has not been repeated with that package.
 
-The local automated suite has 151 passing checks, including the production HTTP transport, an actual MCP server/client exchange, and standalone bundled help. Game objects in these tests are substitutes; these results do not establish gameplay compatibility.
+The local automated suite has 152 passing checks, including the production HTTP transport, an actual MCP server/client exchange, and standalone bundled help. Game objects in these tests are substitutes; these results do not establish gameplay compatibility.
 
-The game baseline is Steam App 4348910, Build 26337366, displaying `VERSION 100-REV6`. New-game character selection, complete appraisal and production workflows, all night locations, other game versions, and all resolutions remain unverified.
+The game baseline is Steam App 4348910, Build 26337366, displaying `VERSION 100-REV6`. New-game selection and representative profession items are covered in the [profession report](docs/profession-tests.md). Complete appraisal, overnight production, all night locations, other game versions, and all resolutions remain unverified.
 
 See [capabilities and gameplay evidence (Chinese)](docs/capabilities.md) and the [publication assessment](docs/public-readiness.md). The [interaction catalog](docs/game-interactions.md) is a design reference, not a completed-feature list.
 

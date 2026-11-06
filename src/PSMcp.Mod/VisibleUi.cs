@@ -145,17 +145,40 @@ namespace PSMcp.Mod
             }
             foreach (var slot in Object.FindObjectsOfType<WildNetworkSlot>().OrderBy(s => s.GetInstanceID()))
             {
-                if (!WildNetworkUI.IsOpen || !Visible(slot) || slot.onClick == null) continue;
-                var label = PlayerStore.Instance.networkUpgrade.TryGetValue(slot.id, out var upgrade)
-                    ? upgrade.GetLocalizedTitle() : Label(slot);
-                var enabled = InScope(slot) && Reachable(slot, out _);
-                var action = enabled ? registry.Add("ui_select_upgrade", slot, "View upgrade: " + label,
-                    _ => () => slot.OnPointerClick(Pointer(slot))) : null;
-                controls.Add(new UiControl { EntityId = registry.Id(slot), Kind = "upgrade", Label = label,
-                    NearbyText = Label(slot), Bounds = Bounds(slot), Enabled = enabled,
-                    DisabledReason = enabled ? null : "occluded_or_outside_view",
-                    Actions = action == null ? Array.Empty<string>() : new[] { action } });
+                if (!Visible(slot) || slot.onClick == null) continue;
+                var control = MenuCards.Describe(slot);
+                var menuCard = control != null;
+                if (control == null)
+                {
+                    if (!WildNetworkUI.IsOpen || !PlayerStore.HasInstance) continue;
+                    var label = PlayerStore.Instance.networkUpgrade.TryGetValue(slot.id, out var upgrade)
+                        ? upgrade.GetLocalizedTitle() : Label(slot);
+                    control = new UiControl { Kind = "upgrade", Label = label, Enabled = true };
+                }
+                var nativeEnabled = control.Enabled;
+                var enabled = nativeEnabled && InScope(slot) && Reachable(slot, out _);
+                var kind = menuCard ? "ui_select_" + control.Kind : "ui_select_upgrade";
+                var description = control.Kind == "starting_perk" ? "Toggle starting perk: " + control.Label
+                    : "View " + control.Kind + ": " + control.Label;
+                var action = enabled ? registry.Add(kind, slot, description,
+                    _ => () =>
+                    {
+                        var pointer = Pointer(slot);
+                        // Perk removal distinguishes the hovered selected-row copy
+                        // from the duplicate entry in the available grid.
+                        if (menuCard) slot.OnPointerEnter(pointer);
+                        try { slot.OnPointerClick(pointer); }
+                        finally { if (menuCard && slot != null) slot.OnPointerExit(pointer); }
+                    }, allowWithoutGame: !state.GameLoaded) : null;
+                control.EntityId = registry.Id(slot);
+                control.NearbyText = Label(slot);
+                control.Bounds = Bounds(slot);
+                control.Enabled = enabled;
+                control.DisabledReason = enabled ? null : nativeEnabled ? "occluded_or_outside_view" : control.DisabledReason;
+                control.Actions = action == null ? Array.Empty<string>() : new[] { action };
+                controls.Add(control);
             }
+
             foreach (var selectable in Object.FindObjectsOfType<Selectable>().OrderBy(s => s.GetInstanceID()))
             {
                 if (!Visible(selectable)) continue;
@@ -173,7 +196,7 @@ namespace PSMcp.Mod
                 }
                 if (selectable is Button button)
                 {
-                    control.Kind = "button";
+                    control.Kind = "button"; MenuCards.DescribeCheckbox(button, control);
                     Add("ui_click", _ => () => button.OnPointerClick(Pointer(button)));
                 }
                 else if (selectable is Toggle toggle)
@@ -332,7 +355,7 @@ namespace PSMcp.Mod
 
             foreach (var window in WindowsHandler.current?.visibleWindows?.ToArray() ?? Array.Empty<PixelWindow>())
             {
-                if (!window.IsVisible() || !window.canMove || !Visible(window.handler)) continue;
+                if (window == null || !Visible(window.handler) || !window.IsVisible() || !window.canMove) continue;
                 var enabled = !window.isLocked && InScope(window.handler) && Reachable(window.handler, out _);
                 var close = enabled ? registry.Add("ui_close_window", window, "Close " + window.titleString + " through the native window handler.",
                     _ => () => WindowsHandler.CloseWindow(window), allowWithoutGame: !state.GameLoaded) : null;

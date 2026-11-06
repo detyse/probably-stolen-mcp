@@ -244,6 +244,8 @@ try
     var inventoryResult = await client.CallToolAsync("get_inventory", new Dictionary<string, object?> { ["containerId"] = "container-1", ["offset"] = 1, ["limit"] = 10 }, cancellationToken: timeout.Token);
     Check(inventoryResult.IsError != true && inventoryResult.StructuredContent!.Value.GetProperty("total").GetInt32() == 1
         && inventoryResult.StructuredContent.Value.GetProperty("inventory").GetArrayLength() == 0, "inventory pagination keeps container totals without exporting extra items");
+    Check(inventoryResult.StructuredContent!.Value.GetProperty("containers")[0].GetProperty("label").GetString() == "种子输入",
+        "native container labels survive bridge and paginated MCP inventory summaries");
     var viewResult = await client.CallToolAsync("get_view", cancellationToken: timeout.Token);
     Check(viewResult.IsError != true && viewResult.Content.OfType<ImageContentBlock>().Single().DecodedData.Length > 0
         && !viewResult.Content.OfType<TextContentBlock>().Single().Text.Contains("iVBOR"), "view returns an MCP image without duplicating base64 in text");
@@ -308,7 +310,7 @@ sealed class FakeGame : IGameAdapter
             Trade = GameLoaded ? Trade : null,
             Interaction = GameLoaded ? Interaction : ObservationRules.Describe(new InteractionSignals(), false),
             Inventory = [new InventoryItem { EntityId = "item-42", ContainerId = "container-1", Id = 42, DisplayName = "Test item", Count = 1 }],
-            Containers = [new InventoryContainer { EntityId = "container-1", Items = [new InventoryItem { EntityId = "item-42", Count = 1 }] }],
+            Containers = [new InventoryContainer { EntityId = "container-1", Label = "种子输入", Items = [new InventoryItem { EntityId = "item-42", Count = 1 }] }],
             Controls = [new UiControl { EntityId = "control-1", Value = ParameterValue,
                 NearbyText = "Day 1 | 700 credits", Bounds = new ScreenBounds { X = 0.5, Y = 0.25, Width = 0.1, Height = 0.03 } }],
             AvailableActions = GameLoaded ? [new AvailableAction { Name = "next_customer", Description = "Test action" },

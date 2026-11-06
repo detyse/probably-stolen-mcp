@@ -1,6 +1,6 @@
 # 菜单、对话与原生界面
 
-通用 UI 入口已接入；主菜单指定存档载入有迁移前实机证据，新游戏选人完整流程未验收。gameLoaded=false 时仍可能有允许的菜单动作。
+0.2.6 已实测 9 个可开局职业从主菜单进入店铺、特性选择／互斥／撤销、难度与开局开关，以及返回主菜单。另 3 个职业由游戏标为开发中，不能继续。指定存档载入另有迁移前证据。gameLoaded=false 时仍可能有允许的菜单动作。
 
 1. get_ui_state 读取 screenText、controls、interaction、availableActions 和 snapshotId。
 2. 用 label、windowTitle、nearbyText 辨认控件；同名按钮还可结合 bounds 与 get_view 截图。
@@ -14,3 +14,7 @@
 顾客放大模式中使用当前 toggle_customer_zoom / exit_customer_inspection 并配合截图。持枪模式中只使用列出的 fire_shotgun / put_away_shotgun，动作保留原生后果。这些特殊模式尚未实测，不能将文档描述当成流程通过。
 
 返回菜单、切换场景或存档后实体引用与快照可能失效，重新观察。没有任意坐标点击、任意按键或后台强制解锁入口。
+
+职业、难度、特性卡分别返回 specialization、difficulty、starting_perk 控件；isOn 表示当前选择，禁用卡没有动作。查看开发中职业卡不等于允许开局。
+
+游戏内当前列出 navigate_back 时，可通过原生后退关闭顶部窗口／选择或打开暂停菜单；每次执行后再观察，不能假定一次必定到主菜单。

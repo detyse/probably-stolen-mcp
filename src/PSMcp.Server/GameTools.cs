@@ -29,7 +29,7 @@ public sealed class GameTools(BridgeClient bridge)
     }
 
     [McpServerTool(Name = "get_inventory", ReadOnly = true, OpenWorld = false)]
-    [Description("Read rendered containers and their items: entityId, ownership, shape, position and known features. Opened nested containers appear separately; unopened contents are not read. Filter by a current containerId and paginate. This query does not use or move items: find current item actions via get_available_actions or get_entity, then perform_action. Use entityId candidates from parameters, not numeric item IDs. See get_help(topic=items).")]
+    [Description("Read rendered containers (label may be empty for icon-only panels) and their items: entityId, ownership, shape, position and known features. Opened nested containers appear separately; unopened contents are not read. Filter by a current containerId and paginate. This query does not use or move items: find current item actions via get_available_actions or get_entity, then perform_action. Use entityId candidates from parameters, not numeric item IDs. See get_help(topic=items).")]
     public async Task<CallToolResult> GetInventory(CancellationToken cancellationToken,
         [Description("Current container entityId, or omit for all rendered containers.")] string? containerId = null,
         int offset = 0, int limit = 100)
@@ -42,7 +42,7 @@ public sealed class GameTools(BridgeClient bridge)
         var items = result.State.Inventory.Where(i => containerId == null || i.ContainerId == containerId).ToArray();
         return Content(new { result.ProtocolVersion, result.State.SnapshotId, result.State.GameLoaded, result.State.InventoryScope,
             Containers = result.State.Containers.Where(c => containerId == null || c.EntityId == containerId)
-                .Select(c => new { c.EntityId, c.Role, c.ParentItemId, c.WindowTitle, c.Kind, c.InsertLocked, c.RemoveLocked, c.Shape, ItemCount = c.Items.Length }),
+                .Select(c => new { c.EntityId, c.Label, c.Role, c.ParentItemId, c.WindowTitle, c.Kind, c.InsertLocked, c.RemoveLocked, c.Shape, ItemCount = c.Items.Length }),
             Total = items.Length, Offset = offset, Inventory = items.Skip(offset).Take(limit) });
     }
 

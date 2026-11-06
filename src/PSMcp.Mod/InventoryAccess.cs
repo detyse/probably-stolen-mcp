@@ -31,6 +31,7 @@ namespace PSMcp.Mod
                 containers.Add(new InventoryContainer
                 {
                     EntityId = id, Role = Role(inventory), ParentItemId = parent == null ? null : registry.Id(parent), WindowTitle = VisibleUi.WindowTitle(node),
+                    Label = ContainerLabel(node, inventory),
                     Kind = inventory is GameGridInventory ? "grid" : inventory is GameGridScrollableInventory ? "scrollable_grid" : "slot", InsertLocked = inventory.IsInsertLocked(), RemoveLocked = inventory.IsRemoveLocked(),
                     Shape = inventory is GameGridInventory grid ? DescribeShape(grid.inventoryShape) : null,
                     Items = inventory.childItems.Where(i => i != null).OrderBy(i => i.uniqueId).Select(i => Describe(i, registry, id)).ToArray()
@@ -135,6 +136,18 @@ namespace PSMcp.Mod
             }
             if (ItemSelectHandler.current != null && ItemSelectHandler.current.IsEquipped)
                 registry.AddNamed("cancel_item_selection", "item_cancel", null, "Cancel the current selected tool.", _ => () => ItemSelectHandler.current.Cancel());
+        }
+
+        private static string ContainerLabel(TreeNodeRender node, GameInventory inventory)
+        {
+            // Read the localized heading from this visible machine panel only.
+            foreach (var ancestor in node.GetComponentsInParent<TreeNodeRender>())
+                if (ancestor.element is MachineryPanel panel && panel.label?.handler != null)
+                {
+                    var text = VisibleUi.Label(panel.label.handler);
+                    if (!string.IsNullOrWhiteSpace(text)) return text;
+                }
+            return inventory is GameSlotInventory slot ? slot.GetTooltip()?.nakedText?.Trim() ?? "" : "";
         }
 
         private static string Role(GameInventory inventory)

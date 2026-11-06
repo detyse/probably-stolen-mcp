@@ -74,6 +74,7 @@ public sealed class GameContext
 public sealed class InventoryContainer
 {
     public string EntityId { get; set; } = "";
+    public string Label { get; set; } = "";
     public string Role { get; set; } = "container";
     public string? ParentItemId { get; set; }
     public string WindowTitle { get; set; } = "";

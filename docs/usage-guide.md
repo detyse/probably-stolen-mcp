@@ -2,9 +2,9 @@
 
 [简体中文](usage-guide.zh-CN.md) · [Project home](../README.en.md) · [Capabilities and evidence (Chinese)](capabilities.md)
 
-For **0.2.5 development builds / bridge protocol 2**, on Windows x64. This project lets your own AI client operate *Probably Stolen*. Your client supplies the model, account, and inference.
+For **0.2.6 development builds / bridge protocol 2**, on Windows x64. This project lets your own AI client operate *Probably Stolen*. Your client supplies the model, account, and inference.
 
-This is an experimental mod. Recorded gameplay covers a business day, showcases, phone calls and upgrades, reporting, scavenging, sorting, and trash containers. That evidence comes from builds before the project rename. The renamed Mod has not repeated the complete gameplay acceptance run. New-game character selection, full appraisal workflows, production machines, and all night destinations remain unverified. See the [capability record](capabilities.md) for the precise scope.
+This is an experimental mod. Recorded gameplay covers a business day, showcases, phone calls and upgrades, reporting, scavenging, sorting, and trash containers. That evidence comes from builds before the project rename. The renamed 0.2.6 package additionally tested all 9 startable professions and representative item operations; see the [profession report](profession-tests.md). A complete business day, full appraisal, overnight production, and all night destinations were not repeated in this session. See the [capability record](capabilities.md) for the precise scope.
 
 ## 1. Prerequisites
 
@@ -161,6 +161,12 @@ The game applies its normal costs, capacity, ownership, injuries, false-report p
 
 Use the current `sleep` action for the bed. Open a backpack before querying its contents. The client does not need separate click rules for every page: the Mod combines game rules and interface state into the current action list. Unsupported custom controls can still lack an action.
 
+### New games and profession items
+
+Have the agent read the menu and follow New game → Profession → Perks → Difficulty/start options → Start. Card isOn reflects selection; disabled cards and coming-soon professions do not authorize continuing. In the store, use navigate_back when listed, observe whether it closed a window or opened pause, then choose Main menu.
+
+Open a profession machine and use containers[].label, windowTitle, and parentItemId to distinguish input/output, seed, water, and animal areas before choosing a legal item_move destination. Icon-only slots can have an empty label. Legal tool targets change with game conditions: a full bottle becomes a water-pack target only after draining. Verify the resulting items; animal processing can take two steps, and overnight production requires normal settlement. See the [profession test results](profession-tests.md).
+
 ## 8. Agent calling rules
 
 Use the loop **observe → select an available action → execute → verify**:
@@ -204,7 +210,7 @@ The [Chinese README](../README.md#手动-http-调用) documents advanced HTTP de
 
 ## 10. Updating, removal, and data handling
 
-Exit the game before updating. Pull the source, rebuild, replace the three Mod files, and restart the game and MCP. If you move the repository, regenerate configuration and update the client's absolute paths. Custom ports and connection-file settings need migration when upgrading from PawnPilot.
+Exit the game and stop the client’s MCP service and any local integration driver before rebuilding, so published DLLs are not locked. Pull the source, rebuild, replace the three Mod files, and start the game and MCP again. If you move the repository, regenerate configuration and update the client's absolute paths. Custom ports and connection-file settings need migration when upgrading from PawnPilot.
 
 To disable control, turn off Probably Automated in the Mods menu and restart; remove the client's MCP entry if desired. Disabling does not undo actions already taken. This version adds no custom items or save format.
 

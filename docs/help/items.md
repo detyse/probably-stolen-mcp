@@ -1,6 +1,6 @@
 # 物品使用、工具与容器
 
-入口已接入；回执阅读、绷带消耗、背包开关／卸载和部分转移整理有迁移前实机证据，所有物品变体并未全部验收。详见 get_help(topic="capabilities")。
+入口已接入；回执阅读、绷带消耗、背包开关／卸载和部分转移整理有迁移前实机证据，0.2.6 另有 9 个职业开局及对应物品操作实测，所有物品变体并未全部验收。详见 get_help(topic="capabilities")。
 
 1. get_inventory 读取已呈现容器、物品 entityId、归属、数量、形状和位置。可用 containerId、offset、limit 分页（limit 1–200）。未打开内容不会自动导出。
 2. get_entity(entityId) 查询该对象和关联动作，或在 get_available_actions 中按 kind、targetId、description 找动作。
@@ -25,3 +25,5 @@
 检查形状、空间、归属与插入／移出锁。非法摆放会拒绝；转移后对照来源和目标的数量、归属与位置。拆分和堆叠由原生放置规则决定，不提供原子多件事务或全局回滚。放入垃圾桶和永久清空是不同后果，不要将它们混为一谈。
 
 所有上表名称仅是类型示例；实际执行要复制 availableActions 中的完整 name，参数按当次 parameters 填写。物品名称或 numeric id 不能用来编造实体引用。
+
+设备容器的 label 来自可见面板名称或插槽提示，可能为空。结合 windowTitle、parentItemId 和合法 destinationId 选择输入／输出位置，不能仅凭容器排列次序判断。
