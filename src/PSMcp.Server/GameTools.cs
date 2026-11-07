@@ -29,7 +29,7 @@ public sealed class GameTools(BridgeClient bridge)
     }
 
     [McpServerTool(Name = "get_inventory", ReadOnly = true, OpenWorld = false)]
-    [Description("Read rendered containers (label may be empty for icon-only panels) and their items: entityId, ownership, shape, position and known features. Opened nested containers appear separately; unopened contents are not read. Filter by a current containerId and paginate. This query does not use or move items: find current item actions via get_available_actions or get_entity, then perform_action. Use entityId candidates from parameters, not numeric item IDs. See get_help(topic=items).")]
+    [Description("Read rendered containers (label may be empty for icon-only panels) and their items: entityId, ownership, shape, position, known features and native statusText for visible production, animals, water and power (null when unavailable). Opened nested containers appear separately; unopened contents are not read. Filter by a current containerId and paginate. This query does not use or move items: find current item actions via get_available_actions or get_entity, then perform_action. Use entityId candidates from parameters, not numeric item IDs. See get_help(topic=items).")]
     public async Task<CallToolResult> GetInventory(CancellationToken cancellationToken,
         [Description("Current container entityId, or omit for all rendered containers.")] string? containerId = null,
         int offset = 0, int limit = 100)

@@ -197,6 +197,12 @@ namespace PSMcp.Mod
                 if (selectable is Button button)
                 {
                     control.Kind = "button"; MenuCards.DescribeCheckbox(button, control);
+                    var checkbox = button.GetComponentInParent<TabletCheckbox>();
+                    if (checkbox != null && checkbox.button == button)
+                    {
+                        control.Kind = "checkbox"; control.IsOn = checkbox.IsOn;
+                        if (!string.IsNullOrWhiteSpace(control.NearbyText)) control.Label = control.NearbyText;
+                    }
                     Add("ui_click", _ => () => button.OnPointerClick(Pointer(button)));
                 }
                 else if (selectable is Toggle toggle)

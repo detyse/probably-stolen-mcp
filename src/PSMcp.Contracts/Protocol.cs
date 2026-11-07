@@ -57,6 +57,7 @@ public sealed class InventoryItem
     public string ContainerId { get; set; } = "";
     public string Owner { get; set; } = "unknown";
     public string Description { get; set; } = "";
+    public string? StatusText { get; set; }
     public ItemFeatureInfo[] Features { get; set; } = Array.Empty<ItemFeatureInfo>();
     public GridInfo? Shape { get; set; }
     public bool ContentsOpen { get; set; }

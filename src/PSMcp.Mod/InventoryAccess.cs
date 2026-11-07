@@ -178,10 +178,30 @@ namespace PSMcp.Mod
         {
             Id = item.uniqueId, EntityId = registry.Id(item), ContainerId = container, DisplayName = item.GetDisplayName(true), Count = item.unitCount,
             Owner = GeneralHelper.IsItemOwned(item) ? "player" : "not_player", Description = item.shortDescription ?? "",
-            Shape = DescribeShape(item.modifiedShape), ContentsOpen = item.contentWindow != null && item.contentWindow.IsVisible(),
+            StatusText = ProductionStatus(item), Shape = DescribeShape(item.modifiedShape), ContentsOpen = item.contentWindow != null && item.contentWindow.IsVisible(),
             Features = (item.itemFeatures ?? new List<ItemFeature>()).Where(f => f != null && ObservationRules.FeatureVisible(f.IsInitiallyShown(), f.isDisabled, f.GetPublicHidden(), f.IsExposed()))
                 .Select(f => new ItemFeatureInfo { Text = f.IsExposed() ? f.GetExposedString() : f.GetPublicDisplay(), Knowledge = f.IsExposed() ? "revealed" : "public_claim" }).ToArray()
         };
+
+        private static string? ProductionStatus(GameItem item)
+        {
+            // Reuse the normal hover sections, never the full tooltip (prices, contents,
+            // debug tags). Only rendered player-owned items reach this observation.
+            if (!GeneralHelper.IsItemOwned(item) || !PlayerStore.HasInstance || PlayerStore.Instance.devMode) return null;
+            var builder = new RichTextBuilder(60);
+            MachineProgressHelper.CreateMachineTooltip(builder, item);
+            MachineProgressHelper.CreateSourceItemDefaultTooltip(builder, item);
+            MachineHydroponic.CreateMachineTooltip(builder, item);
+            HusbandryHelper.CreateItemTooltip(builder, item);
+            AnimalCage.CreateTooltip(builder, item);
+            AquacultureHelper.CreateTooltip(builder, item);
+            MachineRAS.CreateTooltip(builder, item);
+            PowerHelper.CreatePowerSourceItemTooltip(builder, item);
+            WaterHelper.CreateWaterContainerTooltip(builder, item);
+            UseCountHelper.CreateUseCountItemTooltip(builder, item);
+            var text = builder.Build().nakedText?.Trim() ?? "";
+            return text.Length > 8192 ? text.Substring(0, 8192) : text;
+        }
 
         private static GridInfo? DescribeShape(GridShape? shape)
         {

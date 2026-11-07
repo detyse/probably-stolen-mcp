@@ -239,6 +239,8 @@ try
         "duplicate button context and screenshot coordinates survive real MCP transport");
     var entityResult = await client.CallToolAsync("get_entity", new Dictionary<string, object?> { ["entityId"] = "item-42" }, cancellationToken: timeout.Token);
     Check(entityResult.IsError != true && entityResult.StructuredContent!.Value.GetProperty("entity").GetProperty("count").GetInt32() == 1, "entity lookup only returns exposed items");
+    Check(entityResult.StructuredContent!.Value.GetProperty("entity").GetProperty("statusText").GetString() == "生长中 2/4",
+        "native production status survives bridge serialization and MCP entity lookup");
     var hiddenResult = await client.CallToolAsync("get_entity", new Dictionary<string, object?> { ["entityId"] = "hidden-item" }, cancellationToken: timeout.Token);
     Check(hiddenResult.IsError == true, "unexposed entities cannot be queried through MCP");
     var inventoryResult = await client.CallToolAsync("get_inventory", new Dictionary<string, object?> { ["containerId"] = "container-1", ["offset"] = 1, ["limit"] = 10 }, cancellationToken: timeout.Token);
@@ -309,8 +311,8 @@ sealed class FakeGame : IGameAdapter
             Customer = new CustomerInfo { VisitId = Actions.ToString(), DisplayName = "Test customer" },
             Trade = GameLoaded ? Trade : null,
             Interaction = GameLoaded ? Interaction : ObservationRules.Describe(new InteractionSignals(), false),
-            Inventory = [new InventoryItem { EntityId = "item-42", ContainerId = "container-1", Id = 42, DisplayName = "Test item", Count = 1 }],
-            Containers = [new InventoryContainer { EntityId = "container-1", Label = "种子输入", Items = [new InventoryItem { EntityId = "item-42", Count = 1 }] }],
+            Inventory = [new InventoryItem { EntityId = "item-42", ContainerId = "container-1", Id = 42, DisplayName = "Test item", Count = 1, StatusText = "生长中 2/4" }],
+            Containers = [new InventoryContainer { EntityId = "container-1", Label = "种子输入", Items = [new InventoryItem { EntityId = "item-42", Count = 1, StatusText = "生长中 2/4" }] }],
             Controls = [new UiControl { EntityId = "control-1", Value = ParameterValue,
                 NearbyText = "Day 1 | 700 credits", Bounds = new ScreenBounds { X = 0.5, Y = 0.25, Width = 0.1, Height = 0.03 } }],
             AvailableActions = GameLoaded ? [new AvailableAction { Name = "next_customer", Description = "Test action" },

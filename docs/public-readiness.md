@@ -27,7 +27,7 @@ The official [modding code of conduct](https://github.com/dragonpan2/probably-st
 ## Before calling it a stable release
 
 - Install the renamed `PSMcp.*` Mod from a fresh package and repeat the full open → trade → close → sleep workflow.
-- Expand beyond the [0.2.6 profession tests](profession-tests.md): full appraisal, overnight production, additional night locations, and other supported game versions still need verification.
+- Expand beyond the [0.2.6 profession tests](profession-tests.md): full appraisal, other production recipes/lifecycles, additional night locations, and other supported game versions still need verification.
 - Test another machine and client configuration. The guides are verified against the scripts and current artifact layout, not a separate clean-PC installation.
 - If shipping downloadable binaries, prepare versioned packages, dependency license notices, and checksums. Current onboarding builds from source.
 
@@ -40,3 +40,5 @@ These are release-quality follow-ups, not hidden claims that the experimental pr
 The [publication-preparation verification record](validation/2026-11-07-public-readiness.json) records the successful build, 151 checks, 21 published-help checks, document example validation, dependency audit, and scoped repository scan.
 
 Follow-up: 0.2.6 was installed in the real game and tested across all 9 startable professions, including menu returns and representative machine/item operations. The [profession report](profession-tests.md) records fixes and remaining limits; this does not replace the full-day or clean-PC follow-ups.
+
+0.2.7 follow-up: the [overnight report](overnight-tests.md) verifies new output from planting, rat husbandry, aquaculture, and 3D printing, and records production-state and service-checkbox fixes. Its listed configurations do not establish complete production-system coverage.

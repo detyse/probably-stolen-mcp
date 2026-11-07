@@ -1,6 +1,6 @@
-# Probably Automated 0.2.6 实现与覆盖
+# Probably Automated 0.2.7 实现与覆盖
 
-对应 [132 个交互族](game-interactions.md) 和 [整体设计](mcp-design.md)。2026-11-07，基于本机 Steam Build 26337366 编译；Mod 与 MCP 桥接协议均为 2。此处的“已接入”指实现了原生执行入口，不代表所有玩法变体都已在存档中验收。
+对应 [132 个交互族](game-interactions.md) 和 [整体设计](mcp-design.md)。2026-11-07，基于本机 Steam Build 26496118 编译；Mod 与 MCP 桥接协议均为 2。此处的“已接入”指实现了原生执行入口，不代表所有玩法变体都已在存档中验收。
 
 查询“现在能控制什么”、开始菜单／选人支持范围与实测状态，优先看 [当前能力清单](capabilities.md)。
 
@@ -87,3 +87,5 @@
 0.2.6 增加 MenuCards 对职业／难度／特性自定义卡片和开局勾选的适配；特性选择使用原生悬停／点击／离开回调，并从菜单目录读取以免意外构造 PlayerStore。navigate_back 调用原生 ResolveEscape。观察先识别 MainMenuUIController；窗口先检查 Unity handler 有效性再查询 IsVisible，解决返主菜单后的失效引用。容器 label 读取可见 MachineryPanel 标题或槽位提示，所有状态／库存／实体查询保持一致。
 
 [9 个职业的实机回归](profession-tests.zh-CN.md)覆盖开局、物品操作和菜单往返；完整经营日与跨夜生产仍在本轮范围外。针对库存分页结果丢失容器名称的风险，增加真实 MCP 传输回归检查。
+
+0.2.7 增加 InventoryItem.statusText：在普通游戏模式下，从已呈现且归玩家所有的物品读取限定的原生悬浮提示片段，覆盖生产进度、动物／鱼、笼舍、水箱、电池和工具次数。不读取完整 tooltip，不导出调试基因或真实估价；文本保留本地化及可能的富文本标记，限 8192 字符。新增真实 MCP 传输检查。TabletCheckbox 读取原生 IsOn 和可见服务标签，执行仍走原 Button 指针回调。跨夜生产的实际产出与回归结果见[独立报告](overnight-tests.zh-CN.md)。

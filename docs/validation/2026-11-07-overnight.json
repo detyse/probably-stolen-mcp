@@ -1,0 +1,4363 @@
+{
+  "dateLocal": "2026-11-07",
+  "timezone": "Asia/Shanghai",
+  "game": {
+    "steamApp": 4348910,
+    "steamBuild": 26496118,
+    "displayVersion": "VERSION 100-Rev12"
+  },
+  "mod": {
+    "name": "Probably Automated",
+    "version": "0.2.7",
+    "protocol": 2,
+    "dllSha256": "890ea5651bbd97da67f4965d04d5846f570834afaf04ebd6a4980eb21af939d2",
+    "note": "The first two printer nights used 0.2.6. Reload, final printer output and all other production scenarios used 0.2.7. This is not an immutable-build replay of every night."
+  },
+  "method": "Official C# MCP client -> stdio server -> authenticated local bridge -> native Unity actions. Normal open/close/sleep settlement only; no developer mode, day skipping, or edited game/save values.",
+  "localEvidenceRoot": ".cache/overnight-tests/",
+  "saveProtection": {
+    "existingSaves": [
+      {
+        "file": "save_0_day1_20261101-211800.es3",
+        "unchanged": true
+      },
+      {
+        "file": "save_0.es3",
+        "unchanged": true
+      },
+      {
+        "file": "save_1_day1_20261107-011842.es3",
+        "unchanged": true
+      },
+      {
+        "file": "save_1_day2_20261107-014844.es3",
+        "unchanged": true
+      },
+      {
+        "file": "save_1_day3_20261107-015945.es3",
+        "unchanged": true
+      },
+      {
+        "file": "save_1_day4_20261107-021022.es3",
+        "unchanged": true
+      },
+      {
+        "file": "save_1.es3",
+        "unchanged": true
+      },
+      {
+        "file": "save_10.es3",
+        "unchanged": true
+      },
+      {
+        "file": "save_11.es3",
+        "unchanged": true
+      },
+      {
+        "file": "save_2.es3",
+        "unchanged": true
+      },
+      {
+        "file": "save_3.es3",
+        "unchanged": true
+      },
+      {
+        "file": "save_4.es3",
+        "unchanged": true
+      },
+      {
+        "file": "save_5.es3",
+        "unchanged": true
+      },
+      {
+        "file": "save_6.es3",
+        "unchanged": true
+      },
+      {
+        "file": "save_7.es3",
+        "unchanged": true
+      },
+      {
+        "file": "save_8.es3",
+        "unchanged": true
+      },
+      {
+        "file": "save_9.es3",
+        "unchanged": true
+      }
+    ],
+    "newSlots": [
+      12,
+      13,
+      14,
+      15
+    ],
+    "note": "All 17 pre-existing save_*.es3 files, including the user saves and previous test slots, have unchanged SHA-256 hashes. Save index/global metadata may change normally. Last daytime retrieval/processing is not claimed to persist across reload without another autosave."
+  },
+  "observations": [
+    {
+      "scenario": "printer progress after reload",
+      "file": "20261107-232557323-7d14b4.result.json",
+      "sha256": "1c0f707c56511e93b496ca0bbf5f26bd9bbc37a72b1f1bed798bd71099c7197c",
+      "gameVersion": "VERSION 100-Rev12",
+      "snapshotId": "87789883ee074ad9b75d3d24a5554395:1",
+      "day": 3,
+      "phase": "morning",
+      "cash": 140,
+      "items": [
+        {
+          "entityId": "ee3d224b40b11_39",
+          "id": 12,
+          "displayName": "3D打印机",
+          "count": 1,
+          "containerId": "ee3d224b40b11_45",
+          "statusText": "<color=#7a9d4a>状态：工作中</color>\n<color=#7a9d4a>[========= ]</color> <color=#7a9d4a>(48/50)</color>"
+        }
+      ]
+    },
+    {
+      "scenario": "printer output after three nights",
+      "file": "20261107-232650857-50a40f.result.json",
+      "sha256": "5b93655c4dbb5dfb7e4e03911e7ddc33c90f9735602ad5c31fc19c53463d0066",
+      "gameVersion": "VERSION 100-Rev12",
+      "snapshotId": "87789883ee074ad9b75d3d24a5554395:40",
+      "day": 4,
+      "phase": "morning",
+      "cash": 135,
+      "items": [
+        {
+          "entityId": "ee3d224b40b11_114",
+          "id": 176,
+          "displayName": "“解放者”3D打印手枪",
+          "count": 1,
+          "containerId": "ee3d224b40b11_92",
+          "statusText": ""
+        }
+      ]
+    },
+    {
+      "scenario": "hydro first-night output",
+      "file": "20261107-232824904-bde725.result.json",
+      "sha256": "e56f9ed7665a885b8f907a67f90368de7c40323a2af544cc193111ae51a50f14",
+      "gameVersion": "VERSION 100-Rev12",
+      "snapshotId": "a3191de82b434ef0ac63e0fb59138fa7:37",
+      "day": 2,
+      "phase": "morning",
+      "cash": 445,
+      "items": [
+        {
+          "entityId": "ebf64dbb42f70_106",
+          "id": 90,
+          "displayName": "填料草种子",
+          "count": 1,
+          "containerId": "ebf64dbb42f70_69",
+          "statusText": ""
+        },
+        {
+          "entityId": "ebf64dbb42f70_107",
+          "id": 89,
+          "displayName": "小型填料草",
+          "count": 1,
+          "containerId": "ebf64dbb42f70_69",
+          "statusText": ""
+        },
+        {
+          "entityId": "ebf64dbb42f70_108",
+          "id": 88,
+          "displayName": "填料草",
+          "count": 1,
+          "containerId": "ebf64dbb42f70_69",
+          "statusText": ""
+        },
+        {
+          "entityId": "ebf64dbb42f70_109",
+          "id": 87,
+          "displayName": "填料草",
+          "count": 1,
+          "containerId": "ebf64dbb42f70_69",
+          "statusText": ""
+        },
+        {
+          "entityId": "ebf64dbb42f70_110",
+          "id": 86,
+          "displayName": "填料草",
+          "count": 1,
+          "containerId": "ebf64dbb42f70_69",
+          "statusText": ""
+        },
+        {
+          "entityId": "ebf64dbb42f70_111",
+          "id": 85,
+          "displayName": "填料草",
+          "count": 1,
+          "containerId": "ebf64dbb42f70_69",
+          "statusText": ""
+        }
+      ]
+    },
+    {
+      "scenario": "rat births",
+      "file": "20261107-233059559-d7a068.result.json",
+      "sha256": "5ec161a3ea79587e2849f21e0002a4f4951af18801da2c823a68b94a1d04e032",
+      "gameVersion": "VERSION 100-Rev12",
+      "snapshotId": "187505dda7a64d8d9adf0e9080e28af8:119",
+      "day": 4,
+      "phase": "morning",
+      "cash": 585,
+      "items": [
+        {
+          "entityId": "ec3fccde6a569_101",
+          "id": 80,
+          "displayName": "老鼠",
+          "count": 1,
+          "containerId": "ec3fccde6a569_28",
+          "statusText": "<color=#008990>雄性 幼崽 老鼠</color>\n<color=#42a2aa>年龄：0天（5克）</color>\n \n<color=#42a2aa>健康值： </color><color=#548100>[========  ]</color> <color=#548100>(89/100)</color>\n<color=#42a2aa>饥饿值： </color><color=#42a2aa>[==        ]</color> <color=#42a2aa>(125/500)</color>\n<color=#42a2aa>生长速度: </color><color=#42a2aa>1.02</color>\n<color=#42a2aa>预期产仔数: </color><color=#42a2aa>3.05</color>\n<color=#42a2aa>免疫力: </color><color=#42a2aa>30</color>\n<color=#42a2aa>最大健康值: </color><color=#42a2aa>100</color>\n<color=#42a2aa>寿命: </color><color=#42a2aa>1</color>\n<color=#42a2aa>饥饿速度: </color><color=#42a2aa>65</color>"
+        },
+        {
+          "entityId": "ec3fccde6a569_104",
+          "id": 79,
+          "displayName": "老鼠",
+          "count": 1,
+          "containerId": "ec3fccde6a569_66",
+          "statusText": "<color=#008990>雌性 幼崽 老鼠</color>\n<color=#42a2aa>年龄：0天（5克）</color>\n \n<color=#42a2aa>健康值： </color><color=#548100>[========= ]</color> <color=#548100>(95/103)</color>\n<color=#42a2aa>饥饿值： </color><color=#42a2aa>[==        ]</color> <color=#42a2aa>(125/500)</color>\n<color=#42a2aa>生长速度: </color><color=#42a2aa>1</color>\n<color=#42a2aa>预期产仔数: </color><color=#42a2aa>3</color>\n<color=#42a2aa>免疫力: </color><color=#42a2aa>30</color>\n<color=#42a2aa>最大健康值: </color><color=#42a2aa>102.98</color>\n<color=#42a2aa>寿命: </color><color=#42a2aa>1</color>\n<color=#42a2aa>饥饿速度: </color><color=#42a2aa>65</color>\n \n \n<color=#c07d7d>过度拥挤2</color>"
+        },
+        {
+          "entityId": "ec3fccde6a569_105",
+          "id": 78,
+          "displayName": "老鼠",
+          "count": 1,
+          "containerId": "ec3fccde6a569_66",
+          "statusText": "<color=#008990>雌性 幼崽 老鼠</color>\n<color=#42a2aa>年龄：0天（5克）</color>\n \n<color=#42a2aa>健康值： </color><color=#548100>[==========]</color> <color=#548100>(107/100)</color>\n<color=#42a2aa>饥饿值： </color><color=#42a2aa>[==        ]</color> <color=#42a2aa>(125/500)</color>\n<color=#42a2aa>生长速度: </color><color=#42a2aa>1</color>\n<color=#42a2aa>预期产仔数: </color><color=#42a2aa>3</color>\n<color=#42a2aa>免疫力: </color><color=#42a2aa>30.05</color>\n<color=#42a2aa>最大健康值: </color><color=#42a2aa>100</color>\n<color=#42a2aa>寿命: </color><color=#42a2aa>1</color>\n<color=#42a2aa>饥饿速度: </color><color=#42a2aa>65</color>\n \n \n<color=#c07d7d>过度拥挤2</color>"
+        },
+        {
+          "entityId": "ec3fccde6a569_106",
+          "id": 77,
+          "displayName": "老鼠",
+          "count": 1,
+          "containerId": "ec3fccde6a569_66",
+          "statusText": "<color=#008990>雌性 幼崽 老鼠</color>\n<color=#42a2aa>年龄：0天（5克）</color>\n \n<color=#42a2aa>健康值： </color><color=#548100>[========= ]</color> <color=#548100>(91/100)</color>\n<color=#42a2aa>饥饿值： </color><color=#42a2aa>[==        ]</color> <color=#42a2aa>(125/500)</color>\n<color=#42a2aa>生长速度: </color><color=#42a2aa>1</color>\n<color=#42a2aa>预期产仔数: </color><color=#42a2aa>3</color>\n<color=#42a2aa>免疫力: </color><color=#42a2aa>30</color>\n<color=#42a2aa>最大健康值: </color><color=#42a2aa>100</color>\n<color=#42a2aa>寿命: </color><color=#42a2aa>1</color>\n<color=#42a2aa>饥饿速度: </color><color=#42a2aa>65</color>\n \n \n<color=#c07d7d>过度拥挤2</color>"
+        },
+        {
+          "entityId": "ec3fccde6a569_107",
+          "id": 76,
+          "displayName": "老鼠",
+          "count": 1,
+          "containerId": "ec3fccde6a569_66",
+          "statusText": "<color=#008990>雄性 幼崽 老鼠</color>\n<color=#42a2aa>年龄：0天（5克）</color>\n \n<color=#42a2aa>健康值： </color><color=#548100>[==========]</color> <color=#548100>(128/102)</color>\n<color=#42a2aa>饥饿值： </color><color=#42a2aa>[==        ]</color> <color=#42a2aa>(125/500)</color>\n<color=#42a2aa>生长速度: </color><color=#42a2aa>0.97</color>\n<color=#42a2aa>预期产仔数: </color><color=#42a2aa>3</color>\n<color=#42a2aa>免疫力: </color><color=#42a2aa>29.37</color>\n<color=#42a2aa>最大健康值: </color><color=#42a2aa>101.55</color>\n<color=#42a2aa>寿命: </color><color=#42a2aa>1</color>\n<color=#42a2aa>饥饿速度: </color><color=#42a2aa>65</color>\n \n \n<color=#c07d7d>过度拥挤2</color>"
+        },
+        {
+          "entityId": "ec3fccde6a569_108",
+          "id": 75,
+          "displayName": "老鼠",
+          "count": 1,
+          "containerId": "ec3fccde6a569_66",
+          "statusText": "<color=#008990>雌性 幼崽 老鼠</color>\n<color=#42a2aa>年龄：0天（5克）</color>\n \n<color=#42a2aa>健康值： </color><color=#548100>[========= ]</color> <color=#548100>(95/100)</color>\n<color=#42a2aa>饥饿值： </color><color=#42a2aa>[==        ]</color> <color=#42a2aa>(125/500)</color>\n<color=#42a2aa>生长速度: </color><color=#42a2aa>1</color>\n<color=#42a2aa>预期产仔数: </color><color=#42a2aa>3</color>\n<color=#42a2aa>免疫力: </color><color=#42a2aa>30</color>\n<color=#42a2aa>最大健康值: </color><color=#42a2aa>100</color>\n<color=#42a2aa>寿命: </color><color=#42a2aa>0.99</color>\n<color=#42a2aa>饥饿速度: </color><color=#42a2aa>65</color>\n \n \n<color=#c07d7d>过度拥挤2</color>"
+        },
+        {
+          "entityId": "ec3fccde6a569_109",
+          "id": 74,
+          "displayName": "老鼠",
+          "count": 1,
+          "containerId": "ec3fccde6a569_66",
+          "statusText": "<color=#008990>雄性 幼崽 老鼠</color>\n<color=#42a2aa>年龄：0天（5克）</color>\n \n<color=#42a2aa>健康值： </color><color=#548100>[==========]</color> <color=#548100>(120/103)</color>\n<color=#42a2aa>饥饿值： </color><color=#42a2aa>[==        ]</color> <color=#42a2aa>(125/500)</color>\n<color=#42a2aa>生长速度: </color><color=#42a2aa>1</color>\n<color=#42a2aa>预期产仔数: </color><color=#42a2aa>3</color>\n<color=#42a2aa>免疫力: </color><color=#42a2aa>31.25</color>\n<color=#42a2aa>最大健康值: </color><color=#42a2aa>103.15</color>\n<color=#42a2aa>寿命: </color><color=#42a2aa>1</color>\n<color=#42a2aa>饥饿速度: </color><color=#42a2aa>65</color>\n \n \n<color=#c07d7d>过度拥挤2</color>"
+        }
+      ]
+    },
+    {
+      "scenario": "roe hatched into six fry",
+      "file": "20261107-233247995-5d0196.result.json",
+      "sha256": "c00c460cfc79e7c91d318deaaab7f79f23fd2d5090e796a0292d01fffc62f460",
+      "gameVersion": "VERSION 100-Rev12",
+      "snapshotId": "69c323f2124043cd8eb7cc8bca987869:56",
+      "day": 2,
+      "phase": "morning",
+      "cash": 145,
+      "items": [
+        {
+          "entityId": "e2363da88721d_144",
+          "id": 66,
+          "displayName": "罗非鱼苗",
+          "count": 1,
+          "containerId": "e2363da88721d_72",
+          "statusText": "<color=#42a2aa>6尾鱼苗，2天后长成幼鱼</color>\n<color=#42a2aa>健康值： </color><color=#548100>[==========]</color> <color=#548100>(100/100)</color>\n<color=#42a2aa>饥饿值： </color><color=#42a2aa>[========  ]</color> <color=#42a2aa>(595/700)</color>\n<color=#42a2aa>整窝鱼卵需要水箱提供100毫升水</color>"
+        }
+      ]
+    },
+    {
+      "scenario": "pellet growth rate",
+      "file": "20261107-233319819-60f1e5.result.json",
+      "sha256": "39030ea854b58c2af2ae038b43d7991aad79a942ef3f0f1b8ea4c6e092a5bfdc",
+      "gameVersion": "VERSION 100-Rev12",
+      "snapshotId": "69c323f2124043cd8eb7cc8bca987869:85",
+      "day": 3,
+      "phase": "morning",
+      "cash": 140,
+      "items": [
+        {
+          "entityId": "e2363da88721d_144",
+          "id": 66,
+          "displayName": "罗非鱼苗",
+          "count": 1,
+          "containerId": "e2363da88721d_72",
+          "statusText": "<color=#42a2aa>6尾鱼苗，2天后长成幼鱼</color>\n<color=#42a2aa>健康值： </color><color=#548100>[==========]</color> <color=#548100>(100/100)</color>\n<color=#42a2aa>饥饿值： </color><color=#42a2aa>[========  ]</color> <color=#42a2aa>(590/700)</color>\n<color=#877400>按近期的食物摄入情况，当前生长速度为正常速度的75%</color>\n<color=#42a2aa>整窝鱼卵需要水箱提供100毫升水</color>"
+        }
+      ]
+    },
+    {
+      "scenario": "six independent juvenile fish",
+      "file": "20261107-233509809-acdd95.result.json",
+      "sha256": "23b627d23ed340b11a364fb403e11dc3eb2880f16094f9a5ea92e686ebf46ca9",
+      "gameVersion": "VERSION 100-Rev12",
+      "snapshotId": "69c323f2124043cd8eb7cc8bca987869:143",
+      "day": 5,
+      "phase": "morning",
+      "cash": 130,
+      "items": [
+        {
+          "entityId": "e2363da88721d_162",
+          "id": 77,
+          "displayName": "罗非鱼",
+          "count": 1,
+          "containerId": "e2363da88721d_72",
+          "statusText": "<color=#008990>雌性 幼年 罗非鱼</color>\n<color=#42a2aa>年龄：3天（51克）  肉类：546千卡</color>\n<color=#42a2aa>食性：杂食</color>\n<color=#42a2aa>食用肉类时，生长速度提高25%</color>\n<color=#42a2aa>健康值： </color><color=#548100>[==========]</color> <color=#548100>(100/100)</color>\n<color=#42a2aa>饥饿值： </color><color=#42a2aa>[========  ]</color> <color=#42a2aa>(595/700)</color>\n<color=#42a2aa>需要水箱提供100毫升水</color>\n<color=#42a2aa>2天后进入下一生长阶段</color>"
+        },
+        {
+          "entityId": "e2363da88721d_163",
+          "id": 76,
+          "displayName": "罗非鱼",
+          "count": 1,
+          "containerId": "e2363da88721d_72",
+          "statusText": "<color=#008990>雌性 幼年 罗非鱼</color>\n<color=#42a2aa>年龄：3天（51克）  肉类：546千卡</color>\n<color=#42a2aa>食性：杂食</color>\n<color=#42a2aa>食用肉类时，生长速度提高25%</color>\n<color=#42a2aa>健康值： </color><color=#548100>[==========]</color> <color=#548100>(100/100)</color>\n<color=#42a2aa>饥饿值： </color><color=#42a2aa>[========  ]</color> <color=#42a2aa>(595/700)</color>\n<color=#42a2aa>需要水箱提供100毫升水</color>\n<color=#42a2aa>2天后进入下一生长阶段</color>"
+        },
+        {
+          "entityId": "e2363da88721d_164",
+          "id": 75,
+          "displayName": "罗非鱼",
+          "count": 1,
+          "containerId": "e2363da88721d_72",
+          "statusText": "<color=#008990>雌性 幼年 罗非鱼</color>\n<color=#42a2aa>年龄：3天（51克）  肉类：546千卡</color>\n<color=#42a2aa>食性：杂食</color>\n<color=#42a2aa>食用肉类时，生长速度提高25%</color>\n<color=#42a2aa>健康值： </color><color=#548100>[==========]</color> <color=#548100>(100/100)</color>\n<color=#42a2aa>饥饿值： </color><color=#42a2aa>[========  ]</color> <color=#42a2aa>(595/700)</color>\n<color=#42a2aa>需要水箱提供100毫升水</color>\n<color=#42a2aa>2天后进入下一生长阶段</color>"
+        },
+        {
+          "entityId": "e2363da88721d_165",
+          "id": 74,
+          "displayName": "罗非鱼",
+          "count": 1,
+          "containerId": "e2363da88721d_72",
+          "statusText": "<color=#008990>雌性 幼年 罗非鱼</color>\n<color=#42a2aa>年龄：3天（51克）  肉类：546千卡</color>\n<color=#42a2aa>食性：杂食</color>\n<color=#42a2aa>食用肉类时，生长速度提高25%</color>\n<color=#42a2aa>健康值： </color><color=#548100>[==========]</color> <color=#548100>(100/100)</color>\n<color=#42a2aa>饥饿值： </color><color=#42a2aa>[========  ]</color> <color=#42a2aa>(595/700)</color>\n<color=#42a2aa>需要水箱提供100毫升水</color>\n<color=#42a2aa>2天后进入下一生长阶段</color>"
+        },
+        {
+          "entityId": "e2363da88721d_166",
+          "id": 73,
+          "displayName": "罗非鱼",
+          "count": 1,
+          "containerId": "e2363da88721d_72",
+          "statusText": "<color=#008990>雄性 幼年 罗非鱼</color>\n<color=#42a2aa>年龄：3天（51克）  肉类：546千卡</color>\n<color=#42a2aa>食性：杂食</color>\n<color=#42a2aa>食用肉类时，生长速度提高25%</color>\n<color=#42a2aa>健康值： </color><color=#548100>[==========]</color> <color=#548100>(100/100)</color>\n<color=#42a2aa>饥饿值： </color><color=#42a2aa>[========  ]</color> <color=#42a2aa>(595/700)</color>\n<color=#42a2aa>需要水箱提供100毫升水</color>\n<color=#42a2aa>2天后进入下一生长阶段</color>"
+        },
+        {
+          "entityId": "e2363da88721d_167",
+          "id": 72,
+          "displayName": "罗非鱼",
+          "count": 1,
+          "containerId": "e2363da88721d_72",
+          "statusText": "<color=#008990>雌性 幼年 罗非鱼</color>\n<color=#42a2aa>年龄：3天（51克）  肉类：546千卡</color>\n<color=#42a2aa>食性：杂食</color>\n<color=#42a2aa>食用肉类时，生长速度提高25%</color>\n<color=#42a2aa>健康值： </color><color=#548100>[==========]</color> <color=#548100>(100/100)</color>\n<color=#42a2aa>饥饿值： </color><color=#42a2aa>[========  ]</color> <color=#42a2aa>(595/700)</color>\n<color=#42a2aa>需要水箱提供100毫升水</color>\n<color=#42a2aa>2天后进入下一生长阶段</color>"
+        }
+      ]
+    },
+    {
+      "scenario": "new fish processed into fillets",
+      "file": "20261107-233538350-820dbb.result.json",
+      "sha256": "36dd9eb60c335a0a879df74adae5500e8932b0e14334568c8f683f5be20dc725",
+      "gameVersion": "VERSION 100-Rev12",
+      "snapshotId": "69c323f2124043cd8eb7cc8bca987869:148",
+      "day": 5,
+      "phase": "morning",
+      "cash": 130,
+      "items": [
+        {
+          "entityId": "e2363da88721d_169",
+          "id": 79,
+          "displayName": "鱼肉片（极小）",
+          "count": 1,
+          "containerId": "e2363da88721d_72",
+          "statusText": ""
+        },
+        {
+          "entityId": "e2363da88721d_170",
+          "id": 78,
+          "displayName": "鱼肉片",
+          "count": 1,
+          "containerId": "e2363da88721d_72",
+          "statusText": ""
+        }
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "case": "select 枪械匠",
+      "passed": true,
+      "evidence": "20261107-231204554-201eae.result.json",
+      "detail": ""
+    },
+    {
+      "case": "start 枪械匠",
+      "passed": true,
+      "evidence": "20261107-231207693-45277b.result.json",
+      "detail": {
+        "items": [
+          {
+            "entityId": "e0ae098ea913b_10",
+            "id": 46,
+            "displayName": "激光瞄准器",
+            "count": 1,
+            "containerId": "e0ae098ea913b_46"
+          },
+          {
+            "entityId": "e0ae098ea913b_11",
+            "id": 45,
+            "displayName": "简易消音器",
+            "count": 1,
+            "containerId": "e0ae098ea913b_46"
+          },
+          {
+            "entityId": "e0ae098ea913b_12",
+            "id": 44,
+            "displayName": "玩具激光笔",
+            "count": 1,
+            "containerId": "e0ae098ea913b_46"
+          },
+          {
+            "entityId": "e0ae098ea913b_13",
+            "id": 43,
+            "displayName": "大容量.22弹匣",
+            "count": 1,
+            "containerId": "e0ae098ea913b_46"
+          },
+          {
+            "entityId": "e0ae098ea913b_14",
+            "id": 42,
+            "displayName": ".22弹匣",
+            "count": 1,
+            "containerId": "e0ae098ea913b_46"
+          },
+          {
+            "entityId": "e0ae098ea913b_15",
+            "id": 41,
+            "displayName": ".22弹匣",
+            "count": 1,
+            "containerId": "e0ae098ea913b_46"
+          },
+          {
+            "entityId": "e0ae098ea913b_16",
+            "id": 40,
+            "displayName": "红点瞄准镜",
+            "count": 1,
+            "containerId": "e0ae098ea913b_46"
+          },
+          {
+            "entityId": "e0ae098ea913b_17",
+            "id": 39,
+            "displayName": "消音器",
+            "count": 1,
+            "containerId": "e0ae098ea913b_46"
+          },
+          {
+            "entityId": "e0ae098ea913b_18",
+            "id": 38,
+            "displayName": "“解放者”3D打印手枪",
+            "count": 1,
+            "containerId": "e0ae098ea913b_46"
+          },
+          {
+            "entityId": "e0ae098ea913b_19",
+            "id": 37,
+            "displayName": "“解放者”3D打印手枪",
+            "count": 1,
+            "containerId": "e0ae098ea913b_46"
+          },
+          {
+            "entityId": "e0ae098ea913b_2",
+            "id": 73,
+            "displayName": "腰包",
+            "count": 1,
+            "containerId": "e0ae098ea913b_46"
+          },
+          {
+            "entityId": "e0ae098ea913b_20",
+            "id": 36,
+            "displayName": "“巢火”紧凑型手枪",
+            "count": 1,
+            "containerId": "e0ae098ea913b_46"
+          },
+          {
+            "entityId": "e0ae098ea913b_21",
+            "id": 35,
+            "displayName": "“巢火”紧凑型手枪",
+            "count": 1,
+            "containerId": "e0ae098ea913b_46"
+          },
+          {
+            "entityId": "e0ae098ea913b_22",
+            "id": 34,
+            "displayName": ".22 SR弹药",
+            "count": 1,
+            "containerId": "e0ae098ea913b_46"
+          },
+          {
+            "entityId": "e0ae098ea913b_23",
+            "id": 33,
+            "displayName": ".22 SR弹药",
+            "count": 1,
+            "containerId": "e0ae098ea913b_46"
+          },
+          {
+            "entityId": "e0ae098ea913b_24",
+            "id": 32,
+            "displayName": ".22 SR弹药",
+            "count": 1,
+            "containerId": "e0ae098ea913b_46"
+          },
+          {
+            "entityId": "e0ae098ea913b_25",
+            "id": 31,
+            "displayName": ".22 SR弹药",
+            "count": 1,
+            "containerId": "e0ae098ea913b_46"
+          },
+          {
+            "entityId": "e0ae098ea913b_26",
+            "id": 30,
+            "displayName": ".22 SR弹药",
+            "count": 1,
+            "containerId": "e0ae098ea913b_46"
+          },
+          {
+            "entityId": "e0ae098ea913b_27",
+            "id": 29,
+            "displayName": ".22 SR弹药（非致命）",
+            "count": 1,
+            "containerId": "e0ae098ea913b_46"
+          },
+          {
+            "entityId": "e0ae098ea913b_28",
+            "id": 28,
+            "displayName": ".22 SR弹药（非致命）",
+            "count": 1,
+            "containerId": "e0ae098ea913b_46"
+          },
+          {
+            "entityId": "e0ae098ea913b_29",
+            "id": 27,
+            "displayName": ".22 SR弹药（非致命）",
+            "count": 1,
+            "containerId": "e0ae098ea913b_46"
+          },
+          {
+            "entityId": "e0ae098ea913b_3",
+            "id": 72,
+            "displayName": "外用药膏绷带",
+            "count": 1,
+            "containerId": "e0ae098ea913b_46"
+          },
+          {
+            "entityId": "e0ae098ea913b_30",
+            "id": 26,
+            "displayName": ".22 SR弹药（非致命）",
+            "count": 1,
+            "containerId": "e0ae098ea913b_46"
+          },
+          {
+            "entityId": "e0ae098ea913b_31",
+            "id": 25,
+            "displayName": ".22 SR弹药（非致命）",
+            "count": 1,
+            "containerId": "e0ae098ea913b_46"
+          },
+          {
+            "entityId": "e0ae098ea913b_32",
+            "id": 24,
+            "displayName": ".22 SR弹药（非致命）",
+            "count": 1,
+            "containerId": "e0ae098ea913b_46"
+          },
+          {
+            "entityId": "e0ae098ea913b_33",
+            "id": 23,
+            "displayName": "枪械师储藏区",
+            "count": 1,
+            "containerId": "e0ae098ea913b_46"
+          },
+          {
+            "entityId": "e0ae098ea913b_34",
+            "id": 22,
+            "displayName": "3D打印耗材",
+            "count": 1,
+            "containerId": "e0ae098ea913b_46"
+          },
+          {
+            "entityId": "e0ae098ea913b_35",
+            "id": 21,
+            "displayName": "3D打印耗材",
+            "count": 1,
+            "containerId": "e0ae098ea913b_46"
+          },
+          {
+            "entityId": "e0ae098ea913b_36",
+            "id": 20,
+            "displayName": "3D打印耗材",
+            "count": 1,
+            "containerId": "e0ae098ea913b_46"
+          },
+          {
+            "entityId": "e0ae098ea913b_37",
+            "id": 19,
+            "displayName": "3D打印耗材",
+            "count": 1,
+            "containerId": "e0ae098ea913b_46"
+          },
+          {
+            "entityId": "e0ae098ea913b_38",
+            "id": 18,
+            "displayName": "枪械霓虹灯牌",
+            "count": 1,
+            "containerId": "e0ae098ea913b_46"
+          },
+          {
+            "entityId": "e0ae098ea913b_39",
+            "id": 12,
+            "displayName": "3D打印机",
+            "count": 1,
+            "containerId": "e0ae098ea913b_46"
+          },
+          {
+            "entityId": "e0ae098ea913b_4",
+            "id": 71,
+            "displayName": "标签打印机",
+            "count": 1,
+            "containerId": "e0ae098ea913b_46"
+          },
+          {
+            "entityId": "e0ae098ea913b_40",
+            "id": -103,
+            "displayName": "磁带播放器",
+            "count": 1,
+            "containerId": "e0ae098ea913b_44"
+          },
+          {
+            "entityId": "e0ae098ea913b_41",
+            "id": 4,
+            "displayName": "排水口",
+            "count": 1,
+            "containerId": "e0ae098ea913b_47"
+          },
+          {
+            "entityId": "e0ae098ea913b_42",
+            "id": -102,
+            "displayName": "垃圾桶",
+            "count": 1,
+            "containerId": "e0ae098ea913b_48"
+          },
+          {
+            "entityId": "e0ae098ea913b_43",
+            "id": -101,
+            "displayName": "档案箱",
+            "count": 1,
+            "containerId": "e0ae098ea913b_49"
+          },
+          {
+            "entityId": "e0ae098ea913b_5",
+            "id": 70,
+            "displayName": "放大镜",
+            "count": 1,
+            "containerId": "e0ae098ea913b_46"
+          },
+          {
+            "entityId": "e0ae098ea913b_6",
+            "id": 51,
+            "displayName": "枪械零件",
+            "count": 1,
+            "containerId": "e0ae098ea913b_46"
+          },
+          {
+            "entityId": "e0ae098ea913b_7",
+            "id": 49,
+            "displayName": "I级武器许可证",
+            "count": 1,
+            "containerId": "e0ae098ea913b_50"
+          },
+          {
+            "entityId": "e0ae098ea913b_8",
+            "id": 48,
+            "displayName": "螺丝刀",
+            "count": 1,
+            "containerId": "e0ae098ea913b_46"
+          },
+          {
+            "entityId": "e0ae098ea913b_9",
+            "id": 47,
+            "displayName": "改良内部弹簧组",
+            "count": 1,
+            "containerId": "e0ae098ea913b_46"
+          }
+        ],
+        "cash": 150
+      }
+    },
+    {
+      "case": "printer input filled before first night",
+      "passed": true,
+      "evidence": "20261107-231242584-659dc6.result.json",
+      "detail": ""
+    },
+    {
+      "case": "printer day advanced normally",
+      "passed": true,
+      "evidence": "20261107-231439869-83a1d2.result.json",
+      "detail": ""
+    },
+    {
+      "case": "native pause opens",
+      "passed": true,
+      "evidence": "20261107-232339870-8845a4.result.json",
+      "detail": ""
+    },
+    {
+      "case": "native printer status exposed after reload",
+      "passed": true,
+      "evidence": "20261107-232603205-51e692.result.json",
+      "detail": "<color=#7a9d4a>状态：工作中</color>\n<color=#7a9d4a>[========= ]</color> <color=#7a9d4a>(48/50)</color>"
+    },
+    {
+      "case": "night service checkbox state visible",
+      "passed": true,
+      "evidence": "20261107-232643862-9f64f9.result.json",
+      "detail": [
+        {
+          "entityId": "ee3d224b40b11_110",
+          "kind": "checkbox",
+          "label": "电力服务 5<sprite name=\"c\" tint=1 >",
+          "windowTitle": "",
+          "enabled": true,
+          "nearbyText": "电力服务 5<sprite name=\"c\" tint=1 >",
+          "bounds": {
+            "x": 0.3656,
+            "y": 0.3125,
+            "width": 0.0104,
+            "height": 0.0167
+          },
+          "disabledReason": null,
+          "text": null,
+          "value": null,
+          "upperValue": null,
+          "isOn": true,
+          "options": [],
+          "actions": [
+            "ui_click:ee3d224b40b11_110"
+          ]
+        }
+      ]
+    },
+    {
+      "case": "electricity disabled by native checkbox",
+      "passed": true,
+      "evidence": "20261107-232644936-0e96a4.result.json",
+      "detail": [
+        "结束营业",
+        "0<sprite name=\"c\" tint=1 >",
+        "总计",
+        "140<sprite name=\"c\" tint=1 >",
+        "你的资金",
+        "3<sprite name=\"c\" tint=1 >",
+        "清洁服务",
+        "7<sprite name=\"c\" tint=1 >",
+        "保险服务",
+        "5<sprite name=\"c\" tint=1 >",
+        "电力服务",
+        "选择店铺所需的夜间服务。",
+        "营业结束 3",
+        "杰克逊博士",
+        "第3天（星期三）\n租金须于4天后支付",
+        "<i>*砰砰砸着卷帘门*</i>"
+      ]
+    },
+    {
+      "case": "electricity restored before sleep",
+      "passed": true,
+      "evidence": "20261107-232646020-c37fa7.result.json",
+      "detail": ""
+    },
+    {
+      "case": "printer new output after three nights",
+      "passed": true,
+      "evidence": "20261107-232651710-15cb2c.result.json",
+      "detail": {
+        "day": 4,
+        "status": "<color=#42a2aa>状态：就绪</color>",
+        "output": [
+          {
+            "entityId": "ee3d224b40b11_114",
+            "id": 176,
+            "displayName": "“解放者”3D打印手枪",
+            "count": 1,
+            "containerId": "ee3d224b40b11_92",
+            "owner": "player",
+            "description": "一把低成本的塑料制3D打印手枪。",
+            "statusText": "",
+            "features": [
+              {
+                "text": "-全新 (+25%)",
+                "knowledge": "public_claim"
+              }
+            ],
+            "shape": {
+              "x": 0,
+              "y": 0,
+              "width": 4,
+              "height": 3,
+              "rotation": 0,
+              "flipped": false,
+              "cells": [
+                "####",
+                "####",
+                "##.."
+              ]
+            },
+            "contentsOpen": false
+          }
+        ]
+      }
+    },
+    {
+      "case": "printer output retrieved",
+      "passed": true,
+      "evidence": "20261107-232652876-34ad36.result.json",
+      "detail": ""
+    },
+    {
+      "case": "native pause opens",
+      "passed": true,
+      "evidence": "20261107-232705686-ff532c.result.json",
+      "detail": ""
+    },
+    {
+      "case": "select 水培农场主",
+      "passed": true,
+      "evidence": "20261107-232708849-97b94b.result.json",
+      "detail": ""
+    },
+    {
+      "case": "start 水培农场主",
+      "passed": true,
+      "evidence": "20261107-232713118-8dbe6b.result.json",
+      "detail": {
+        "items": [
+          {
+            "entityId": "ebf64dbb42f70_10",
+            "id": 31,
+            "displayName": "营养果种子",
+            "count": 1,
+            "containerId": "ebf64dbb42f70_22"
+          },
+          {
+            "entityId": "ebf64dbb42f70_11",
+            "id": 25,
+            "displayName": "密封水配给包（小）",
+            "count": 1,
+            "containerId": "ebf64dbb42f70_22"
+          },
+          {
+            "entityId": "ebf64dbb42f70_12",
+            "id": 24,
+            "displayName": "密封水配给包（小）",
+            "count": 1,
+            "containerId": "ebf64dbb42f70_22"
+          },
+          {
+            "entityId": "ebf64dbb42f70_13",
+            "id": 21,
+            "displayName": "Decrepit Hydroponic System",
+            "count": 1,
+            "containerId": "ebf64dbb42f70_22"
+          },
+          {
+            "entityId": "ebf64dbb42f70_14",
+            "id": 13,
+            "displayName": "旧水培系统",
+            "count": 1,
+            "containerId": "ebf64dbb42f70_22"
+          },
+          {
+            "entityId": "ebf64dbb42f70_15",
+            "id": 12,
+            "displayName": "水培农业手册",
+            "count": 1,
+            "containerId": "ebf64dbb42f70_22"
+          },
+          {
+            "entityId": "ebf64dbb42f70_16",
+            "id": -103,
+            "displayName": "磁带播放器",
+            "count": 1,
+            "containerId": "ebf64dbb42f70_20"
+          },
+          {
+            "entityId": "ebf64dbb42f70_17",
+            "id": 4,
+            "displayName": "排水口",
+            "count": 1,
+            "containerId": "ebf64dbb42f70_23"
+          },
+          {
+            "entityId": "ebf64dbb42f70_18",
+            "id": -102,
+            "displayName": "垃圾桶",
+            "count": 1,
+            "containerId": "ebf64dbb42f70_24"
+          },
+          {
+            "entityId": "ebf64dbb42f70_19",
+            "id": -101,
+            "displayName": "档案箱",
+            "count": 1,
+            "containerId": "ebf64dbb42f70_25"
+          },
+          {
+            "entityId": "ebf64dbb42f70_2",
+            "id": 66,
+            "displayName": "腰包",
+            "count": 1,
+            "containerId": "ebf64dbb42f70_22"
+          },
+          {
+            "entityId": "ebf64dbb42f70_3",
+            "id": 65,
+            "displayName": "外用药膏绷带",
+            "count": 1,
+            "containerId": "ebf64dbb42f70_22"
+          },
+          {
+            "entityId": "ebf64dbb42f70_4",
+            "id": 64,
+            "displayName": "标签打印机",
+            "count": 1,
+            "containerId": "ebf64dbb42f70_22"
+          },
+          {
+            "entityId": "ebf64dbb42f70_5",
+            "id": 63,
+            "displayName": "放大镜",
+            "count": 1,
+            "containerId": "ebf64dbb42f70_22"
+          },
+          {
+            "entityId": "ebf64dbb42f70_6",
+            "id": 44,
+            "displayName": "填料草种子",
+            "count": 1,
+            "containerId": "ebf64dbb42f70_22"
+          },
+          {
+            "entityId": "ebf64dbb42f70_7",
+            "id": 43,
+            "displayName": "填料草种子",
+            "count": 1,
+            "containerId": "ebf64dbb42f70_22"
+          },
+          {
+            "entityId": "ebf64dbb42f70_8",
+            "id": 33,
+            "displayName": "水培营养片药瓶",
+            "count": 1,
+            "containerId": "ebf64dbb42f70_22"
+          },
+          {
+            "entityId": "ebf64dbb42f70_9",
+            "id": 32,
+            "displayName": "营养果种子",
+            "count": 1,
+            "containerId": "ebf64dbb42f70_22"
+          }
+        ],
+        "cash": 450
+      }
+    },
+    {
+      "case": "hydro seed loaded",
+      "passed": true,
+      "evidence": "20261107-232747121-5a5ed2.result.json",
+      "detail": ""
+    },
+    {
+      "case": "native night 1 to 2",
+      "passed": true,
+      "evidence": "20261107-232823122-66567c.result.json",
+      "detail": {
+        "report": [
+          "-新开张的店铺暂时不会遭贼，保护期还剩3晚。",
+          "-电费已结清。",
+          "-<color=#cc7755>昨晚店面没有被打扫，但反正也没什么需要打扫的。</color>",
+          "445<sprite name=\"c\" tint=1 >",
+          "0",
+          "别忘了补充展示柜存货！",
+          "店铺吸引力: 250 <link=\"ui_info_store_attractiveness\"><sprite name=\"info\" tint=1></link>",
+          "状态",
+          "基础",
+          "日历",
+          "第2天（星期二）\n租金须于5天后支付",
+          "1000",
+          "夜间报告"
+        ],
+        "cash": 445,
+        "day": 2
+      }
+    },
+    {
+      "case": "native night 2 to 3",
+      "passed": true,
+      "evidence": "20261107-232838075-af06e5.result.json",
+      "detail": {
+        "report": [
+          "-你的一位联系人通知你，通缉犯：奥丁·哈拉尔德森昨天曾光顾过你的店铺。",
+          "-新开张的店铺暂时不会遭贼，保护期还剩2晚。",
+          "-电费已结清。",
+          "-<color=#cc7755>昨晚店面没有被打扫，店门前堆着垃圾袋，可能会使少数顾客望而却步。</color>",
+          "440<sprite name=\"c\" tint=1 >",
+          "0",
+          "别忘了补充展示柜存货！",
+          "店铺吸引力: 200 <link=\"ui_info_store_attractiveness\"><sprite name=\"info\" tint=1></link>",
+          "状态",
+          "垃圾",
+          "基础",
+          "日历",
+          "第3天（星期三）\n租金须于4天后支付",
+          "1000",
+          "夜间报告"
+        ],
+        "cash": 440,
+        "day": 3
+      }
+    },
+    {
+      "case": "hydro harvested grass and replacement seed",
+      "passed": true,
+      "evidence": "20261107-232844495-570f95.result.json",
+      "detail": {
+        "day": 3,
+        "items": [
+          {
+            "entityId": "ebf64dbb42f70_111",
+            "id": 85,
+            "displayName": "填料草",
+            "count": 1,
+            "containerId": "ebf64dbb42f70_69",
+            "owner": "player",
+            "description": "一种主要种植于下层区、呈淡黄色的速生叶菜。几乎没有营养价值，通常作为填充料掺进食物，以增加口粮分量。",
+            "statusText": "",
+            "features": [
+              {
+                "text": "-难以下咽 (-15%)",
+                "knowledge": "public_claim"
+              }
+            ],
+            "shape": {
+              "x": 0,
+              "y": 0,
+              "width": 1,
+              "height": 2,
+              "rotation": 0,
+              "flipped": false,
+              "cells": [
+                "#",
+                "#"
+              ]
+            },
+            "contentsOpen": false
+          },
+          {
+            "entityId": "ebf64dbb42f70_110",
+            "id": 86,
+            "displayName": "填料草",
+            "count": 1,
+            "containerId": "ebf64dbb42f70_69",
+            "owner": "player",
+            "description": "一种主要种植于下层区、呈淡黄色的速生叶菜。几乎没有营养价值，通常作为填充料掺进食物，以增加口粮分量。",
+            "statusText": "",
+            "features": [
+              {
+                "text": "-难以下咽 (-15%)",
+                "knowledge": "public_claim"
+              }
+            ],
+            "shape": {
+              "x": 1,
+              "y": 0,
+              "width": 1,
+              "height": 2,
+              "rotation": 0,
+              "flipped": false,
+              "cells": [
+                "#",
+                "#"
+              ]
+            },
+            "contentsOpen": false
+          },
+          {
+            "entityId": "ebf64dbb42f70_109",
+            "id": 87,
+            "displayName": "填料草",
+            "count": 1,
+            "containerId": "ebf64dbb42f70_69",
+            "owner": "player",
+            "description": "一种主要种植于下层区、呈淡黄色的速生叶菜。几乎没有营养价值，通常作为填充料掺进食物，以增加口粮分量。",
+            "statusText": "",
+            "features": [
+              {
+                "text": "-难以下咽 (-15%)",
+                "knowledge": "public_claim"
+              }
+            ],
+            "shape": {
+              "x": 2,
+              "y": 0,
+              "width": 1,
+              "height": 2,
+              "rotation": 0,
+              "flipped": false,
+              "cells": [
+                "#",
+                "#"
+              ]
+            },
+            "contentsOpen": false
+          },
+          {
+            "entityId": "ebf64dbb42f70_108",
+            "id": 88,
+            "displayName": "填料草",
+            "count": 1,
+            "containerId": "ebf64dbb42f70_69",
+            "owner": "player",
+            "description": "一种主要种植于下层区、呈淡黄色的速生叶菜。几乎没有营养价值，通常作为填充料掺进食物，以增加口粮分量。",
+            "statusText": "",
+            "features": [
+              {
+                "text": "-难以下咽 (-15%)",
+                "knowledge": "public_claim"
+              }
+            ],
+            "shape": {
+              "x": 3,
+              "y": 0,
+              "width": 1,
+              "height": 2,
+              "rotation": 0,
+              "flipped": false,
+              "cells": [
+                "#",
+                "#"
+              ]
+            },
+            "contentsOpen": false
+          },
+          {
+            "entityId": "ebf64dbb42f70_107",
+            "id": 89,
+            "displayName": "小型填料草",
+            "count": 1,
+            "containerId": "ebf64dbb42f70_69",
+            "owner": "player",
+            "description": "一种主要种植于下层区、呈淡黄色的速生叶菜。几乎没有营养价值，通常作为填充料掺进食物，以增加口粮分量。",
+            "statusText": "",
+            "features": [
+              {
+                "text": "-难以下咽 (-15%)",
+                "knowledge": "public_claim"
+              }
+            ],
+            "shape": {
+              "x": 4,
+              "y": 0,
+              "width": 1,
+              "height": 1,
+              "rotation": 0,
+              "flipped": false,
+              "cells": [
+                "#"
+              ]
+            },
+            "contentsOpen": false
+          },
+          {
+            "entityId": "ebf64dbb42f70_106",
+            "id": 90,
+            "displayName": "填料草种子",
+            "count": 1,
+            "containerId": "ebf64dbb42f70_69",
+            "owner": "player",
+            "description": "一种适合新手的速生种子，其生长不受营养物质或水质的影响。",
+            "statusText": "",
+            "features": [],
+            "shape": {
+              "x": 5,
+              "y": 0,
+              "width": 1,
+              "height": 1,
+              "rotation": 0,
+              "flipped": false,
+              "cells": [
+                "#"
+              ]
+            },
+            "contentsOpen": false
+          }
+        ]
+      }
+    },
+    {
+      "case": "hydro output retrieved",
+      "passed": true,
+      "evidence": "20261107-232845826-ccf451.result.json",
+      "detail": ""
+    },
+    {
+      "case": "native pause opens",
+      "passed": true,
+      "evidence": "20261107-232848602-764c5b.result.json",
+      "detail": ""
+    },
+    {
+      "case": "select 养鼠人",
+      "passed": true,
+      "evidence": "20261107-232851872-478635.result.json",
+      "detail": ""
+    },
+    {
+      "case": "start 养鼠人",
+      "passed": true,
+      "evidence": "20261107-232856316-18b0bb.result.json",
+      "detail": {
+        "cash": 600,
+        "items": [
+          {
+            "entityId": "ec3fccde6a569_10",
+            "id": 25,
+            "displayName": "小型营养果",
+            "count": 1,
+            "containerId": "ec3fccde6a569_29"
+          },
+          {
+            "entityId": "ec3fccde6a569_11",
+            "id": 24,
+            "displayName": "小型营养果",
+            "count": 1,
+            "containerId": "ec3fccde6a569_29"
+          },
+          {
+            "entityId": "ec3fccde6a569_12",
+            "id": 23,
+            "displayName": "牲畜免疫血清",
+            "count": 1,
+            "containerId": "ec3fccde6a569_29"
+          },
+          {
+            "entityId": "ec3fccde6a569_13",
+            "id": 22,
+            "displayName": "标记笔",
+            "count": 1,
+            "containerId": "ec3fccde6a569_29"
+          },
+          {
+            "entityId": "ec3fccde6a569_14",
+            "id": 21,
+            "displayName": "蓝色标签打印机",
+            "count": 1,
+            "containerId": "ec3fccde6a569_29"
+          },
+          {
+            "entityId": "ec3fccde6a569_15",
+            "id": 20,
+            "displayName": "切肉刀",
+            "count": 1,
+            "containerId": "ec3fccde6a569_29"
+          },
+          {
+            "entityId": "ec3fccde6a569_16",
+            "id": 19,
+            "displayName": "老鼠",
+            "count": 1,
+            "containerId": "ec3fccde6a569_29"
+          },
+          {
+            "entityId": "ec3fccde6a569_17",
+            "id": 18,
+            "displayName": "老鼠",
+            "count": 1,
+            "containerId": "ec3fccde6a569_29"
+          },
+          {
+            "entityId": "ec3fccde6a569_18",
+            "id": 17,
+            "displayName": "老鼠",
+            "count": 1,
+            "containerId": "ec3fccde6a569_29"
+          },
+          {
+            "entityId": "ec3fccde6a569_19",
+            "id": 16,
+            "displayName": "老鼠",
+            "count": 1,
+            "containerId": "ec3fccde6a569_29"
+          },
+          {
+            "entityId": "ec3fccde6a569_2",
+            "id": 51,
+            "displayName": "腰包",
+            "count": 1,
+            "containerId": "ec3fccde6a569_29"
+          },
+          {
+            "entityId": "ec3fccde6a569_20",
+            "id": 15,
+            "displayName": "老鼠",
+            "count": 1,
+            "containerId": "ec3fccde6a569_29"
+          },
+          {
+            "entityId": "ec3fccde6a569_21",
+            "id": 14,
+            "displayName": "老鼠",
+            "count": 1,
+            "containerId": "ec3fccde6a569_29"
+          },
+          {
+            "entityId": "ec3fccde6a569_22",
+            "id": 12,
+            "displayName": "动物笼",
+            "count": 1,
+            "containerId": "ec3fccde6a569_29"
+          },
+          {
+            "entityId": "ec3fccde6a569_23",
+            "id": -103,
+            "displayName": "磁带播放器",
+            "count": 1,
+            "containerId": "ec3fccde6a569_27"
+          },
+          {
+            "entityId": "ec3fccde6a569_24",
+            "id": 4,
+            "displayName": "排水口",
+            "count": 1,
+            "containerId": "ec3fccde6a569_30"
+          },
+          {
+            "entityId": "ec3fccde6a569_25",
+            "id": -102,
+            "displayName": "垃圾桶",
+            "count": 1,
+            "containerId": "ec3fccde6a569_31"
+          },
+          {
+            "entityId": "ec3fccde6a569_26",
+            "id": -101,
+            "displayName": "档案箱",
+            "count": 1,
+            "containerId": "ec3fccde6a569_32"
+          },
+          {
+            "entityId": "ec3fccde6a569_3",
+            "id": 50,
+            "displayName": "外用药膏绷带",
+            "count": 1,
+            "containerId": "ec3fccde6a569_29"
+          },
+          {
+            "entityId": "ec3fccde6a569_4",
+            "id": 49,
+            "displayName": "标签打印机",
+            "count": 1,
+            "containerId": "ec3fccde6a569_29"
+          },
+          {
+            "entityId": "ec3fccde6a569_5",
+            "id": 48,
+            "displayName": "放大镜",
+            "count": 1,
+            "containerId": "ec3fccde6a569_29"
+          },
+          {
+            "entityId": "ec3fccde6a569_6",
+            "id": 29,
+            "displayName": "小型营养果",
+            "count": 1,
+            "containerId": "ec3fccde6a569_29"
+          },
+          {
+            "entityId": "ec3fccde6a569_7",
+            "id": 28,
+            "displayName": "小型营养果",
+            "count": 1,
+            "containerId": "ec3fccde6a569_29"
+          },
+          {
+            "entityId": "ec3fccde6a569_8",
+            "id": 27,
+            "displayName": "小型营养果",
+            "count": 1,
+            "containerId": "ec3fccde6a569_29"
+          },
+          {
+            "entityId": "ec3fccde6a569_9",
+            "id": 26,
+            "displayName": "小型营养果",
+            "count": 1,
+            "containerId": "ec3fccde6a569_29"
+          }
+        ]
+      }
+    },
+    {
+      "case": "rat breeding group and food loaded",
+      "passed": true,
+      "evidence": "20261107-232942985-0ebf59.result.json",
+      "detail": {
+        "rats": [
+          "ec3fccde6a569_18",
+          "ec3fccde6a569_19",
+          "ec3fccde6a569_20",
+          "ec3fccde6a569_21"
+        ],
+        "cage": "ec3fccde6a569_66",
+        "food": 6
+      }
+    },
+    {
+      "case": "native night 1 to 2",
+      "passed": true,
+      "evidence": "20261107-232953865-fc34fe.result.json",
+      "detail": {
+        "cash": 595,
+        "day": 2,
+        "report": [
+          "-新开张的店铺暂时不会遭贼，保护期还剩3晚。",
+          "-电费已结清。",
+          "-<color=#cc7755>昨晚店面没有被打扫，但反正也没什么需要打扫的。</color>",
+          "595<sprite name=\"c\" tint=1 >",
+          "0",
+          "别忘了补充展示柜存货！",
+          "店铺吸引力: 250 <link=\"ui_info_store_attractiveness\"><sprite name=\"info\" tint=1></link>",
+          "状态",
+          "基础",
+          "日历",
+          "第2天（星期二）\n租金须于5天后支付",
+          "1000",
+          "夜间报告"
+        ]
+      }
+    },
+    {
+      "case": "serum remaining uses observable",
+      "passed": true,
+      "evidence": "20261107-233029394-0a5696.result.json",
+      "detail": {
+        "target": "<color=#008990>雌性 成年 老鼠</color>\n<color=#42a2aa>年龄：6天（367克）</color>\n \n<color=#42a2aa>健康值： </color><color=#548100>[=======   ]</color> <color=#548100>(75/100)</color>\n<color=#42a2aa>饥饿值： </color><color=#42a2aa>[========  ]</color> <color=#42a2aa>(435/500)</color>\n<color=#42a2aa>繁殖力： </color><color=#c07d7d>12%（基础：50%）</color>\n<color=#42a2aa>生长速度: </color><color=#42a2aa>1</color>\n<color=#42a2aa>预期产仔数: </color><color=#42a2aa>3</color>\n<color=#42a2aa>免疫力: </color><color=#548100>52.5 (30)</color>\n<color=#42a2aa>最大健康值: </color><color=#42a2aa>100</color>\n<color=#42a2aa>寿命: </color><color=#42a2aa>1</color>\n<color=#42a2aa>饥饿速度: </color><color=#c07d7d>81.25 (65)</color>\n<color=#42a2aa>怀孕期： </color><color=#42a2aa>[===       ]</color> <color=#42a2aa>（1/3天）</color>\n \n<color=#548100>[怀孕] </color><color=#c07d7d>[患病] </color><color=#008990>[成熟] </color> \n<color=#548100>免疫力强 </color>",
+        "uses": "剩余使用次数：<color=#42a2aa>[=         ]</color> <color=#42a2aa>(1/10)</color>"
+      }
+    },
+    {
+      "case": "native night 2 to 3",
+      "passed": true,
+      "evidence": "20261107-233040372-3fcf97.result.json",
+      "detail": {
+        "report": [
+          "-你的一位联系人通知你，通缉犯：奥丁·哈拉尔德森昨天曾光顾过你的店铺。",
+          "-新开张的店铺暂时不会遭贼，保护期还剩2晚。",
+          "-电费已结清。",
+          "-<color=#cc7755>昨晚店面没有被打扫，店门前堆着垃圾袋，可能会使少数顾客望而却步。</color>",
+          "590<sprite name=\"c\" tint=1 >",
+          "0",
+          "别忘了补充展示柜存货！",
+          "店铺吸引力: 200 <link=\"ui_info_store_attractiveness\"><sprite name=\"info\" tint=1></link>",
+          "状态",
+          "垃圾",
+          "基础",
+          "日历",
+          "第3天（星期三）\n租金须于4天后支付",
+          "1000",
+          "夜间报告"
+        ],
+        "cash": 590,
+        "day": 3
+      }
+    },
+    {
+      "case": "native night 3 to 4",
+      "passed": true,
+      "evidence": "20261107-233057393-f7b307.result.json",
+      "detail": {
+        "report": [
+          "-新开张的店铺暂时不会遭贼，保护期还剩1晚。",
+          "-电费已结清。",
+          "-<color=#cc7755>昨晚店面没有被打扫，店门前遍地都是垃圾和破烂，潜在的顾客都不愿光顾店铺了！</color>",
+          "585<sprite name=\"c\" tint=1 >",
+          "0",
+          "别忘了补充展示柜存货！",
+          "店铺吸引力: 175 <link=\"ui_info_store_attractiveness\"><sprite name=\"info\" tint=1></link>",
+          "状态",
+          "垃圾",
+          "基础",
+          "日历",
+          "第4天（星期四）\n租金须于3天后支付",
+          "1000",
+          "夜间报告"
+        ],
+        "cash": 585,
+        "day": 4
+      }
+    },
+    {
+      "case": "rat birth after three nights",
+      "passed": true,
+      "evidence": "20261107-233100249-75bc99.result.json",
+      "detail": {
+        "newborns": [
+          {
+            "entityId": "ec3fccde6a569_101",
+            "id": 80,
+            "displayName": "老鼠",
+            "count": 1,
+            "containerId": "ec3fccde6a569_28",
+            "owner": "player",
+            "description": "",
+            "statusText": "<color=#008990>雄性 幼崽 老鼠</color>\n<color=#42a2aa>年龄：0天（5克）</color>\n \n<color=#42a2aa>健康值： </color><color=#548100>[========  ]</color> <color=#548100>(89/100)</color>\n<color=#42a2aa>饥饿值： </color><color=#42a2aa>[==        ]</color> <color=#42a2aa>(125/500)</color>\n<color=#42a2aa>生长速度: </color><color=#42a2aa>1.02</color>\n<color=#42a2aa>预期产仔数: </color><color=#42a2aa>3.05</color>\n<color=#42a2aa>免疫力: </color><color=#42a2aa>30</color>\n<color=#42a2aa>最大健康值: </color><color=#42a2aa>100</color>\n<color=#42a2aa>寿命: </color><color=#42a2aa>1</color>\n<color=#42a2aa>饥饿速度: </color><color=#42a2aa>65</color>",
+            "features": [],
+            "shape": {
+              "x": 0,
+              "y": 0,
+              "width": 2,
+              "height": 1,
+              "rotation": 0,
+              "flipped": false,
+              "cells": [
+                "##"
+              ]
+            },
+            "contentsOpen": false
+          },
+          {
+            "entityId": "ec3fccde6a569_104",
+            "id": 79,
+            "displayName": "老鼠",
+            "count": 1,
+            "containerId": "ec3fccde6a569_66",
+            "owner": "player",
+            "description": "",
+            "statusText": "<color=#008990>雌性 幼崽 老鼠</color>\n<color=#42a2aa>年龄：0天（5克）</color>\n \n<color=#42a2aa>健康值： </color><color=#548100>[========= ]</color> <color=#548100>(95/103)</color>\n<color=#42a2aa>饥饿值： </color><color=#42a2aa>[==        ]</color> <color=#42a2aa>(125/500)</color>\n<color=#42a2aa>生长速度: </color><color=#42a2aa>1</color>\n<color=#42a2aa>预期产仔数: </color><color=#42a2aa>3</color>\n<color=#42a2aa>免疫力: </color><color=#42a2aa>30</color>\n<color=#42a2aa>最大健康值: </color><color=#42a2aa>102.98</color>\n<color=#42a2aa>寿命: </color><color=#42a2aa>1</color>\n<color=#42a2aa>饥饿速度: </color><color=#42a2aa>65</color>\n \n \n<color=#c07d7d>过度拥挤2</color>",
+            "features": [],
+            "shape": {
+              "x": 5,
+              "y": 2,
+              "width": 2,
+              "height": 1,
+              "rotation": 0,
+              "flipped": false,
+              "cells": [
+                "##"
+              ]
+            },
+            "contentsOpen": false
+          },
+          {
+            "entityId": "ec3fccde6a569_105",
+            "id": 78,
+            "displayName": "老鼠",
+            "count": 1,
+            "containerId": "ec3fccde6a569_66",
+            "owner": "player",
+            "description": "",
+            "statusText": "<color=#008990>雌性 幼崽 老鼠</color>\n<color=#42a2aa>年龄：0天（5克）</color>\n \n<color=#42a2aa>健康值： </color><color=#548100>[==========]</color> <color=#548100>(107/100)</color>\n<color=#42a2aa>饥饿值： </color><color=#42a2aa>[==        ]</color> <color=#42a2aa>(125/500)</color>\n<color=#42a2aa>生长速度: </color><color=#42a2aa>1</color>\n<color=#42a2aa>预期产仔数: </color><color=#42a2aa>3</color>\n<color=#42a2aa>免疫力: </color><color=#42a2aa>30.05</color>\n<color=#42a2aa>最大健康值: </color><color=#42a2aa>100</color>\n<color=#42a2aa>寿命: </color><color=#42a2aa>1</color>\n<color=#42a2aa>饥饿速度: </color><color=#42a2aa>65</color>\n \n \n<color=#c07d7d>过度拥挤2</color>",
+            "features": [],
+            "shape": {
+              "x": 3,
+              "y": 2,
+              "width": 2,
+              "height": 1,
+              "rotation": 0,
+              "flipped": false,
+              "cells": [
+                "##"
+              ]
+            },
+            "contentsOpen": false
+          },
+          {
+            "entityId": "ec3fccde6a569_106",
+            "id": 77,
+            "displayName": "老鼠",
+            "count": 1,
+            "containerId": "ec3fccde6a569_66",
+            "owner": "player",
+            "description": "",
+            "statusText": "<color=#008990>雌性 幼崽 老鼠</color>\n<color=#42a2aa>年龄：0天（5克）</color>\n \n<color=#42a2aa>健康值： </color><color=#548100>[========= ]</color> <color=#548100>(91/100)</color>\n<color=#42a2aa>饥饿值： </color><color=#42a2aa>[==        ]</color> <color=#42a2aa>(125/500)</color>\n<color=#42a2aa>生长速度: </color><color=#42a2aa>1</color>\n<color=#42a2aa>预期产仔数: </color><color=#42a2aa>3</color>\n<color=#42a2aa>免疫力: </color><color=#42a2aa>30</color>\n<color=#42a2aa>最大健康值: </color><color=#42a2aa>100</color>\n<color=#42a2aa>寿命: </color><color=#42a2aa>1</color>\n<color=#42a2aa>饥饿速度: </color><color=#42a2aa>65</color>\n \n \n<color=#c07d7d>过度拥挤2</color>",
+            "features": [],
+            "shape": {
+              "x": 8,
+              "y": 1,
+              "width": 2,
+              "height": 1,
+              "rotation": 0,
+              "flipped": false,
+              "cells": [
+                "##"
+              ]
+            },
+            "contentsOpen": false
+          },
+          {
+            "entityId": "ec3fccde6a569_107",
+            "id": 76,
+            "displayName": "老鼠",
+            "count": 1,
+            "containerId": "ec3fccde6a569_66",
+            "owner": "player",
+            "description": "",
+            "statusText": "<color=#008990>雄性 幼崽 老鼠</color>\n<color=#42a2aa>年龄：0天（5克）</color>\n \n<color=#42a2aa>健康值： </color><color=#548100>[==========]</color> <color=#548100>(128/102)</color>\n<color=#42a2aa>饥饿值： </color><color=#42a2aa>[==        ]</color> <color=#42a2aa>(125/500)</color>\n<color=#42a2aa>生长速度: </color><color=#42a2aa>0.97</color>\n<color=#42a2aa>预期产仔数: </color><color=#42a2aa>3</color>\n<color=#42a2aa>免疫力: </color><color=#42a2aa>29.37</color>\n<color=#42a2aa>最大健康值: </color><color=#42a2aa>101.55</color>\n<color=#42a2aa>寿命: </color><color=#42a2aa>1</color>\n<color=#42a2aa>饥饿速度: </color><color=#42a2aa>65</color>\n \n \n<color=#c07d7d>过度拥挤2</color>",
+            "features": [],
+            "shape": {
+              "x": 4,
+              "y": 1,
+              "width": 2,
+              "height": 1,
+              "rotation": 0,
+              "flipped": false,
+              "cells": [
+                "##"
+              ]
+            },
+            "contentsOpen": false
+          },
+          {
+            "entityId": "ec3fccde6a569_108",
+            "id": 75,
+            "displayName": "老鼠",
+            "count": 1,
+            "containerId": "ec3fccde6a569_66",
+            "owner": "player",
+            "description": "",
+            "statusText": "<color=#008990>雌性 幼崽 老鼠</color>\n<color=#42a2aa>年龄：0天（5克）</color>\n \n<color=#42a2aa>健康值： </color><color=#548100>[========= ]</color> <color=#548100>(95/100)</color>\n<color=#42a2aa>饥饿值： </color><color=#42a2aa>[==        ]</color> <color=#42a2aa>(125/500)</color>\n<color=#42a2aa>生长速度: </color><color=#42a2aa>1</color>\n<color=#42a2aa>预期产仔数: </color><color=#42a2aa>3</color>\n<color=#42a2aa>免疫力: </color><color=#42a2aa>30</color>\n<color=#42a2aa>最大健康值: </color><color=#42a2aa>100</color>\n<color=#42a2aa>寿命: </color><color=#42a2aa>0.99</color>\n<color=#42a2aa>饥饿速度: </color><color=#42a2aa>65</color>\n \n \n<color=#c07d7d>过度拥挤2</color>",
+            "features": [],
+            "shape": {
+              "x": 8,
+              "y": 0,
+              "width": 2,
+              "height": 1,
+              "rotation": 0,
+              "flipped": false,
+              "cells": [
+                "##"
+              ]
+            },
+            "contentsOpen": false
+          },
+          {
+            "entityId": "ec3fccde6a569_109",
+            "id": 74,
+            "displayName": "老鼠",
+            "count": 1,
+            "containerId": "ec3fccde6a569_66",
+            "owner": "player",
+            "description": "",
+            "statusText": "<color=#008990>雄性 幼崽 老鼠</color>\n<color=#42a2aa>年龄：0天（5克）</color>\n \n<color=#42a2aa>健康值： </color><color=#548100>[==========]</color> <color=#548100>(120/103)</color>\n<color=#42a2aa>饥饿值： </color><color=#42a2aa>[==        ]</color> <color=#42a2aa>(125/500)</color>\n<color=#42a2aa>生长速度: </color><color=#42a2aa>1</color>\n<color=#42a2aa>预期产仔数: </color><color=#42a2aa>3</color>\n<color=#42a2aa>免疫力: </color><color=#42a2aa>31.25</color>\n<color=#42a2aa>最大健康值: </color><color=#42a2aa>103.15</color>\n<color=#42a2aa>寿命: </color><color=#42a2aa>1</color>\n<color=#42a2aa>饥饿速度: </color><color=#42a2aa>65</color>\n \n \n<color=#c07d7d>过度拥挤2</color>",
+            "features": [],
+            "shape": {
+              "x": 6,
+              "y": 0,
+              "width": 2,
+              "height": 1,
+              "rotation": 0,
+              "flipped": false,
+              "cells": [
+                "##"
+              ]
+            },
+            "contentsOpen": false
+          }
+        ],
+        "day": 4
+      }
+    },
+    {
+      "case": "newborn retrieved from cage",
+      "passed": true,
+      "evidence": "20261107-233126275-d56259.result.json",
+      "detail": "ec3fccde6a569_104"
+    },
+    {
+      "case": "native pause opens",
+      "passed": true,
+      "evidence": "20261107-233129772-5b9dff.result.json",
+      "detail": ""
+    },
+    {
+      "case": "select 水产养殖户",
+      "passed": true,
+      "evidence": "20261107-233133659-399757.result.json",
+      "detail": ""
+    },
+    {
+      "case": "start 水产养殖户",
+      "passed": true,
+      "evidence": "20261107-233138353-66cc88.result.json",
+      "detail": {
+        "cash": 150,
+        "items": [
+          {
+            "entityId": "e2363da88721d_10",
+            "id": 24,
+            "displayName": "电子元件（普通）",
+            "count": 1,
+            "containerId": "e2363da88721d_25"
+          },
+          {
+            "entityId": "e2363da88721d_11",
+            "id": 23,
+            "displayName": "废金属",
+            "count": 1,
+            "containerId": "e2363da88721d_25"
+          },
+          {
+            "entityId": "e2363da88721d_12",
+            "id": 22,
+            "displayName": "工业鱼饲料",
+            "count": 1,
+            "containerId": "e2363da88721d_25"
+          },
+          {
+            "entityId": "e2363da88721d_13",
+            "id": 21,
+            "displayName": "工业鱼饲料",
+            "count": 1,
+            "containerId": "e2363da88721d_25"
+          },
+          {
+            "entityId": "e2363da88721d_14",
+            "id": 20,
+            "displayName": "罗非鱼卵（受精）",
+            "count": 1,
+            "containerId": "e2363da88721d_25"
+          },
+          {
+            "entityId": "e2363da88721d_15",
+            "id": 19,
+            "displayName": "罗非鱼",
+            "count": 1,
+            "containerId": "e2363da88721d_25"
+          },
+          {
+            "entityId": "e2363da88721d_16",
+            "id": 18,
+            "displayName": "罗非鱼",
+            "count": 1,
+            "containerId": "e2363da88721d_25"
+          },
+          {
+            "entityId": "e2363da88721d_17",
+            "id": 15,
+            "displayName": "循环水养殖系统",
+            "count": 1,
+            "containerId": "e2363da88721d_25"
+          },
+          {
+            "entityId": "e2363da88721d_18",
+            "id": 12,
+            "displayName": "循环水养殖系统",
+            "count": 1,
+            "containerId": "e2363da88721d_25"
+          },
+          {
+            "entityId": "e2363da88721d_19",
+            "id": -103,
+            "displayName": "磁带播放器",
+            "count": 1,
+            "containerId": "e2363da88721d_23"
+          },
+          {
+            "entityId": "e2363da88721d_2",
+            "id": 50,
+            "displayName": "腰包",
+            "count": 1,
+            "containerId": "e2363da88721d_25"
+          },
+          {
+            "entityId": "e2363da88721d_20",
+            "id": 4,
+            "displayName": "排水口",
+            "count": 1,
+            "containerId": "e2363da88721d_26"
+          },
+          {
+            "entityId": "e2363da88721d_21",
+            "id": -102,
+            "displayName": "垃圾桶",
+            "count": 1,
+            "containerId": "e2363da88721d_27"
+          },
+          {
+            "entityId": "e2363da88721d_22",
+            "id": -101,
+            "displayName": "档案箱",
+            "count": 1,
+            "containerId": "e2363da88721d_28"
+          },
+          {
+            "entityId": "e2363da88721d_3",
+            "id": 49,
+            "displayName": "外用药膏绷带",
+            "count": 1,
+            "containerId": "e2363da88721d_25"
+          },
+          {
+            "entityId": "e2363da88721d_4",
+            "id": 48,
+            "displayName": "标签打印机",
+            "count": 1,
+            "containerId": "e2363da88721d_25"
+          },
+          {
+            "entityId": "e2363da88721d_5",
+            "id": 47,
+            "displayName": "放大镜",
+            "count": 1,
+            "containerId": "e2363da88721d_25"
+          },
+          {
+            "entityId": "e2363da88721d_6",
+            "id": 28,
+            "displayName": "水桶",
+            "count": 1,
+            "containerId": "e2363da88721d_25"
+          },
+          {
+            "entityId": "e2363da88721d_7",
+            "id": 27,
+            "displayName": "水桶",
+            "count": 1,
+            "containerId": "e2363da88721d_25"
+          },
+          {
+            "entityId": "e2363da88721d_8",
+            "id": 26,
+            "displayName": "标记笔",
+            "count": 1,
+            "containerId": "e2363da88721d_25"
+          },
+          {
+            "entityId": "e2363da88721d_9",
+            "id": 25,
+            "displayName": "厨刀",
+            "count": 1,
+            "containerId": "e2363da88721d_25"
+          }
+        ]
+      }
+    },
+    {
+      "case": "roe nursery filled",
+      "passed": true,
+      "evidence": "20261107-233224747-f6db80.result.json",
+      "detail": "<color=#42a2aa>水量：6000毫升，需要100毫升</color>\n<color=#42a2aa>废物：0.7%</color>\n<color=#42a2aa>存鱼：活鱼1尾</color>\n \n<color=#42a2aa>升级：</color>\n<color=#42a2aa>储藏（废金属）：0/4</color>\n<color=#42a2aa>储藏（金属锭）：0/4</color>\n<color=#42a2aa>效率（电子元件（普通））：0/12</color>"
+    },
+    {
+      "case": "adult fish supplied separately",
+      "passed": true,
+      "evidence": "20261107-233233388-ab154b.result.json",
+      "detail": ""
+    },
+    {
+      "case": "native night 1 to 2",
+      "passed": true,
+      "evidence": "20261107-233245967-6db7c8.result.json",
+      "detail": {
+        "day": 2,
+        "report": [
+          "-新开张的店铺暂时不会遭贼，保护期还剩3晚。",
+          "-电费已结清。",
+          "-<color=#cc7755>昨晚店面没有被打扫，但反正也没什么需要打扫的。</color>",
+          "145<sprite name=\"c\" tint=1 >",
+          "0",
+          "别忘了补充展示柜存货！",
+          "店铺吸引力: 250 <link=\"ui_info_store_attractiveness\"><sprite name=\"info\" tint=1></link>",
+          "状态",
+          "基础",
+          "日历",
+          "第2天（星期二）\n租金须于5天后支付",
+          "1000",
+          "夜间报告"
+        ],
+        "cash": 145
+      }
+    },
+    {
+      "case": "roe hatched after first night",
+      "passed": true,
+      "evidence": "20261107-233248856-63a75f.result.json",
+      "detail": [
+        {
+          "entityId": "e2363da88721d_144",
+          "id": 66,
+          "displayName": "罗非鱼苗",
+          "count": 1,
+          "containerId": "e2363da88721d_72",
+          "owner": "player",
+          "description": "",
+          "statusText": "<color=#42a2aa>6尾鱼苗，2天后长成幼鱼</color>\n<color=#42a2aa>健康值： </color><color=#548100>[==========]</color> <color=#548100>(100/100)</color>\n<color=#42a2aa>饥饿值： </color><color=#42a2aa>[========  ]</color> <color=#42a2aa>(595/700)</color>\n<color=#42a2aa>整窝鱼卵需要水箱提供100毫升水</color>",
+          "features": [],
+          "shape": {
+            "x": 3,
+            "y": 0,
+            "width": 2,
+            "height": 2,
+            "rotation": 0,
+            "flipped": false,
+            "cells": [
+              "##",
+              "##"
+            ]
+          },
+          "contentsOpen": false
+        }
+      ]
+    },
+    {
+      "case": "native night 2 to 3",
+      "passed": true,
+      "evidence": "20261107-233318034-3eaa27.result.json",
+      "detail": {
+        "cash": 140,
+        "report": [
+          "-你的一位联系人通知你，通缉犯：奥丁·哈拉尔德森昨天曾光顾过你的店铺。",
+          "-新开张的店铺暂时不会遭贼，保护期还剩2晚。",
+          "-电费已结清。",
+          "-<color=#cc7755>昨晚店面没有被打扫，店门前堆着垃圾袋，可能会使少数顾客望而却步。</color>",
+          "140<sprite name=\"c\" tint=1 >",
+          "0",
+          "别忘了补充展示柜存货！",
+          "店铺吸引力: 200 <link=\"ui_info_store_attractiveness\"><sprite name=\"info\" tint=1></link>",
+          "状态",
+          "垃圾",
+          "基础",
+          "日历",
+          "第3天（星期三）\n租金须于4天后支付",
+          "1000",
+          "夜间报告"
+        ],
+        "day": 3
+      }
+    },
+    {
+      "case": "fry growth progressed",
+      "passed": false,
+      "evidence": "20261107-233320662-436358.result.json",
+      "detail": "<color=#42a2aa>6尾鱼苗，2天后长成幼鱼</color>\n<color=#42a2aa>健康值： </color><color=#548100>[==========]</color> <color=#548100>(100/100)</color>\n<color=#42a2aa>饥饿值： </color><color=#42a2aa>[========  ]</color> <color=#42a2aa>(590/700)</color>\n<color=#877400>按近期的食物摄入情况，当前生长速度为正常速度的75%</color>\n<color=#42a2aa>整窝鱼卵需要水箱提供100毫升水</color>"
+    },
+    {
+      "case": "native night 3 to 4",
+      "passed": true,
+      "evidence": "20261107-233453147-4c97e6.result.json",
+      "detail": {
+        "report": [
+          "-新开张的店铺暂时不会遭贼，保护期还剩1晚。",
+          "-电费已结清。",
+          "-<color=#cc7755>昨晚店面没有被打扫，店门前遍地都是垃圾和破烂，潜在的顾客都不愿光顾店铺了！</color>",
+          "135<sprite name=\"c\" tint=1 >",
+          "0",
+          "别忘了补充展示柜存货！",
+          "店铺吸引力: 175 <link=\"ui_info_store_attractiveness\"><sprite name=\"info\" tint=1></link>",
+          "状态",
+          "垃圾",
+          "基础",
+          "日历",
+          "第4天（星期四）\n租金须于3天后支付",
+          "1000",
+          "夜间报告"
+        ],
+        "cash": 135,
+        "day": 4
+      }
+    },
+    {
+      "case": "native night 4 to 5",
+      "passed": true,
+      "evidence": "20261107-233507926-b909ee.result.json",
+      "detail": {
+        "report": [
+          "-<color=#9c3738>你遭贼了！电子元件（普通）被偷走了！</color>",
+          "-你目前没有保险保障。保险已中断1天。",
+          "-电费已结清。",
+          "-<color=#cc7755>昨晚店面没有被打扫，店门前遍地都是垃圾和破烂，潜在的顾客都不愿光顾店铺了！</color>",
+          "2天后需支付租金的240信用点！",
+          "130<sprite name=\"c\" tint=1 >",
+          "0",
+          "别忘了补充展示柜存货！",
+          "店铺吸引力: 150 <link=\"ui_info_store_attractiveness\"><sprite name=\"info\" tint=1></link>",
+          "状态",
+          "垃圾",
+          "基础",
+          "日历",
+          "第5天（星期五）\n租金须于2天后支付",
+          "1000",
+          "夜间报告"
+        ],
+        "cash": 130,
+        "day": 5
+      }
+    },
+    {
+      "case": "fry became individual juvenile fish",
+      "passed": true,
+      "evidence": "20261107-233510508-41bc52.result.json",
+      "detail": {
+        "fish": [
+          {
+            "entityId": "e2363da88721d_162",
+            "id": 77,
+            "displayName": "罗非鱼",
+            "count": 1,
+            "containerId": "e2363da88721d_72",
+            "owner": "player",
+            "description": "",
+            "statusText": "<color=#008990>雌性 幼年 罗非鱼</color>\n<color=#42a2aa>年龄：3天（51克）  肉类：546千卡</color>\n<color=#42a2aa>食性：杂食</color>\n<color=#42a2aa>食用肉类时，生长速度提高25%</color>\n<color=#42a2aa>健康值： </color><color=#548100>[==========]</color> <color=#548100>(100/100)</color>\n<color=#42a2aa>饥饿值： </color><color=#42a2aa>[========  ]</color> <color=#42a2aa>(595/700)</color>\n<color=#42a2aa>需要水箱提供100毫升水</color>\n<color=#42a2aa>2天后进入下一生长阶段</color>",
+            "features": [],
+            "shape": {
+              "x": 2,
+              "y": 2,
+              "width": 2,
+              "height": 1,
+              "rotation": 0,
+              "flipped": false,
+              "cells": [
+                "##"
+              ]
+            },
+            "contentsOpen": false
+          },
+          {
+            "entityId": "e2363da88721d_163",
+            "id": 76,
+            "displayName": "罗非鱼",
+            "count": 1,
+            "containerId": "e2363da88721d_72",
+            "owner": "player",
+            "description": "",
+            "statusText": "<color=#008990>雌性 幼年 罗非鱼</color>\n<color=#42a2aa>年龄：3天（51克）  肉类：546千卡</color>\n<color=#42a2aa>食性：杂食</color>\n<color=#42a2aa>食用肉类时，生长速度提高25%</color>\n<color=#42a2aa>健康值： </color><color=#548100>[==========]</color> <color=#548100>(100/100)</color>\n<color=#42a2aa>饥饿值： </color><color=#42a2aa>[========  ]</color> <color=#42a2aa>(595/700)</color>\n<color=#42a2aa>需要水箱提供100毫升水</color>\n<color=#42a2aa>2天后进入下一生长阶段</color>",
+            "features": [],
+            "shape": {
+              "x": 0,
+              "y": 2,
+              "width": 2,
+              "height": 1,
+              "rotation": 0,
+              "flipped": false,
+              "cells": [
+                "##"
+              ]
+            },
+            "contentsOpen": false
+          },
+          {
+            "entityId": "e2363da88721d_164",
+            "id": 75,
+            "displayName": "罗非鱼",
+            "count": 1,
+            "containerId": "e2363da88721d_72",
+            "owner": "player",
+            "description": "",
+            "statusText": "<color=#008990>雌性 幼年 罗非鱼</color>\n<color=#42a2aa>年龄：3天（51克）  肉类：546千卡</color>\n<color=#42a2aa>食性：杂食</color>\n<color=#42a2aa>食用肉类时，生长速度提高25%</color>\n<color=#42a2aa>健康值： </color><color=#548100>[==========]</color> <color=#548100>(100/100)</color>\n<color=#42a2aa>饥饿值： </color><color=#42a2aa>[========  ]</color> <color=#42a2aa>(595/700)</color>\n<color=#42a2aa>需要水箱提供100毫升水</color>\n<color=#42a2aa>2天后进入下一生长阶段</color>",
+            "features": [],
+            "shape": {
+              "x": 5,
+              "y": 1,
+              "width": 2,
+              "height": 1,
+              "rotation": 0,
+              "flipped": false,
+              "cells": [
+                "##"
+              ]
+            },
+            "contentsOpen": false
+          },
+          {
+            "entityId": "e2363da88721d_165",
+            "id": 74,
+            "displayName": "罗非鱼",
+            "count": 1,
+            "containerId": "e2363da88721d_72",
+            "owner": "player",
+            "description": "",
+            "statusText": "<color=#008990>雌性 幼年 罗非鱼</color>\n<color=#42a2aa>年龄：3天（51克）  肉类：546千卡</color>\n<color=#42a2aa>食性：杂食</color>\n<color=#42a2aa>食用肉类时，生长速度提高25%</color>\n<color=#42a2aa>健康值： </color><color=#548100>[==========]</color> <color=#548100>(100/100)</color>\n<color=#42a2aa>饥饿值： </color><color=#42a2aa>[========  ]</color> <color=#42a2aa>(595/700)</color>\n<color=#42a2aa>需要水箱提供100毫升水</color>\n<color=#42a2aa>2天后进入下一生长阶段</color>",
+            "features": [],
+            "shape": {
+              "x": 6,
+              "y": 3,
+              "width": 2,
+              "height": 1,
+              "rotation": 0,
+              "flipped": false,
+              "cells": [
+                "##"
+              ]
+            },
+            "contentsOpen": false
+          },
+          {
+            "entityId": "e2363da88721d_166",
+            "id": 73,
+            "displayName": "罗非鱼",
+            "count": 1,
+            "containerId": "e2363da88721d_72",
+            "owner": "player",
+            "description": "",
+            "statusText": "<color=#008990>雄性 幼年 罗非鱼</color>\n<color=#42a2aa>年龄：3天（51克）  肉类：546千卡</color>\n<color=#42a2aa>食性：杂食</color>\n<color=#42a2aa>食用肉类时，生长速度提高25%</color>\n<color=#42a2aa>健康值： </color><color=#548100>[==========]</color> <color=#548100>(100/100)</color>\n<color=#42a2aa>饥饿值： </color><color=#42a2aa>[========  ]</color> <color=#42a2aa>(595/700)</color>\n<color=#42a2aa>需要水箱提供100毫升水</color>\n<color=#42a2aa>2天后进入下一生长阶段</color>",
+            "features": [],
+            "shape": {
+              "x": 5,
+              "y": 0,
+              "width": 2,
+              "height": 1,
+              "rotation": 0,
+              "flipped": false,
+              "cells": [
+                "##"
+              ]
+            },
+            "contentsOpen": false
+          },
+          {
+            "entityId": "e2363da88721d_167",
+            "id": 72,
+            "displayName": "罗非鱼",
+            "count": 1,
+            "containerId": "e2363da88721d_72",
+            "owner": "player",
+            "description": "",
+            "statusText": "<color=#008990>雌性 幼年 罗非鱼</color>\n<color=#42a2aa>年龄：3天（51克）  肉类：546千卡</color>\n<color=#42a2aa>食性：杂食</color>\n<color=#42a2aa>食用肉类时，生长速度提高25%</color>\n<color=#42a2aa>健康值： </color><color=#548100>[==========]</color> <color=#548100>(100/100)</color>\n<color=#42a2aa>饥饿值： </color><color=#42a2aa>[========  ]</color> <color=#42a2aa>(595/700)</color>\n<color=#42a2aa>需要水箱提供100毫升水</color>\n<color=#42a2aa>2天后进入下一生长阶段</color>",
+            "features": [],
+            "shape": {
+              "x": 4,
+              "y": 2,
+              "width": 2,
+              "height": 1,
+              "rotation": 0,
+              "flipped": false,
+              "cells": [
+                "##"
+              ]
+            },
+            "contentsOpen": false
+          }
+        ],
+        "day": 5
+      }
+    },
+    {
+      "case": "newly grown fish killed by native tool",
+      "passed": true,
+      "evidence": "20261107-233537703-a56720.result.json",
+      "detail": {
+        "entityId": "e2363da88721d_162",
+        "id": 77,
+        "displayName": "罗非鱼",
+        "count": 1,
+        "containerId": "e2363da88721d_72",
+        "owner": "player",
+        "description": "",
+        "statusText": "<color=#c07d7d>[死亡] </color> \n<color=#008990>雌性 幼年 罗非鱼</color>\n<color=#42a2aa>年龄：3天（51克）</color>\n<color=#42a2aa>剩余肉量：546/546千卡</color>",
+        "features": [],
+        "shape": {
+          "x": 2,
+          "y": 2,
+          "width": 2,
+          "height": 1,
+          "rotation": 2,
+          "flipped": true,
+          "cells": [
+            "##"
+          ]
+        },
+        "contentsOpen": false
+      }
+    },
+    {
+      "case": "newly grown fish produces fillet",
+      "passed": true,
+      "evidence": "20261107-233539188-23295a.result.json",
+      "detail": [
+        {
+          "entityId": "e2363da88721d_169",
+          "id": 79,
+          "displayName": "鱼肉片（极小）",
+          "count": 1,
+          "containerId": "e2363da88721d_72",
+          "owner": "player",
+          "description": "",
+          "statusText": "",
+          "features": [],
+          "shape": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "rotation": 0,
+            "flipped": false,
+            "cells": [
+              "#"
+            ]
+          },
+          "contentsOpen": false
+        },
+        {
+          "entityId": "e2363da88721d_170",
+          "id": 78,
+          "displayName": "鱼肉片",
+          "count": 1,
+          "containerId": "e2363da88721d_72",
+          "owner": "player",
+          "description": "",
+          "statusText": "",
+          "features": [],
+          "shape": {
+            "x": 3,
+            "y": 0,
+            "width": 2,
+            "height": 2,
+            "rotation": 0,
+            "flipped": false,
+            "cells": [
+              "##",
+              "##"
+            ]
+          },
+          "contentsOpen": false
+        }
+      ]
+    },
+    {
+      "case": "fish fillet retrieved",
+      "passed": true,
+      "evidence": "20261107-233540794-bab947.result.json",
+      "detail": ""
+    },
+    {
+      "case": "native pause opens",
+      "passed": true,
+      "evidence": "20261107-233543604-a8475f.result.json",
+      "detail": ""
+    },
+    {
+      "case": "all production tests returned to main menu",
+      "passed": true,
+      "evidence": "20261107-233545174-cd76f2.result.json",
+      "detail": ""
+    }
+  ],
+  "actionCounts": {
+    "total": 200,
+    "dispatched": 192,
+    "staleSnapshotRejected": 8
+  },
+  "actions": [
+    {
+      "file": "20261107-231202776-b55251.result.json",
+      "sha256": "fe7cc84e32f50902254a722ffcab00d9a3bde21639080fe648e9d2ebff16c9d8",
+      "action": "ui_click:e769d775ca6d0_2",
+      "arguments": {},
+      "requestId": "5903a54d-2a07-49c0-aad6-b94a1588a8b7",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-231203866-e32d3e.result.json",
+      "sha256": "32b17bc6d3cff2137ae3f2b3884caf5d0081ac53b383359598f1a739e43e2fe2",
+      "action": "ui_select_specialization:e769d775ca6d0_13",
+      "arguments": {},
+      "requestId": "11bd5ed5-b61f-4bd6-a786-2ce2ada8eebf",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-231204926-58ada7.result.json",
+      "sha256": "a6070e8f4f84ebea28c74a4de3cfbd985dd15431545e204592227569ca8be67d",
+      "action": "ui_click:e769d775ca6d0_21",
+      "arguments": {},
+      "requestId": "42c4e81e-0864-40dc-afc1-4ed652e94156",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-231205976-f0837f.result.json",
+      "sha256": "916ee3736a35a52b740d35a84b8ac93c51257813f25f6888733f2e9a276b8ec3",
+      "action": "ui_click:e769d775ca6d0_61",
+      "arguments": {},
+      "requestId": "0503bb1a-6a3b-4a6f-845c-3bccf9a0169c",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-231207015-bc4f0c.result.json",
+      "sha256": "464f82c9cf84848d48782b73dd9839692b3eb30034c517281bddf7efb820513b",
+      "action": "ui_click:e769d775ca6d0_70",
+      "arguments": {},
+      "requestId": "11ea5570-86e4-4681-879f-0340eddf8916",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-231210359-49afda.result.json",
+      "sha256": "6537744259ccbcc3a1be9eea09ea35ecaa9247d9a0aa9b1d52f042513d098214",
+      "action": "ui_click:e0ae098ea913b_1",
+      "arguments": {},
+      "requestId": "2e9f067d-6b1c-493b-a6fa-6514e4567ef4",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-231211837-bdd892.result.json",
+      "sha256": "686ba0e5ec17b2f7f92a3c1b21e54e07b8a08d01697e293cef4008ed37ba0167",
+      "action": "item_open:e0ae098ea913b_39",
+      "arguments": {},
+      "requestId": "508c5e38-8ac1-404b-912b-fd6a1a674db2",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-231238215-5bb056.result.json",
+      "sha256": "61bf40326b8ad0836752961f99edfe0e1f724da8a67b0b661dc12350b2d6b96d",
+      "action": "item_move:e0ae098ea913b_34",
+      "arguments": {
+        "destinationId": "e0ae098ea913b_93"
+      },
+      "requestId": "5f43dfef-859a-40b1-9298-ca7349556729",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-231239516-70df3e.result.json",
+      "sha256": "323483b4659374979d7a725b89ab877a5a6ae09bca824948a2b5f5882bf4a08a",
+      "action": "item_move:e0ae098ea913b_35",
+      "arguments": {
+        "destinationId": "e0ae098ea913b_93"
+      },
+      "requestId": "22525eff-e2cf-48b6-a220-5efebad67906",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-231240766-1b8944.result.json",
+      "sha256": "8ae762740d9d28495c6164cf533f4ca33a4046f4251e99457b8cb8c97af8a65e",
+      "action": "item_move:e0ae098ea913b_36",
+      "arguments": {
+        "destinationId": "e0ae098ea913b_93"
+      },
+      "requestId": "b260682f-9481-46a2-a2fb-774d8b7bb8df",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-231241885-be24d4.result.json",
+      "sha256": "00a004f33a64d6673619d25e061f1db5f4ce9d17d1346710cb5726535009c747",
+      "action": "item_move:e0ae098ea913b_37",
+      "arguments": {
+        "destinationId": "e0ae098ea913b_93"
+      },
+      "requestId": "5becc54d-e2d6-4cfe-b03d-9d6c4d75764d",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-231243397-82377f.result.json",
+      "sha256": "99a02e121328f4fabb7aceec6f321e36ee6cc0836760f14103651ca1baf09014",
+      "action": "item_close:e0ae098ea913b_39",
+      "arguments": {},
+      "requestId": "222a55ec-8be9-4d24-baa3-f632ab2042e5",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-231244661-31cfdb.result.json",
+      "sha256": "d38bd260349fac068c5adfbf04af21e3884f84e71cfa6002f06466a98c71d56d",
+      "action": "open_shop",
+      "arguments": {},
+      "requestId": "dfde4def-3a6e-449b-8f1f-c75e6940e652",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-231308516-a64d19.result.json",
+      "sha256": "59c010bc04fa7b2b77b45c24c0b60fd55a07611952693173f4798b0e963da1d5",
+      "action": "next_customer",
+      "arguments": {},
+      "requestId": "ff058de4-0571-4cf7-b550-128fd63acd50",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-231324180-b53aa9.result.json",
+      "sha256": "956ec52f06183c0a667c08519047bbad422bce68fa7be85b496822a90183c3d3",
+      "action": "close_shop",
+      "arguments": {},
+      "requestId": "df24fe15-96eb-4a6a-9e62-f175f9ebb456",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-231337724-a4ce74.result.json",
+      "sha256": "1bd51a28223ae4dcd13535bfc35ac1ac0f62116a4a11456b40be02e579232881",
+      "action": "ui_click:e0ae098ea913b_106",
+      "arguments": {},
+      "requestId": "be9269de-6ff1-481a-a580-d88eacf69c45",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-231340260-fc992e.result.json",
+      "sha256": "218c6a4d984319cbe26de4658ee554849bd83182c6e2245833502bdc4b132035",
+      "action": "sleep",
+      "arguments": {},
+      "requestId": "7aa1c0b8-1124-4d3e-8095-e5f53f10ca0b",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-231415225-32569c.result.json",
+      "sha256": "bcc78f1219238080416572e16a7baed131b9fb427f4f713183d86e3e2daee9f8",
+      "action": "ui_click:e0ae098ea913b_107",
+      "arguments": {},
+      "requestId": "9191d186-e08b-4973-869f-7579b6c84a13",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-231437734-b30bf9.result.json",
+      "sha256": "1758b7ab053998ad0bf72c84135b68d70bb6b2342d9d92a516844fcfbae362cb",
+      "action": "ui_click:e0ae098ea913b_115",
+      "arguments": {},
+      "requestId": "7a21c8d7-d5f3-4b29-8384-1cb6d2626226",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-231439150-49060f.result.json",
+      "sha256": "442d8da668645bebf22e4d36c36f22278aa0511228d6d8f0b8481742d4340cbf",
+      "action": "item_open:e0ae098ea913b_39",
+      "arguments": {},
+      "requestId": "6ae4d08d-ef9a-49c4-a9f7-df84722f33c1",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-231511551-4bc8c6.result.json",
+      "sha256": "c7773bb00e9e8bed41866a341b9e4c68d2ecb49a40b057036318e266153c3103",
+      "action": "item_close:e0ae098ea913b_39",
+      "arguments": {},
+      "requestId": "65829940-9c31-48b0-8655-5909370f8b3e",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-231512841-58e743.result.json",
+      "sha256": "eb1d5340d5b5de86d95e30044806672c9a4c530768aa8b5ba132b9378f6f1b1a",
+      "action": "open_shop",
+      "arguments": {},
+      "requestId": "49ac2fa1-64f4-4d46-8954-641bcaf647f5",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-231551728-d05836.result.json",
+      "sha256": "508c1974bed9cd631cc555a44cedfee023efd8d76ea5c29f2827e0f0d62edc7b",
+      "action": "next_customer",
+      "arguments": {},
+      "requestId": "5755f568-5548-4fa9-b410-42094209e5ee",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-231657708-e63399.result.json",
+      "sha256": "327d9fcf57cab39ef92e8b08adae3daa6e620f714fe836cad83cf35b098e7703",
+      "action": "close_shop",
+      "arguments": {},
+      "requestId": "0a4e5985-83b8-4429-bfb6-68b6e79af144",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-231658862-3807d2.result.json",
+      "sha256": "8d264821c6a694c696e7acb8d068f60d2033c2aa25dedeb09864681332ac7f62",
+      "action": "ui_click:e0ae098ea913b_106",
+      "arguments": {},
+      "requestId": "a6c86b3d-c172-47d4-8ab2-4de9b2f16332",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-231700775-db2926.result.json",
+      "sha256": "be37b26214a804813f3f2b59f965fb93ee353964f9e2f9a4ab643ca8f59fffe7",
+      "action": "sleep",
+      "arguments": {},
+      "requestId": "a999bfd9-d45d-4e16-9558-01e1da336cdb",
+      "success": false,
+      "actionStatus": null,
+      "errorCode": "stale_snapshot"
+    },
+    {
+      "file": "20261107-231825067-1d5f75.result.json",
+      "sha256": "6efaf0999771422864bb64a70acf1355b1bf7b8de1ea4f01ee0c0d71bb0f571c",
+      "action": "sleep",
+      "arguments": {},
+      "requestId": "30358aaa-e4bc-493d-8b44-01564e7fc3f5",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-231826181-a2984c.result.json",
+      "sha256": "72f962bdd1c921bd41fe1646cfd87cd198eb6c86e99cccf1ca776203ae25ce67",
+      "action": "ui_click:e0ae098ea913b_120",
+      "arguments": {},
+      "requestId": "1e24b71b-5c2a-4729-8fe6-0fba3c0e281f",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-231829486-229c0e.result.json",
+      "sha256": "f286a8d8b5f4b55568410ec654ec28db98d9191dd71134173ff654534237f201",
+      "action": "ui_click:e0ae098ea913b_115",
+      "arguments": {},
+      "requestId": "c28ba5f0-cdbb-4e79-9c69-d4d9ecb9da6a",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-231830933-c1f141.result.json",
+      "sha256": "9b8fd17ce3a2794881aabe046527fcd9af6d0a9538c51cbbdb984b43e46fe4b5",
+      "action": "item_open:e0ae098ea913b_39",
+      "arguments": {},
+      "requestId": "6bf379da-f5cf-4b93-ac7b-6a824bcca251",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232243641-a81fd6.result.json",
+      "sha256": "766ca5bf76700fd68658320eabdf08704360f5617c5ea2b4a20ea329cfe005bd",
+      "action": "navigate_back",
+      "arguments": {},
+      "requestId": "05382b1c-04ff-4f48-890b-32142c66db78",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232244944-25a579.result.json",
+      "sha256": "43992ef260b1d266ca85cd581ee075ffbbf4b67ba274bdecf8da9654261792b8",
+      "action": "navigate_back",
+      "arguments": {},
+      "requestId": "82eceaca-122c-4b2c-9967-9df4e9515eff",
+      "success": false,
+      "actionStatus": null,
+      "errorCode": "stale_snapshot"
+    },
+    {
+      "file": "20261107-232339143-fd3e0e.result.json",
+      "sha256": "348a52de3aa6a9944fc59acac3893c53eabb7e8d73dac5afc48e1ad59fbbd058",
+      "action": "navigate_back",
+      "arguments": {},
+      "requestId": "017a9ed7-65d0-451e-bc1c-58fae3ee9e64",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232340323-f4c975.result.json",
+      "sha256": "9b6db46a3a149939cd47b0543fe5b90490a5536292ff135aae4715afa14ce1ba",
+      "action": "ui_click:e0ae098ea913b_130",
+      "arguments": {},
+      "requestId": "2b5a9b22-1285-4e86-9c4e-9f6409cdcb7d",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232355760-f3e24c.result.json",
+      "sha256": "d0b8d74ebb775ea61344a9ee425e039ff9606b360d2d81263d73a63681addeac",
+      "action": "ui_click:ef3378581f760_7",
+      "arguments": {},
+      "requestId": "78469ee0-e953-42f5-9022-8f4d7432c5fa",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232540399-4b46db.result.json",
+      "sha256": "464d9bebafa8580d9d963979919ab8a155db5af97ea4c7900f484714734828cf",
+      "action": "ui_click:e1722dd6e3778_6",
+      "arguments": {},
+      "requestId": "96c4cbe5-5266-4681-b316-12ead226242e",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232556634-a6ec51.result.json",
+      "sha256": "04a51119768e3cbadbcd000180fb02355786370066d8990c576c398ac9e505c3",
+      "action": "ui_click:e1722dd6e3778_31",
+      "arguments": {},
+      "requestId": "405b4aad-0786-4855-b327-3d8dfb32a2d2",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232601053-cfb1c6.result.json",
+      "sha256": "912c77f3bd95a64f4cc56c5fdb8765888b81fddc3f7427039d60c98920610eaf",
+      "action": "ui_click:ee3d224b40b11_2",
+      "arguments": {},
+      "requestId": "805d2271-12cd-4a17-bcfc-6bafa2c8b87f",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232602490-40d279.result.json",
+      "sha256": "0e60e3158a98d89652b6cb0fade646d2f56be2ed93cd0e2801809792e87e813a",
+      "action": "item_open:ee3d224b40b11_39",
+      "arguments": {},
+      "requestId": "be1dce77-bbd9-40d0-b2ed-4b327f59e399",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232603838-e90d20.result.json",
+      "sha256": "159c5f3656ddac8bcdf4cee6ecb24cc630834d77e0c7a3b873266f30143dabfc",
+      "action": "item_close:ee3d224b40b11_39",
+      "arguments": {},
+      "requestId": "05a2073d-11c9-4f25-bd59-4abc71a52c5e",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232604925-83be02.result.json",
+      "sha256": "6954ad69157cc7819b440f1ecbdcb895dff26d80757eaf314ccb8b59f14a7287",
+      "action": "open_shop",
+      "arguments": {},
+      "requestId": "ce3d8cde-5ccf-40b5-8aa5-0da3c4e89a0d",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232606000-7c3f47.result.json",
+      "sha256": "0156357c5c32a710500c5b34209bc4bb2258f0d38d6b207b1e6ae572686e22a5",
+      "action": "next_customer",
+      "arguments": {},
+      "requestId": "00ea25ff-50e0-4e1b-bedd-e0838e75e08c",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232640628-e15171.result.json",
+      "sha256": "dfbd1ce3d54852bb9a55aa6478a3bb21c1cddb874f543fe92b8140ebd5cde74b",
+      "action": "close_shop",
+      "arguments": {},
+      "requestId": "e81d5bef-0d05-4f92-a8b8-b42d5e16d980",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232641908-7b13c6.result.json",
+      "sha256": "790948ec8a6a6eb6300b92c3591bc14c156c15748f885825d623b7c306c1abd9",
+      "action": "ui_click:ee3d224b40b11_106",
+      "arguments": {},
+      "requestId": "7a74901e-a4ab-46e5-a9b7-31bc470c9067",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232643182-f3a670.result.json",
+      "sha256": "a4b7aac9af08ccd1c996cd775dd41e33157156e99688fa6b855580c94079d35c",
+      "action": "sleep",
+      "arguments": {},
+      "requestId": "e9700ae0-d856-4986-bab9-86567c739c31",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232644258-2ea174.result.json",
+      "sha256": "7509ca7f74eb98dc43d627ca17d52b49f8df57535acfce81fb2a10fbb22a5db9",
+      "action": "ui_click:ee3d224b40b11_110",
+      "arguments": {},
+      "requestId": "7b18a783-2107-44d0-bc76-db055c43ae49",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232645309-077cd8.result.json",
+      "sha256": "1add8bd72b6da5aff1a405f448b3bb4c4c74e14b2205fdfce3aee4ce787301e8",
+      "action": "ui_click:ee3d224b40b11_110",
+      "arguments": {},
+      "requestId": "8b3addbb-6826-46de-a58b-8a5d5b2035f3",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232646394-9f5f0a.result.json",
+      "sha256": "d28147789b2a4e707598031155534fe78e1d595aa7c66d21ede27b0c62a76de7",
+      "action": "ui_click:ee3d224b40b11_107",
+      "arguments": {},
+      "requestId": "4bd39e6c-bedc-40dd-8a8a-d96540a60b68",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232649358-7be5f0.result.json",
+      "sha256": "527769f3d663b3ebb14095e972816f4478f77c334e95da3e78806ef5b040459b",
+      "action": "ui_click:ee3d224b40b11_2",
+      "arguments": {},
+      "requestId": "affbe551-bd44-40b5-baff-b499889a0232",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232650857-50a40f.result.json",
+      "sha256": "5b93655c4dbb5dfb7e4e03911e7ddc33c90f9735602ad5c31fc19c53463d0066",
+      "action": "item_open:ee3d224b40b11_39",
+      "arguments": {},
+      "requestId": "53fc62c5-1728-4dae-958d-93844252a1a5",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232652155-f4aec5.result.json",
+      "sha256": "039c4e6db00445beb4642d3eb7b23a996e940cce0ba3d49d695ee0dbd19a9318",
+      "action": "item_move:ee3d224b40b11_114",
+      "arguments": {
+        "destinationId": "ee3d224b40b11_45"
+      },
+      "requestId": "a054cd28-0300-48c6-afb5-f143359ae9e3",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232703544-285621.result.json",
+      "sha256": "dedae2f8d3d8553cb65781351fdd3ba95e7b353440d3a844da6265f7588e43eb",
+      "action": "navigate_back",
+      "arguments": {},
+      "requestId": "38492221-adf3-46a8-9a99-81e1c0131126",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232704846-3e0124.result.json",
+      "sha256": "7f52d9fd4d62de23a44aee1bb9d619d6082c8aa15879efc1784ccb0f44923e8b",
+      "action": "navigate_back",
+      "arguments": {},
+      "requestId": "e8a3c052-592d-49c3-94b4-3c26f22b28bd",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232706085-0ba2d6.result.json",
+      "sha256": "8f5d3df332f841471f0c7705d918968975bc7a5466db223b116f6ea393bc80b4",
+      "action": "ui_click:ee3d224b40b11_120",
+      "arguments": {},
+      "requestId": "10965e6c-244b-4a5f-a2c4-7beacdd70514",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232707118-7160fe.result.json",
+      "sha256": "31e196c43781fe8557a7a0808acfd3326a04fb5a8dd7cb9826d8951140d9895b",
+      "action": "ui_click:e50a4c56fefb3_2",
+      "arguments": {},
+      "requestId": "0ead8f53-1248-47f8-a91c-28711ffab90d",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232708170-b8f171.result.json",
+      "sha256": "e7bf64a77db83aa7e6e831609954018d86e8dac253fa075cfaa8ca612426f978",
+      "action": "ui_select_specialization:e50a4c56fefb3_14",
+      "arguments": {},
+      "requestId": "a16fcb81-b2ee-49d1-a85d-fafb2d2677b6",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232709204-ee6e2e.result.json",
+      "sha256": "635a69bcce57ca1ba8202c5ed36533e254e59eb048d1e8457ae0ced73c0913ee",
+      "action": "ui_click:e50a4c56fefb3_21",
+      "arguments": {},
+      "requestId": "62b308d4-bfae-456c-8c6f-bf02afa2c633",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232710236-2fb575.result.json",
+      "sha256": "19e1c25bd2a48e8c4ec09d05980ac3cbe48ca748003bec70513e80a2d6d86f03",
+      "action": "ui_click:e50a4c56fefb3_61",
+      "arguments": {},
+      "requestId": "59110299-57c4-4151-a3dd-1e11e8ee5059",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232711424-40afad.result.json",
+      "sha256": "d6e6fcaecd1c05102f62fbc49b2b572557af22a891d539fb9c2402214c02e615",
+      "action": "ui_click:e50a4c56fefb3_67",
+      "arguments": {},
+      "requestId": "bfedda2f-4460-40d7-b455-ba48f7cb915b",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232712446-9cd56d.result.json",
+      "sha256": "3d075d7a2dd4593f4e556d1fd0f45384137f8e5a97a5fd5a789a44bb9370f2dd",
+      "action": "ui_click:e50a4c56fefb3_70",
+      "arguments": {},
+      "requestId": "5b4d1dc7-7128-4860-97de-60703c0640eb",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232715259-f91f27.result.json",
+      "sha256": "da43169ff578d3137ab5de493fc2d69bced192ebb06bd4b6e5b4e74fe62174e5",
+      "action": "ui_click:ebf64dbb42f70_1",
+      "arguments": {},
+      "requestId": "7ce3aec3-e343-4895-a45e-0fd7c9949a22",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232745157-fdb924.result.json",
+      "sha256": "39c8b773246335a3c716a74a61ffc22d848aed1819c8cb0b243d833b9619c629",
+      "action": "item_open:ebf64dbb42f70_14",
+      "arguments": {},
+      "requestId": "392184db-ca5b-4eee-8308-5ba2ecdae458",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232746431-c82925.result.json",
+      "sha256": "7f07a02067450abada38392e4bc9669cc52565ae7ac3e45003240e00ccfe0826",
+      "action": "item_move:ebf64dbb42f70_6",
+      "arguments": {
+        "destinationId": "ebf64dbb42f70_70"
+      },
+      "requestId": "3273c46e-af7c-4eea-ac52-a55d122a9e98",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232748056-81638b.result.json",
+      "sha256": "40b054706231a08861603bbf7697aed6358748968fb6aa2cd0518465772aeea2",
+      "action": "item_close:ebf64dbb42f70_14",
+      "arguments": {},
+      "requestId": "f637dac9-ff8d-4477-baf4-8f76fb611571",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232749261-5a895c.result.json",
+      "sha256": "dfdcb527e2c2d6a865b21c315b76af0bbb68dd67544f084231db2b26e2872678",
+      "action": "open_shop",
+      "arguments": {},
+      "requestId": "ca50d1e2-25a0-474b-ac59-0db4a32053f5",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232750485-d1b8a5.result.json",
+      "sha256": "9606d9a8e263f4f4edbeeaa4785a066ed5dae09e5ae9ab1d4038950dae7fca67",
+      "action": "next_customer",
+      "arguments": {},
+      "requestId": "f5012057-3778-4cab-927e-5d7ae373db34",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232818314-553801.result.json",
+      "sha256": "8e07397ef0dddd93cc054bc254ab4e49e26ea1a67522510468f77f87e6f7ebf9",
+      "action": "close_shop",
+      "arguments": {},
+      "requestId": "b902cca3-119c-47f8-97bd-b290d29bb60d",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232819403-37e78d.result.json",
+      "sha256": "6e2ae16eb1ae4b3a70aac9b4f89a9a14cd4faf3c544c9b0a70ae9fe8d2c14b32",
+      "action": "ui_click:ebf64dbb42f70_93",
+      "arguments": {},
+      "requestId": "612328d2-31dd-43c9-bdac-5089e36f93af",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232820467-9854ca.result.json",
+      "sha256": "1d09363973eaca3e66a10fd869e655a9583b9efe3e51917d3929962e426ce169",
+      "action": "sleep",
+      "arguments": {},
+      "requestId": "26419782-a96c-472c-977e-98de7f758808",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232821530-d31ed8.result.json",
+      "sha256": "1b937862926a0b90f001319b2e64e4c1dc97cd5b9157b1c1ea88b668254aa34e",
+      "action": "ui_click:ebf64dbb42f70_95",
+      "arguments": {},
+      "requestId": "ff0543b4-207c-4fac-be0c-24f36be4b582",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232823663-bd1952.result.json",
+      "sha256": "a62139523c0be95635b657091622c0b76109f045cac5b6a32bd610a0f4cb915d",
+      "action": "ui_click:ebf64dbb42f70_103",
+      "arguments": {},
+      "requestId": "d0f57a04-afb7-44f6-8da7-de565fa114b7",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232824904-bde725.result.json",
+      "sha256": "e56f9ed7665a885b8f907a67f90368de7c40323a2af544cc193111ae51a50f14",
+      "action": "item_open:ebf64dbb42f70_14",
+      "arguments": {},
+      "requestId": "2489af12-b182-4e8b-a879-7d31d6186ba4",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232826396-9393bd.result.json",
+      "sha256": "86d8fc1bd595723857c41e5b170a80e1282d2c26c18d7d6e954458c4cd9d769b",
+      "action": "item_close:ebf64dbb42f70_14",
+      "arguments": {},
+      "requestId": "cda080dd-088c-465e-8a7d-812c5aeb1873",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232827620-7c2dc8.result.json",
+      "sha256": "df4623ac5c7afc66d914145f549302b19e8fe140612d32f6b2f9ec5c05244d33",
+      "action": "open_shop",
+      "arguments": {},
+      "requestId": "cba32371-c140-4cd1-a1b8-efbf8f01890b",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232828692-113c3d.result.json",
+      "sha256": "1d725fd17ff29462b429f5a2ab8d356e0b90564951cd25b4b74cb45a3c2e0db3",
+      "action": "next_customer",
+      "arguments": {},
+      "requestId": "cff7197c-90f8-4472-909e-df7f4206f81e",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232831513-4a5688.result.json",
+      "sha256": "adba33fbb3357ef5d22c6f3f0a7d46dfd6766e0f94b8e703b7315f7a63cc630c",
+      "action": "close_shop",
+      "arguments": {},
+      "requestId": "bdd0e9e8-ea44-40d5-b691-98efdcee44f3",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232832550-5c32ab.result.json",
+      "sha256": "8894783cca45705a870eda36e9d9250c485d9d782bcc90896ebcce0ecfeee4d6",
+      "action": "ui_click:ebf64dbb42f70_93",
+      "arguments": {},
+      "requestId": "992c0c8f-b862-4fcc-b275-8e86d2d74379",
+      "success": false,
+      "actionStatus": null,
+      "errorCode": "stale_snapshot"
+    },
+    {
+      "file": "20261107-232834099-02c10a.result.json",
+      "sha256": "3ca3ce4fb4e05dcce6c46da4986fbfd6c8bc8c2b276d4968e0fa13765d48901e",
+      "action": "ui_click:ebf64dbb42f70_93",
+      "arguments": {},
+      "requestId": "04d5c768-fb7b-461a-b0fc-a875ef0b3842",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232835317-4bb8f4.result.json",
+      "sha256": "807f5cacca892038b881d67a1783ba694011af71b1c020baf3cf8ca5ddbef316",
+      "action": "sleep",
+      "arguments": {},
+      "requestId": "8aff1b70-a96c-45df-a723-5ad2bc0b9ae6",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232836504-d0e511.result.json",
+      "sha256": "f4835f77ba2d11ada011b04fa1fd47989d1665224c2d942904abedbeb8f3fcc4",
+      "action": "ui_click:ebf64dbb42f70_113",
+      "arguments": {},
+      "requestId": "e2e049b3-78fe-49d3-95b5-c39d0ec8aacf",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232838451-0ffd1b.result.json",
+      "sha256": "0b561bd2954412411e9f6c0181d4b2c31d42abd320328107849d2d154ee8938e",
+      "action": "ui_click:ebf64dbb42f70_103",
+      "arguments": {},
+      "requestId": "25025e59-6da5-4f11-a890-d40ef3e706ed",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232839676-239136.result.json",
+      "sha256": "55ff2c24f6fa717623a96f45e5110b4b988f6cff6d67e8adb48a5e90bac1c7ca",
+      "action": "item_open:ebf64dbb42f70_14",
+      "arguments": {},
+      "requestId": "2ab48f9b-23bb-4ae7-a5a8-84c30a0fb430",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232845144-4721e3.result.json",
+      "sha256": "247e46f70369a756a796d48a5886e8949712e7de0e3ed700d569267157dcb027",
+      "action": "item_move:ebf64dbb42f70_111",
+      "arguments": {
+        "destinationId": "ebf64dbb42f70_22"
+      },
+      "requestId": "5b8190df-4ae4-4d6e-85fb-a20c95841cd7",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232846675-f594fa.result.json",
+      "sha256": "af338e042da583b69ccf6227668bed4dd3ee0687e5ffee00487e144e40dda9b2",
+      "action": "navigate_back",
+      "arguments": {},
+      "requestId": "450fad53-27f0-4845-a469-4302755f77f5",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232847919-abcd02.result.json",
+      "sha256": "1ee5e264af0941b39a23d68f6a0b1dd92aa458e3287df8fc04870fea6bda1311",
+      "action": "navigate_back",
+      "arguments": {},
+      "requestId": "232deede-3350-4f66-ac73-8fa86dfe03a2",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232848984-6f786a.result.json",
+      "sha256": "4853b811ece08a50dda799ba72afda7d9d305c4bc7e4768cab225c268b84529a",
+      "action": "ui_click:ebf64dbb42f70_122",
+      "arguments": {},
+      "requestId": "60ba026a-2898-4ea4-92bc-95a66029f936",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232850165-12d15e.result.json",
+      "sha256": "15bb77bc093d57c3d6d732a964fcbc439debb883356f15defeaf0c2641ab20af",
+      "action": "ui_click:eda2cb4798938_2",
+      "arguments": {},
+      "requestId": "dcfe659b-9c2e-4009-8303-5c73bc9af2fd",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232851204-d69089.result.json",
+      "sha256": "de8920f5e347cecd1515911b99ac5f3f938469360e7c4e7d69d443c4120e2ef2",
+      "action": "ui_select_specialization:eda2cb4798938_11",
+      "arguments": {},
+      "requestId": "2f0afd2c-db29-4280-be84-a7d16b12823c",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232852396-fd0d9e.result.json",
+      "sha256": "bc3b2ffb9ec7367ab59e8b666f7a97cc635988ddf67124f555f1571eb113b5c8",
+      "action": "ui_click:eda2cb4798938_21",
+      "arguments": {},
+      "requestId": "faad5f9d-3b47-4aa5-bc26-f2d5cf353b61",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232853439-5b44db.result.json",
+      "sha256": "01fadf4fb683a91051baabff628628e1887b2b4b264119da6da840bb2a2538f2",
+      "action": "ui_click:eda2cb4798938_61",
+      "arguments": {},
+      "requestId": "a4d10907-824c-4e10-b0d3-00bec2ed3d37",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232854473-ba1105.result.json",
+      "sha256": "921b1243e355658431317cdb64bf43f08cf8b3029df1c18b353f8363c6afe13c",
+      "action": "ui_click:eda2cb4798938_67",
+      "arguments": {},
+      "requestId": "22699165-a10d-4338-baef-b986a58525b6",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232855489-8c7787.result.json",
+      "sha256": "e3794b52b86d4b1b5ba0adbd52a136f7282bc32195dcf25bcaeeeef697b7d119",
+      "action": "ui_click:eda2cb4798938_70",
+      "arguments": {},
+      "requestId": "a8b0acd8-90d2-4450-9626-935c6784d508",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232858132-47ef6e.result.json",
+      "sha256": "d6de7432aeff7bcb8fee87857f6a602b8f9aab295f1e5724531b44ed1683b424",
+      "action": "ui_click:ec3fccde6a569_1",
+      "arguments": {},
+      "requestId": "61a54293-ac84-43e5-9491-e48e9f057fd1",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232911034-1dc965.result.json",
+      "sha256": "8815d21650deea37c47dd8c1c5114d6d3aa952ff745ab6c38ed4127849c966c3",
+      "action": "item_open:ec3fccde6a569_22",
+      "arguments": {},
+      "requestId": "bf6ed425-44e6-498e-8844-fc2620f6985e",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232931708-1e8753.result.json",
+      "sha256": "aa167f6041eb61d2f875516988b2901a2258549b915d25c8ba55d1bb26ab3480",
+      "action": "item_move:ec3fccde6a569_18",
+      "arguments": {
+        "destinationId": "ec3fccde6a569_66"
+      },
+      "requestId": "4e8ff9fa-57ff-4a8c-a052-678cd9257633",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232933005-51492a.result.json",
+      "sha256": "58fe75e75df698d7fb1547d58765502965ce5931b7c0b97b2992d088b9f6fc3b",
+      "action": "item_move:ec3fccde6a569_19",
+      "arguments": {
+        "destinationId": "ec3fccde6a569_66"
+      },
+      "requestId": "8621462c-3a35-4b9f-b828-4d94475ed356",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232934094-88718b.result.json",
+      "sha256": "cabe014e8b6c036b73cfb1d65ad84f82e15f74f4cb8c6602ecacb548cef1467f",
+      "action": "item_move:ec3fccde6a569_20",
+      "arguments": {
+        "destinationId": "ec3fccde6a569_66"
+      },
+      "requestId": "e1ada4f4-8cff-4197-8025-bbca065a8f82",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232935179-908131.result.json",
+      "sha256": "42643ef32029037076f2a13e84cf65b7d48e3c9d51a19e42cd98c5cc0e0c6cd5",
+      "action": "item_move:ec3fccde6a569_21",
+      "arguments": {
+        "destinationId": "ec3fccde6a569_66"
+      },
+      "requestId": "0c9ec195-4e31-4094-8842-1d3829663da3",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232936420-3730de.result.json",
+      "sha256": "ec11cbfc3062c4029e6d1ca7bd6ff9c48f23c7caa76fc283cf432db868d64824",
+      "action": "item_move:ec3fccde6a569_10",
+      "arguments": {
+        "destinationId": "ec3fccde6a569_66"
+      },
+      "requestId": "39ca6e22-6f25-4fed-a5b2-45707d8bc746",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232937686-be5971.result.json",
+      "sha256": "2139f6074d58fe2cd19585002431deb6ad326ba6ed212a787833579c53d643d5",
+      "action": "item_move:ec3fccde6a569_11",
+      "arguments": {
+        "destinationId": "ec3fccde6a569_66"
+      },
+      "requestId": "d9fb4659-bccd-4c50-ab1c-80f1c8114f90",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232938754-053b44.result.json",
+      "sha256": "c96416aa5f355c8d00970755daf33008bf6282960f4b78a0fa97cbc6cb42c9b4",
+      "action": "item_move:ec3fccde6a569_6",
+      "arguments": {
+        "destinationId": "ec3fccde6a569_66"
+      },
+      "requestId": "b98e7f9d-fa36-4fc5-82d6-38c6ad9b73c8",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232939812-7310a3.result.json",
+      "sha256": "91420cc1ab5e9038e8e5bd1a75c91b0ce4af27e6f4a07abcc2e6c918d6ba7001",
+      "action": "item_move:ec3fccde6a569_7",
+      "arguments": {
+        "destinationId": "ec3fccde6a569_66"
+      },
+      "requestId": "158f8317-e52a-4d63-91b0-75b81eb41ee3",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232941037-8874e1.result.json",
+      "sha256": "9bfa253dd15e339ca22c06c46eb155eb8ae6e31276476cd364e34cb978d33ce2",
+      "action": "item_move:ec3fccde6a569_8",
+      "arguments": {
+        "destinationId": "ec3fccde6a569_66"
+      },
+      "requestId": "b3da42ec-e2a2-48ca-a664-f3d3ababd681",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232942302-e35cad.result.json",
+      "sha256": "7f26cebfccf6f3b032777cc771065f9a9d68e23d987fedd50d8f24a575950cc5",
+      "action": "item_move:ec3fccde6a569_9",
+      "arguments": {
+        "destinationId": "ec3fccde6a569_66"
+      },
+      "requestId": "e2c76c77-1415-4c50-b59a-3ea3cc6ae028",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232943749-23bb3c.result.json",
+      "sha256": "8fcaf86412adc6b988883ac1216fd2209f14b3a167d294733d4319d9127ba41e",
+      "action": "item_close:ec3fccde6a569_22",
+      "arguments": {},
+      "requestId": "a510d772-dc2f-4e7b-b7ad-2dad09450db6",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232945093-6ed7d5.result.json",
+      "sha256": "27c7946117fcaaf2e7fd9d5f9a2203dc1a4b309cfe7112b444e9bb0c7f64e045",
+      "action": "open_shop",
+      "arguments": {},
+      "requestId": "f498f91e-19e5-446f-ab46-b2355af3d60a",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232946605-427209.result.json",
+      "sha256": "2fc5b39ef4bd11701c2a1788acf6abbb4d5d95170de057e2fc5ffb4c975f249d",
+      "action": "next_customer",
+      "arguments": {},
+      "requestId": "7ceb2697-d7e9-4ae5-bc56-afba05d583bb",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232948811-2ea938.result.json",
+      "sha256": "0a4f280724e090537f5ab5f8bde060b157b06f49c16bda2d855cb148642fd8bc",
+      "action": "close_shop",
+      "arguments": {},
+      "requestId": "5d40b2d6-330b-4453-867b-e133ee97e6aa",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232949866-b1bf66.result.json",
+      "sha256": "a493dbfa6879f360ce4e2df3754e4969f6a350b89ef933092a2837005c8d4249",
+      "action": "ui_click:ec3fccde6a569_73",
+      "arguments": {},
+      "requestId": "d609ce10-4acf-4fd9-a621-42f54ce33b51",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232950914-10bc9c.result.json",
+      "sha256": "5d7e4717183a30763800a15b1b772174b5b064db2386dc625f251a5b6f3ea650",
+      "action": "sleep",
+      "arguments": {},
+      "requestId": "641eb83a-494c-4ecf-9077-9437312c5588",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232952134-c185e4.result.json",
+      "sha256": "e5908841e6d9d6d737f77b34974f18a815a96594983061c31d1cc3b8507b0c5d",
+      "action": "ui_click:ec3fccde6a569_74",
+      "arguments": {},
+      "requestId": "29290e98-163c-43e1-8754-139da3b35189",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232954224-0ba307.result.json",
+      "sha256": "e1bf32c886f4d3909bd7705729f82f8904b748e4d26ef57a3cd3585411c8f447",
+      "action": "ui_click:ec3fccde6a569_84",
+      "arguments": {},
+      "requestId": "d9922d96-1a1f-4268-834e-86909cc9f4db",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-232955606-9e0139.result.json",
+      "sha256": "364d9481519a8a5705675e3a4ced9d0175d51d79e499767ce712b39bbc115515",
+      "action": "item_open:ec3fccde6a569_22",
+      "arguments": {},
+      "requestId": "bf8943b4-58d0-479b-91b8-c9718aaaaa5a",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233028526-942455.result.json",
+      "sha256": "dd24062dd5aa83e703deca7c7008c2ec2fd582075df5176f9eb47408b7e40057",
+      "action": "item_use_on:ec3fccde6a569_12",
+      "arguments": {
+        "targetId": "ec3fccde6a569_20"
+      },
+      "requestId": "0e944af3-cc9c-48ac-a8d2-61fc03199502",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233030201-10c4fb.result.json",
+      "sha256": "77d0c3aeacb71cd521359d35a3b652f1f26973ddf098f5e928832eba90d56808",
+      "action": "item_close:ec3fccde6a569_22",
+      "arguments": {},
+      "requestId": "d0dbf74b-c97e-489a-9a5e-d6ed9d925884",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233031281-c430cd.result.json",
+      "sha256": "d391501a300ce5bfabdedcb352ad8a32502c8bacf35478fdb321032bc2f01e30",
+      "action": "open_shop",
+      "arguments": {},
+      "requestId": "f1f6ea26-2e97-47a1-8bbd-1d8deb636005",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233032349-9a03ec.result.json",
+      "sha256": "a6f3c82212033ff519a5979e0b56c4779157e328b55b13c10956c713d00123d1",
+      "action": "next_customer",
+      "arguments": {},
+      "requestId": "488960ab-39c3-4d3c-bf01-24a6c59d5bf0",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233035174-f4931c.result.json",
+      "sha256": "4d1ca5d730e5990ff38dbfdee5ccd66e525e416e28316f23a388e4797c2a80bb",
+      "action": "close_shop",
+      "arguments": {},
+      "requestId": "33b1d439-5ca2-4f68-90f4-d9011abfecfc",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233036364-c4cfd9.result.json",
+      "sha256": "90861988fa6d0c765180e0fd498543b5d96566de8105fdb41d59affc57495e5e",
+      "action": "ui_click:ec3fccde6a569_73",
+      "arguments": {},
+      "requestId": "e62db46a-7c3a-450e-8e0c-e7563749cf24",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233037431-dc01f7.result.json",
+      "sha256": "0440bcae69272565de79f5fdec793fa19be01d99c5235afcd702e761dbbcee87",
+      "action": "sleep",
+      "arguments": {},
+      "requestId": "6e6e1815-7de5-45ff-ac09-7a7f310085f5",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233038652-abc864.result.json",
+      "sha256": "8c5562f04d3765cd6c0dd2cd3b7c94096f33e2adfb0989440fa8e8087704aae9",
+      "action": "ui_click:ec3fccde6a569_90",
+      "arguments": {},
+      "requestId": "00fc2ce1-6e66-4aae-b811-524e6cb5b095",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233040739-81dae2.result.json",
+      "sha256": "657d25a43ea264bf72bad5d71106f763f4c10784bdf1d974b782ca91319a3e32",
+      "action": "ui_click:ec3fccde6a569_84",
+      "arguments": {},
+      "requestId": "b675ce3b-a686-463e-90dd-c4db1ca6bfb3",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233042313-9c01f7.result.json",
+      "sha256": "6fc7ee5b60db63356471bf170b457957204877a02ceffc0fb5dadccc378955ba",
+      "action": "item_open:ec3fccde6a569_22",
+      "arguments": {},
+      "requestId": "3db200ab-beab-4174-8dc0-054a9de1ce9a",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233043929-142c0e.result.json",
+      "sha256": "769b0b65ef64aaca9204cc74a12e846d5eb005c0153e0a41c850df9078d4e783",
+      "action": "item_close:ec3fccde6a569_22",
+      "arguments": {},
+      "requestId": "0f463d96-88bf-4e8f-9124-0e0fcf6a3472",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233045143-87a74b.result.json",
+      "sha256": "0d3440c8f7f965f3819cc627940ca3fe7c3f89627b29fc18fd46c280d47aa465",
+      "action": "open_shop",
+      "arguments": {},
+      "requestId": "20f4fba8-40f6-4b51-9f3f-a401f3bd373f",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233046372-4afe33.result.json",
+      "sha256": "1964e8c8a8c0d2fad5a7daa930dc3e1df6eee1a53a6d9cf7410c82cf848c1815",
+      "action": "next_customer",
+      "arguments": {},
+      "requestId": "6cfe601d-af47-4572-b58a-fe6009cd5e66",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233048756-c86e36.result.json",
+      "sha256": "0e0f00f653ebf70d83536854c853894bd4ff89b345110b4990d4a3e613d6fe82",
+      "action": "close_shop",
+      "arguments": {},
+      "requestId": "1ca00c77-a075-4832-9125-ae98e9d73746",
+      "success": false,
+      "actionStatus": null,
+      "errorCode": "stale_snapshot"
+    },
+    {
+      "file": "20261107-233050621-041e96.result.json",
+      "sha256": "54cc0273bd7617fdeccd60a359a22a7d1a6320c28bd0a1e28d04d65626818dd9",
+      "action": "close_shop",
+      "arguments": {},
+      "requestId": "d2e8365b-32a5-4c05-956b-7d40886633a5",
+      "success": false,
+      "actionStatus": null,
+      "errorCode": "stale_snapshot"
+    },
+    {
+      "file": "20261107-233052375-098bd6.result.json",
+      "sha256": "b4bc59f3b2357c9fc1dd6bd228279ec11fb44a7ec2e01e0974afffed489a9d32",
+      "action": "close_shop",
+      "arguments": {},
+      "requestId": "4aaedfd9-2b8e-49e8-8eb4-de841d55d103",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233053411-a95c27.result.json",
+      "sha256": "fb257e525c624c8080e337c0432800c44d27cd44ce4586ddef0b77eff1d477a0",
+      "action": "ui_click:ec3fccde6a569_73",
+      "arguments": {},
+      "requestId": "9bc00aa9-cc18-4987-9933-d6f3ba9097ef",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233054606-e84649.result.json",
+      "sha256": "3676e241e323e795cb9d989b6a51b5ade20991857200c4fb7c3e9ce192f03677",
+      "action": "sleep",
+      "arguments": {},
+      "requestId": "06a7bb9b-194d-476a-a5dd-cd5ef3c7e72a",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233055814-b19ed7.result.json",
+      "sha256": "39aac0508cea68d0de38337b4fbfa92f8436e815ef6d3b9be77bcbe6fb2df2db",
+      "action": "ui_click:ec3fccde6a569_97",
+      "arguments": {},
+      "requestId": "3f332680-a063-46b9-961c-73d42081c5ad",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233058103-07c406.result.json",
+      "sha256": "622c1c2cd58c08a79731f6ddcdce60abec98617b2e7155c7c02995ba43f3b6d6",
+      "action": "ui_click:ec3fccde6a569_84",
+      "arguments": {},
+      "requestId": "86244f1e-14d4-4b9f-b414-7793f5274fa5",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233059559-d7a068.result.json",
+      "sha256": "5ec161a3ea79587e2849f21e0002a4f4951af18801da2c823a68b94a1d04e032",
+      "action": "item_open:ec3fccde6a569_22",
+      "arguments": {},
+      "requestId": "9a8c20f3-475c-49dd-8c27-171b23fffdd2",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233125573-1f70ed.result.json",
+      "sha256": "a30f3107e644cfb5d7148399599ff95e1c506fa88282e1468e922031fada69fb",
+      "action": "item_move:ec3fccde6a569_104",
+      "arguments": {
+        "destinationId": "ec3fccde6a569_29"
+      },
+      "requestId": "cde34022-aa62-42bc-a151-fedbf0e9ef8c",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233127504-bd1dc0.result.json",
+      "sha256": "3304040c8f4cc0cb6159065946406d94708925090352271dcd38bca8f4a9ea99",
+      "action": "navigate_back",
+      "arguments": {},
+      "requestId": "6765ed0b-5903-42b6-ad1a-1086b15bdca1",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233128881-d7b574.result.json",
+      "sha256": "52c308655d83b7827e8d8b4fdffa9127f64b308d2313ffd5a980741fc3b2ff17",
+      "action": "navigate_back",
+      "arguments": {},
+      "requestId": "4b5720a1-3825-4e04-9dc6-f2d2b7f5fd88",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233130330-e97a93.result.json",
+      "sha256": "613c2a3d8a60aa65b319bfb0f296b2926cacd0fbc3939facc1aa4810959999f4",
+      "action": "ui_click:ec3fccde6a569_115",
+      "arguments": {},
+      "requestId": "5594023e-b9b9-4ea1-90f0-5c398179f28f",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233131694-ec2327.result.json",
+      "sha256": "c1cdac649d1c5f6642cbb317ae881e2e0ce735061dc7f0baf961fb0f0bdec257",
+      "action": "ui_click:eaad880940ecc_2",
+      "arguments": {},
+      "requestId": "d6574cbb-cedc-4d58-867d-bb409f537f6a",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233132984-668d30.result.json",
+      "sha256": "f6fa1c9abe328c9df31ed784cb9facf28e525fc377f006bed078e8015c8e01e0",
+      "action": "ui_select_specialization:eaad880940ecc_10",
+      "arguments": {},
+      "requestId": "8940b00a-3ae0-4cc5-a778-61b6ed0e23fa",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233134165-fd12cc.result.json",
+      "sha256": "4897b5eaf4054de837f727f2e1163d1ab60710d217aaec6ad957d45702ddfbb3",
+      "action": "ui_click:eaad880940ecc_21",
+      "arguments": {},
+      "requestId": "1fb384e3-e14e-4731-9c86-b42cea198893",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233135260-d1934e.result.json",
+      "sha256": "c71f4f68539f013df6191f2d5258b7e46c8638d0d46618af076042f855640d85",
+      "action": "ui_click:eaad880940ecc_61",
+      "arguments": {},
+      "requestId": "c822be60-73a3-4ec9-9ac1-0828b91f244c",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233136607-707f62.result.json",
+      "sha256": "90f773afe940b195014bf3ca922b923c9738bc5df3bada6a334ca1d14f8a504b",
+      "action": "ui_click:eaad880940ecc_67",
+      "arguments": {},
+      "requestId": "38b541c2-6e4a-4ee0-85ad-3cfa4acad312",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233137683-39039c.result.json",
+      "sha256": "54ad86dea991e06096943d640c345df58bd1e609f5016b9419095ff2559ef887",
+      "action": "ui_click:eaad880940ecc_70",
+      "arguments": {},
+      "requestId": "2e7e451e-a711-46de-98cc-76ea044cfa74",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233140332-03be26.result.json",
+      "sha256": "0269d234da5e9cac2586024f1e815106d4cd99327e1dc4a7b76a09368175e907",
+      "action": "ui_click:e2363da88721d_1",
+      "arguments": {},
+      "requestId": "cf010899-4e69-4949-ad77-a4b0ba295a46",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233158804-1ae13c.result.json",
+      "sha256": "5dc024e7e8c56272b57035a789f89b12fbe87a6c96847ca174720144b9d3a07e",
+      "action": "item_open:e2363da88721d_17",
+      "arguments": {},
+      "requestId": "347a85f6-c5f8-4d4f-904e-89de20d97e3b",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233221273-6fa470.result.json",
+      "sha256": "5b251bab37d639de2a2ea680752bf38890d7cb043878476aa812d3946ce0d754",
+      "action": "item_use_on:e2363da88721d_6",
+      "arguments": {
+        "targetId": "e2363da88721d_46"
+      },
+      "requestId": "9f0fd76f-6340-4148-bb23-407a9e855ed0",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233222776-647962.result.json",
+      "sha256": "ddb67fa445e023f490601581269d9786dd50d21472f258d776a00d652849a8b5",
+      "action": "item_move:e2363da88721d_14",
+      "arguments": {
+        "destinationId": "e2363da88721d_72"
+      },
+      "requestId": "6e33ff56-a4df-459d-ad02-d1f0de2b5785",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233224064-ed3c74.result.json",
+      "sha256": "ed68333ef733ac10ea7e58a338b9fafda920edacc53900bbd79a6f132a15fcf3",
+      "action": "item_move:e2363da88721d_12",
+      "arguments": {
+        "destinationId": "e2363da88721d_72"
+      },
+      "requestId": "2b8ebb64-f019-436b-9936-939205a26a3d",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233225690-3f29df.result.json",
+      "sha256": "9ca2d99ab738a76117f2a7702a49fd24bba719da2069b1d84f84da6f10f5c216",
+      "action": "item_close:e2363da88721d_17",
+      "arguments": {},
+      "requestId": "87ef2464-2252-446a-a9ad-7a4cb7ca08a9",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233227087-9064f5.result.json",
+      "sha256": "3d998a70e2ee495f5b62ed0db0d0a0a67606261dac6652fd7201725a5ea55f66",
+      "action": "item_open:e2363da88721d_18",
+      "arguments": {},
+      "requestId": "1cbc997c-ba62-4544-8c8a-666901071020",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233228358-a7089c.result.json",
+      "sha256": "7bc2458ef32e3f9ffb410d0e290ab8dfa4f2855b52333295181fb8fed29efd6e",
+      "action": "item_use_on:e2363da88721d_7",
+      "arguments": {
+        "targetId": "e2363da88721d_82"
+      },
+      "requestId": "dfaa1b95-90d5-4ea8-9f4b-b45c4668d7fe",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233229757-6a7582.result.json",
+      "sha256": "20509005b957c07dc476ece6aa703516aa7a3252d507144e1e5a591fbcd6bc56",
+      "action": "item_move:e2363da88721d_15",
+      "arguments": {
+        "destinationId": "e2363da88721d_108"
+      },
+      "requestId": "2c1621aa-7356-4a24-99de-ac9792d4ac04",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233231134-12cf0e.result.json",
+      "sha256": "f8954281892e04992a8b633bb64f12d2e8982d355ed0edf50fc41261f2685684",
+      "action": "item_move:e2363da88721d_16",
+      "arguments": {
+        "destinationId": "e2363da88721d_108"
+      },
+      "requestId": "2bf03635-68c5-45f0-b222-eac54c1f1571",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233232537-953d89.result.json",
+      "sha256": "8a78084f6f01a24f0fa50c545b231cea5f2c9a7d87f8d7b9c38234f8e612ac1c",
+      "action": "item_move:e2363da88721d_13",
+      "arguments": {
+        "destinationId": "e2363da88721d_108"
+      },
+      "requestId": "2e7174d2-486e-4aaa-9baf-cbefa28de3b5",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233234141-179ec3.result.json",
+      "sha256": "7f33ad71a5d6ec9e8771d8bc477d7912d01b3a56cd244f6c116c80c5a5752e37",
+      "action": "item_close:e2363da88721d_18",
+      "arguments": {},
+      "requestId": "3cc0a4af-4924-4a04-b8c5-66c8f37e7869",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233235352-9a70f4.result.json",
+      "sha256": "91e1c71ece9b26f0bcf16effdd7d1700874b720456e7e4e5e8032947e836c3dc",
+      "action": "open_shop",
+      "arguments": {},
+      "requestId": "ed45c30f-eda3-4e81-8805-ce87c35d23fe",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233236557-1a7f58.result.json",
+      "sha256": "74bef01a886fcc7a3dcad0e1f2b69992a9a782f6083733259b2c3fe793a4c0e0",
+      "action": "next_customer",
+      "arguments": {},
+      "requestId": "f4524f0f-9508-4e07-85ab-16f99c3e4918",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233238575-bdac10.result.json",
+      "sha256": "0aa04720cb85dbc0415f912392fe1a327a2a2e54a95f01cd1971d3215cd1bb3e",
+      "action": "close_shop",
+      "arguments": {},
+      "requestId": "e39b13df-2e05-453e-97cc-3749e5060a1a",
+      "success": false,
+      "actionStatus": null,
+      "errorCode": "stale_snapshot"
+    },
+    {
+      "file": "20261107-233240321-01d339.result.json",
+      "sha256": "65db9a0fd3740740aa07734686c7851d8673d2742e7946a98bdb19a355bcabed",
+      "action": "close_shop",
+      "arguments": {},
+      "requestId": "e828c30e-7540-4b33-9532-7f58f59dcc94",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233241533-a22e43.result.json",
+      "sha256": "0fee37339215fe2352b75f6b695c81eefb0ee93dcf5d58f9e86580e9d299f849",
+      "action": "ui_click:e2363da88721d_122",
+      "arguments": {},
+      "requestId": "51cc98ba-f250-4df7-8a3e-01fcb2ab6dac",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233242809-ecd1e7.result.json",
+      "sha256": "91eced56bcb8b7c49bc8562aeae4ea047bcfb5b4aeae7c6b73da96bf2bcaa9d8",
+      "action": "sleep",
+      "arguments": {},
+      "requestId": "5d6d3b89-3fad-42ca-8297-dcea5eb0325b",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233244227-f7ef83.result.json",
+      "sha256": "fd626c609f47549bfd472d160ebbd0d5355cfb7a58b0b6f5816918470c28a2d6",
+      "action": "ui_click:e2363da88721d_133",
+      "arguments": {},
+      "requestId": "18c28266-dbc5-47ec-a162-5c0f0af853ee",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233246646-f94696.result.json",
+      "sha256": "a26ee30f22473895482c2e3366dd3f55920391a698cec152f3997a44946816ca",
+      "action": "ui_click:e2363da88721d_141",
+      "arguments": {},
+      "requestId": "e11c605a-38af-4495-9318-370a5be57f2b",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233247995-5d0196.result.json",
+      "sha256": "c00c460cfc79e7c91d318deaaab7f79f23fd2d5090e796a0292d01fffc62f460",
+      "action": "item_open:e2363da88721d_17",
+      "arguments": {},
+      "requestId": "f1c3fc64-f251-4e1b-a470-fe74ab054413",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233307243-e5764e.result.json",
+      "sha256": "61401e428e21fe1777950f6b70ebb1643ec2631eaae1264f1fae6c51abed082e",
+      "action": "item_close:e2363da88721d_17",
+      "arguments": {},
+      "requestId": "ac35bc42-0ee7-4ccd-8b26-2785db7c0969",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233308520-fd11da.result.json",
+      "sha256": "52b465f9050932bfcddb262393ff162f9e5960037792e24ab364076d52579930",
+      "action": "open_shop",
+      "arguments": {},
+      "requestId": "4d4d6ce1-bd2a-4094-8bb4-19f5c84ba36a",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233309609-983157.result.json",
+      "sha256": "ac119e4feb5793427e8975491056cb66de72b730f4defa763f6ef7ad6311a925",
+      "action": "next_customer",
+      "arguments": {},
+      "requestId": "a4b05e22-1bb4-45f7-8e38-5bf8fe524ea6",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233312646-6eb555.result.json",
+      "sha256": "6414afd66fa6fe7303dabe9606f7b4dfb4e084abce6f9fbeed3f1efc47d5092f",
+      "action": "close_shop",
+      "arguments": {},
+      "requestId": "7d63ba51-2698-432f-8587-5b7d318093a7",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233313857-a27c62.result.json",
+      "sha256": "34ad73a016db5719f287e5a0df5cfe8bb78880de05b432a1ec4e3c6f87dc444b",
+      "action": "ui_click:e2363da88721d_122",
+      "arguments": {},
+      "requestId": "20b958f1-452b-40e1-b8b0-db11e2e07e2b",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233315247-4519f9.result.json",
+      "sha256": "9c3de0298e0c4c616796abadbd3d3759478fef0065062eba8993fed595319a51",
+      "action": "sleep",
+      "arguments": {},
+      "requestId": "5aa548fa-8aa9-4300-92c3-07ff71ae907d",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233316448-9ed35b.result.json",
+      "sha256": "7b7f3941a7af56099f3de96450c14ea4b88670b14bcdeb204d3226b1d1347dd9",
+      "action": "ui_click:e2363da88721d_146",
+      "arguments": {},
+      "requestId": "e6f4e4f3-f95b-4c04-8f54-d0a3cb523123",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233318415-ccc770.result.json",
+      "sha256": "5b7bddba80ab26a6906763e4c74a0ca6423af08b4a95a69fa7e75f8ea8af04e5",
+      "action": "ui_click:e2363da88721d_141",
+      "arguments": {},
+      "requestId": "fd10eda4-003b-4e63-bf32-c806826be0f4",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233319819-60f1e5.result.json",
+      "sha256": "39030ea854b58c2af2ae038b43d7991aad79a942ef3f0f1b8ea4c6e092a5bfdc",
+      "action": "item_open:e2363da88721d_17",
+      "arguments": {},
+      "requestId": "06444138-857d-45a0-99be-4061b18d6240",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233438651-df5570.result.json",
+      "sha256": "49b43f4748913afe470deb717bcd61e25ea5f8e3e9330b690d3459fbc4b03102",
+      "action": "item_close:e2363da88721d_17",
+      "arguments": {},
+      "requestId": "c2eef3ec-c980-4e24-8100-3c45202aa5e5",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233440043-cb8dab.result.json",
+      "sha256": "ea4850e383c66e859ff61ea5fa84a800809cb475b1508e36f914b4c43b27e51c",
+      "action": "open_shop",
+      "arguments": {},
+      "requestId": "46d7f2dc-9980-4b66-8812-a56d74dbc5bf",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233441290-9a45b9.result.json",
+      "sha256": "94fa628ee349780102f387f8c19c30f3cd846bf4051bb9ece31eaec4f3d3e2cf",
+      "action": "next_customer",
+      "arguments": {},
+      "requestId": "894a6b69-af8d-47c4-91df-eb1497f8f47a",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233443330-567206.result.json",
+      "sha256": "80ea81e05ca152df8a4ec984f7aea02d61451f97f32d8353104d2d8a1307f8af",
+      "action": "close_shop",
+      "arguments": {},
+      "requestId": "aff06913-28dd-4e4f-86fd-288a87ff0824",
+      "success": false,
+      "actionStatus": null,
+      "errorCode": "stale_snapshot"
+    },
+    {
+      "file": "20261107-233445071-2a83cd.result.json",
+      "sha256": "b12d2639bb37e96d849c7aa720f5836559448623b41c5889fd7fd9a4fc0be237",
+      "action": "close_shop",
+      "arguments": {},
+      "requestId": "8269fd6f-67b5-4184-ae1d-8dea971a185b",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233446608-030239.result.json",
+      "sha256": "159c8146d0b8b7d95676e6b188bd4bc6f45dd247751610f34ea1cc4fe37a197b",
+      "action": "ui_click:e2363da88721d_122",
+      "arguments": {},
+      "requestId": "f3e3b778-3c5d-4f0c-b416-97a8ae7f4efc",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233447843-ed8fd4.result.json",
+      "sha256": "0a773cacc2bfb5de4219da173c9bd48d565d8661722871c75ca9d5d39aed4ab7",
+      "action": "sleep",
+      "arguments": {},
+      "requestId": "54972e1d-9012-4459-86db-6b3d69f067cf",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233449370-f607b8.result.json",
+      "sha256": "daf8b9d9b8905978c7ccdff32e0cccb14c268ca2bff62a0e1e928abf554c161f",
+      "action": "ui_click:e2363da88721d_153",
+      "arguments": {},
+      "requestId": "7e77c47c-22d2-49e0-bf7f-5204d9fe4b34",
+      "success": false,
+      "actionStatus": null,
+      "errorCode": "stale_snapshot"
+    },
+    {
+      "file": "20261107-233451246-c07f67.result.json",
+      "sha256": "376f40cb7dd3dc2fa0a870f540d560c5d250d6a3aaf25e9a8bd209859eaedbdd",
+      "action": "ui_click:e2363da88721d_153",
+      "arguments": {},
+      "requestId": "cd83a89d-1522-4227-9c38-7694c292c478",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233453862-975df7.result.json",
+      "sha256": "e6c127bcb57fb0882c24972ddff4951cbd2f6fa30bca8e5d7b15eb8b4c36ce15",
+      "action": "ui_click:e2363da88721d_141",
+      "arguments": {},
+      "requestId": "3eb54de6-6489-474c-b07f-9633b05a7008",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233455250-cd242f.result.json",
+      "sha256": "a008ef81e40b0f3d3192a6e21ce0684b360a8a894e2c9bc98ea608e6525af0e9",
+      "action": "item_open:e2363da88721d_17",
+      "arguments": {},
+      "requestId": "3a2c6d67-49d7-4af6-929e-95921acccad6",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233457021-33a961.result.json",
+      "sha256": "555be5dd10cf42934767d8bdd5a577822cbecac0a47f8844468e7cc734b8fc13",
+      "action": "item_close:e2363da88721d_17",
+      "arguments": {},
+      "requestId": "4f283ec7-2aba-4765-a025-69617d85bdfa",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233458262-15f5d3.result.json",
+      "sha256": "6c34ea27907a4527936db25bee2e2d8006b32e95bfbb6d472d41fab69d93bd7d",
+      "action": "open_shop",
+      "arguments": {},
+      "requestId": "ea71b086-1af1-4486-a40c-bac6c0427972",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233459515-cd856a.result.json",
+      "sha256": "e534d6f322f329047fc1438ef144c1abee9076cd26f7a731a17311342f180451",
+      "action": "next_customer",
+      "arguments": {},
+      "requestId": "91d43496-9bda-4479-b35b-19da36c8c866",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233502547-19d0e9.result.json",
+      "sha256": "b081dd5c477a76c41cbe3e60e589d7895378e01bde854b92f842e9b82a02cafc",
+      "action": "close_shop",
+      "arguments": {},
+      "requestId": "44d7a850-b1d9-4de4-bd6c-794cf52f2caf",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233503780-269841.result.json",
+      "sha256": "f8f844630e77d1db10506e36fdf75400d513742a0c963493a7cfd321b80cf00d",
+      "action": "ui_click:e2363da88721d_122",
+      "arguments": {},
+      "requestId": "2f6bd571-9db6-4917-a95f-ce686b37b213",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233504999-f5e3cc.result.json",
+      "sha256": "3911b274c6086d3cc8cee79b536bfa8d90faedaa79fa255a0a1817fa88b50385",
+      "action": "sleep",
+      "arguments": {},
+      "requestId": "d0c836f9-2598-4f94-9ea9-6dcfb1706e62",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233506196-b70ea3.result.json",
+      "sha256": "8d3c6e9757f857cae3828bb72704cfc6e4799e5ef68d21bdc37f5e95db4d0f21",
+      "action": "ui_click:e2363da88721d_158",
+      "arguments": {},
+      "requestId": "838c32a3-2029-4ca3-98fb-b3fab1125755",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233508620-1c40af.result.json",
+      "sha256": "e161872974d12e4ae7bf7fdd8f6af511ec5b579b869b4b6ddb44b6269fe93fd7",
+      "action": "ui_click:e2363da88721d_141",
+      "arguments": {},
+      "requestId": "f62f5dea-7597-482a-bfdc-ee575c3811f3",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233509809-acdd95.result.json",
+      "sha256": "23b627d23ed340b11a364fb403e11dc3eb2880f16094f9a5ea92e686ebf46ca9",
+      "action": "item_open:e2363da88721d_17",
+      "arguments": {},
+      "requestId": "bc0b62ce-3a94-4d99-965d-34df067cac7a",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233536859-2bf60e.result.json",
+      "sha256": "f2692b7dca4c9db4c1d7f30c974318cae79bc43bd8cef9a84261b287ef8c1420",
+      "action": "item_use_on:e2363da88721d_9",
+      "arguments": {
+        "targetId": "e2363da88721d_162"
+      },
+      "requestId": "b7a404f6-7e29-4ce2-9696-d433a5035c5e",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233538350-820dbb.result.json",
+      "sha256": "36dd9eb60c335a0a879df74adae5500e8932b0e14334568c8f683f5be20dc725",
+      "action": "item_use_on:e2363da88721d_9",
+      "arguments": {
+        "targetId": "e2363da88721d_162"
+      },
+      "requestId": "aef1bc83-72b3-4ed6-8768-d4c53c69d221",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233539957-9b0e0d.result.json",
+      "sha256": "fa6a40b7c12d1f1e18fe8813f94b1571562ed7e543fd46fbef8f63fb5df5351d",
+      "action": "item_move:e2363da88721d_169",
+      "arguments": {
+        "destinationId": "e2363da88721d_25"
+      },
+      "requestId": "a8d3b52e-0735-411c-9b32-d5a4d5fcb788",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233541844-fc22f2.result.json",
+      "sha256": "f19d585fda65036f4484b871e91749f9a7407b7120788953ab9afb247ec8c9b8",
+      "action": "navigate_back",
+      "arguments": {},
+      "requestId": "57604d5a-8c81-4fc6-b5d9-3069a03ec40d",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233542918-181de0.result.json",
+      "sha256": "332f59cf9e6165e46cf187a1c0ec348a542ad36e1fc17094604b3b76ba3cd90a",
+      "action": "navigate_back",
+      "arguments": {},
+      "requestId": "bf027059-3f58-4a44-bf01-9d4ba520b78e",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    },
+    {
+      "file": "20261107-233544311-3c4ce4.result.json",
+      "sha256": "455dddbce9daf5d58394b4b06f29250981d4ba32fae54823e01f664760dcb71d",
+      "action": "ui_click:e2363da88721d_176",
+      "arguments": {},
+      "requestId": "c4e95218-8d33-4bd3-a580-5bc19b3a6979",
+      "success": true,
+      "actionStatus": "dispatched",
+      "errorCode": null
+    }
+  ],
+  "testExpectationCorrection": "The day-3 fry check expected the remaining days to decrease every night. Native status reported 75% growth on industrial pellets. No game/MCP code was changed to force growth; day 5 produced six separate fish.",
+  "limitations": [
+    "Only the listed species, seeds, printer recipe and module setups were exercised.",
+    "Rat test proves birth and retrieval, not raising every newborn to adulthood.",
+    "Aquaculture test proves egg -> fry -> juvenile fish -> fillets, not a complete second-generation breeding cycle.",
+    "No trading transaction was required or claimed in these production runs.",
+    "Status text is localized native rich text, not a universal structured recipe or lifecycle model."
+  ],
+  "screenshots": [
+    {
+      "file": "2026-11-07-rat-birth.jpg",
+      "sha256": "7ffd5f1f939b45a05d3516f1af02f1819596a6d4fab7ac4a38120208dcd4d295",
+      "source": "20261107-233126541-615bea.image-0.jpg"
+    },
+    {
+      "file": "2026-11-07-fish-output.jpg",
+      "sha256": "24ee9c8f9464b63b69dfcde3e3d4d84ed52e3086ea6de05a83578c92ee551411",
+      "source": "20261107-233541065-db6cee.image-0.jpg"
+    }
+  ],
+  "automatedValidation": {
+    "fullBuildChecks": 153,
+    "warnings": 0,
+    "errors": 0,
+    "publishedHelpChecks": 21,
+    "localMarkdownLinksChecked": 140,
+    "brokenLocalLinks": 0,
+    "buildLog": ".cache/overnight-tests/final-build.log",
+    "buildLogSha256": "d2d021687b4b0c623015eb5c17b95f13f4154c152b8987dfffb15ab34369061e",
+    "publishedHelpLog": ".cache/overnight-tests/published-help.log",
+    "publishedHelpLogSha256": "44dc4abe43063ca8b7c907045f3f1922c6f7743cbcde3343215250bf8b1ad60c",
+    "installedModMatchesFinalArtifact": true
+  }
+}

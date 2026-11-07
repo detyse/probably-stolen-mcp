@@ -4,7 +4,7 @@
 
 An independent C# Mod and MCP server that lets an AI client observe and play *Probably Stolen* through native game actions. Bring your own MCP client and model.
 
-**Status: experimental, version 0.2.6 / bridge protocol 2.** Suitable for developers and players willing to build from source. This is not a claim of complete gameplay or game-version coverage.
+**Status: experimental, version 0.2.7 / bridge protocol 2.** Suitable for developers and players willing to build from source. This is not a claim of complete gameplay or game-version coverage.
 
 ## Start here
 
@@ -42,15 +42,9 @@ There are 11 tools: `get_help`, `get_bridge_status`, `get_game_state`, `get_trad
 
 Use **observe → choose a current action → execute → verify**. The server returns permitted actions and argument constraints. The client need not implement separate click rules for each page. Unsupported custom controls may still require adaptation. Built-in help works without a running game and is currently primarily in Chinese; the English guide covers operating rules.
 
-## What is verified
+## Capabilities and test records
 
-Recorded gameplay covers a business day, showcases, phone services and an upgrade, reporting, night scavenging, inventory placement/sorting, and trash cleanup. Those records came from the pre-migration build. Version 0.2.6 additionally tested all 9 startable professions and their item operations with the renamed Mod; the complete business day has not been repeated with that package.
-
-The local automated suite has 152 passing checks, including the production HTTP transport, an actual MCP server/client exchange, and standalone bundled help. Game objects in these tests are substitutes; these results do not establish gameplay compatibility.
-
-The game baseline is Steam App 4348910, Build 26337366, displaying `VERSION 100-REV6`. New-game selection and representative profession items are covered in the [profession report](docs/profession-tests.md). Complete appraisal, overnight production, all night locations, other game versions, and all resolutions remain unverified.
-
-See [capabilities and gameplay evidence (Chinese)](docs/capabilities.md) and the [publication assessment](docs/public-readiness.md). The [interaction catalog](docs/game-interactions.md) is a design reference, not a completed-feature list.
+See the [capability record](docs/capabilities.md), [profession test report](docs/profession-tests.md), [overnight production report](docs/overnight-tests.md), and [publication assessment](docs/public-readiness.md) for supported scenarios, evidence, and limitations. The [interaction catalog](docs/game-interactions.md) is a design reference.
 
 ## Data and game effects
 

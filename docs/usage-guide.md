@@ -2,9 +2,9 @@
 
 [简体中文](usage-guide.zh-CN.md) · [Project home](../README.en.md) · [Capabilities and evidence (Chinese)](capabilities.md)
 
-For **0.2.6 development builds / bridge protocol 2**, on Windows x64. This project lets your own AI client operate *Probably Stolen*. Your client supplies the model, account, and inference.
+For **0.2.7 development builds / bridge protocol 2**, on Windows x64. This project lets your own AI client operate *Probably Stolen*. Your client supplies the model, account, and inference.
 
-This is an experimental mod. Recorded gameplay covers a business day, showcases, phone calls and upgrades, reporting, scavenging, sorting, and trash containers. That evidence comes from builds before the project rename. The renamed 0.2.6 package additionally tested all 9 startable professions and representative item operations; see the [profession report](profession-tests.md). A complete business day, full appraisal, overnight production, and all night destinations were not repeated in this session. See the [capability record](capabilities.md) for the precise scope.
+This is an experimental mod. Recorded gameplay covers a business day, showcases, phone calls and upgrades, reporting, scavenging, sorting, and trash containers. That evidence comes from builds before the project rename. The renamed 0.2.6 package additionally tested all 9 startable professions and representative item operations; see the [profession report](profession-tests.md). Version 0.2.7 adds [overnight production verification](overnight-tests.md). A complete business day, full appraisal, and all night destinations have not been comprehensively repeated with the renamed package. See the [capability record](capabilities.md) for the precise scope.
 
 ## 1. Prerequisites
 
@@ -18,7 +18,7 @@ You need:
 
 Python, uv, Unity Editor, and a full Visual Studio installation are not required. A client that only connects to remote, cloud-hosted MCP servers cannot connect directly to this server.
 
-The project uses the game's built-in Mod loader. The current compilation and gameplay baseline is Steam Build **26337366**, displaying **VERSION 100-REV6**. Compatibility with other game versions is unverified.
+The project uses the game's built-in Mod loader. The current compilation and gameplay baseline is Steam Build **26496118**, displaying **VERSION 100-Rev12**. Compatibility with other game versions is unverified.
 
 ## 2. Get the source and build
 
@@ -166,6 +166,12 @@ Use the current `sleep` action for the bed. Open a backpack before querying its 
 Have the agent read the menu and follow New game → Profession → Perks → Difficulty/start options → Start. Card isOn reflects selection; disabled cards and coming-soon professions do not authorize continuing. In the store, use navigate_back when listed, observe whether it closed a window or opened pause, then choose Main menu.
 
 Open a profession machine and use containers[].label, windowTitle, and parentItemId to distinguish input/output, seed, water, and animal areas before choosing a legal item_move destination. Icon-only slots can have an empty label. Legal tool targets change with game conditions: a full bottle becomes a water-pack target only after draining. Verify the resulting items; animal processing can take two steps, and overnight production requires normal settlement. See the [profession test results](profession-tests.md).
+
+### Observing overnight production
+
+Rendered player-owned items expose `statusText` from normal native hover sections: production progress, animal/fish condition, water, power, and remaining tool uses. It follows the game language and may contain game rich-text markup. An empty string means these supported sections contain no text; `null` means unavailable or inapplicable, including developer mode. It is limited to 8192 characters and is not a universal recipe API.
+
+Night service controls expose `kind=checkbox`, `isOn`, and the service label/cost. Use the current native `ui_click` action and observe again before confirming sleep. Check the day transition, input consumption, and new output items to establish completion; dispatch or increasing progress alone does not prove production. See the [separate overnight test report](overnight-tests.md).
 
 ## 8. Agent calling rules
 

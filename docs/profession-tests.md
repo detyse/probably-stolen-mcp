@@ -40,3 +40,5 @@ The original slots 0 and 1 and their five daily backups—seven files—retained
 This session tested profession items and new-game/return flows. It **did not repeat the complete open → trade → close → sleep workflow**. Overnight production, every item, other game builds, and all resolutions remain outside this run.
 
 The final build passed all **152 automated checks** with no warnings or errors. The published MCP server also preserved machine labels through both get_inventory and get_entity in the real game.
+
+Follow-up: the overnight limitations above describe this REV6 run. The separate [0.2.7 / Rev12 overnight report](overnight-tests.md) records later production outcomes and fixes.
