@@ -32,10 +32,10 @@ dotnet --version
 
 仓库仍为私有时，克隆需要访问权限；源码下载方式不需要 Git。以下命令均在仓库根目录执行。
 
-在 Steam 的游戏管理菜单中选择“浏览本地文件”，找到包含 `Probably Stolen.exe` 的目录。修改下面的路径：
+在 Steam 的游戏管理菜单中选择“浏览本地文件”，找到包含 `Probably Stolen.exe` 的目录。将 `<游戏安装目录>` 替换为该目录：
 
 ~~~powershell
-$gamePath = 'D:\Apps\Steam\steamapps\common\Probably Stolen'
+$gamePath = '<游戏安装目录>'
 .\scripts\Build.ps1 -GamePath $gamePath
 ~~~
 
@@ -92,15 +92,15 @@ Mod 启动成功后，通常会生成：
 
 打开生成的 `artifacts/mcp-config.json`，将 `probably-stolen-mcp` 条目合并进客户端的 MCP 配置，保留其他服务。
 
-采用 `mcpServers` JSON 格式的客户端可参考下面的例子。请使用生成文件中的真实路径：
+下面展示采用 `mcpServers` JSON 格式的配置结构，`<…>` 表示需要替换的绝对路径。实际使用时请复制生成文件中的真实路径：
 
 ~~~json
 {
   "mcpServers": {
     "probably-stolen-mcp": {
-      "command": "C:\\Program Files\\dotnet\\dotnet.exe",
+      "command": "<dotnet 可执行文件的绝对路径>",
       "args": [
-        "D:\\Projects\\probably-stolen-mcp\\artifacts\\mcp\\PSMcp.Server.dll"
+        "<仓库绝对路径>\\artifacts\\mcp\\PSMcp.Server.dll"
       ]
     }
   }

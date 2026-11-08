@@ -54,15 +54,15 @@ Python、uv、Unity Editor 和完整 Visual Studio 均非必需。Mod 与 MCP �
 
 ## 快速开始
 
-以下示例使用项目目录 `D:\Projects\probably-stolen-mcp`，游戏目录 `D:\Apps\Steam\steamapps\common\Probably Stolen`。请按自己的安装位置调整。已有构建产物时，可从第 2 步开始。
+源码可克隆或下载解压到任意位置。以下命令均在仓库根目录（包含 `scripts` 的目录）执行。已有构建产物时，可从第 2 步开始。
 
 ### 1. 构建项目
 
-在 PowerShell 中执行：
+在 Steam 的游戏管理菜单中选择“浏览本地文件”，找到包含 `Probably Stolen.exe` 的目录。将 `<游戏安装目录>` 替换为该目录，然后在 PowerShell 中执行：
 
 ```powershell
-Set-Location 'D:\Projects\probably-stolen-mcp'
-.\scripts\Build.ps1 -GamePath 'D:\Apps\Steam\steamapps\common\Probably Stolen'
+$gamePath = '<游戏安装目录>'
+.\scripts\Build.ps1 -GamePath $gamePath
 ```
 
 脚本会还原锁定的 NuGet 依赖、编译、运行协议测试并生成：
@@ -85,10 +85,10 @@ artifacts/
 
 **从 PawnPilot 升级。** 先在游戏内停用旧 Mod，退出后将旧的 `Mods/PawnPilot` 文件夹移出 `Mods`。按下面的步骤启用新 Mod，它会创建新的连接文件。若设置过自定义端口，请在新 Mod 配置中重新设置。重新构建后，用生成的 `mcp-config.json` 替换客户端中的旧服务条目，并更新自定义连接路径及环境变量 `PSMCP_CONNECTION_FILE`、`PSMCP_GAME_PATH`。
 
-**先关闭游戏。** 在仓库根目录执行以下命令，将三个 Mod 文件复制到游戏中：
+**先关闭游戏。** 将 `<游戏安装目录>` 替换为 Steam 中找到的实际目录，然后在仓库根目录执行以下命令，将三个 Mod 文件复制到游戏中：
 
 ```powershell
-$gamePath = 'D:\Apps\Steam\steamapps\common\Probably Stolen'
+$gamePath = '<游戏安装目录>'
 if (!(Test-Path -LiteralPath (Join-Path $gamePath 'Probably Stolen.exe'))) {
     throw '游戏目录不正确，请修改 $gamePath。'
 }
@@ -127,15 +127,15 @@ Mod 成功启动后监听 `127.0.0.1:15527`，生成本次运行的认证令牌�
 
 构建生成的 `artifacts/mcp-config.json` 包含本机可用的绝对路径。对于采用 `mcpServers` JSON 格式的客户端，将其中的 `probably-stolen-mcp` 条目合并到已有配置，保留其他服务。
 
-本例对应的配置为：
+下面仅展示配置结构，`<…>` 表示需要替换的绝对路径。实际使用时请复制生成的 `artifacts/mcp-config.json`，其中已经填好本机的 .NET 程序和 MCP 程序路径：
 
 ```json
 {
   "mcpServers": {
     "probably-stolen-mcp": {
-      "command": "C:\\Program Files\\dotnet\\dotnet.exe",
+      "command": "<dotnet 可执行文件的绝对路径>",
       "args": [
-        "D:\\Projects\\probably-stolen-mcp\\artifacts\\mcp\\PSMcp.Server.dll"
+        "<仓库绝对路径>\\artifacts\\mcp\\PSMcp.Server.dll"
       ]
     }
   }
@@ -147,18 +147,18 @@ Mod 成功启动后监听 `127.0.0.1:15527`，生成本次运行的认证令牌�
 通常由客户端启动服务，无需提前在终端手动运行。以下命令仅用于检查启动方式：
 
 ```powershell
-& 'C:\Program Files\dotnet\dotnet.exe' '.\artifacts\mcp\PSMcp.Server.dll' --help
+dotnet '.\artifacts\mcp\PSMcp.Server.dll' --help
 ```
 
 不加 `--help` 会启动 stdio 服务并等待协议请求，这是正常行为。日志写入 stderr，stdout 专用于 MCP 协议。
 
-如果连接文件不在默认位置，在客户端的 args 中追加：
+如果连接文件不在默认位置，在客户端的 args 中追加 `--connection` 和连接文件的绝对路径。完整 args 结构如下，使用时替换所有 `<…>` 占位符：
 
 ```json
 [
-  "D:\\Projects\\probably-stolen-mcp\\artifacts\\mcp\\PSMcp.Server.dll",
+  "<仓库绝对路径>\\artifacts\\mcp\\PSMcp.Server.dll",
   "--connection",
-  "C:\\实际数据目录\\ModData\\probably-stolen-mcp\\connection.json"
+  "<连接文件绝对路径>"
 ]
 ```
 
@@ -327,7 +327,7 @@ Invoke-PSMcp -Path state | ConvertTo-Json -Depth 12
 
 | 现象 | 检查或处理 |
 |---|---|
-| 找不到 `dotnet` | 安装 SDK 后重新打开终端；构建脚本也会尝试 `C:\Program Files\dotnet\dotnet.exe`。客户端可直接填写绝对路径。 |
+| 找不到 `dotnet` | 安装 SDK 后重新打开终端；构建脚本也会尝试 `%ProgramFiles%\dotnet\dotnet.exe`。客户端可直接填写绝对路径。 |
 | 缺少游戏程序集 / GamePath 错误 | `-GamePath` 应指向包含 `Probably Stolen.exe` 和 `Probably Stolen_Data` 的目录。 |
 | Mods 菜单找不到 Probably Automated | 检查是否多套了一层目录，以及 `Mods/probably-stolen-mcp/manifest.xml` 是否存在。 |
 | `connection_file_unavailable` | 确认 Mod 已启用并重启游戏；查看日志中的真实连接文件路径，必要时配置 `--connection`。 |

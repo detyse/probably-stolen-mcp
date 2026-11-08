@@ -12,13 +12,14 @@ Follow the [user guide](docs/usage-guide.md) for installation, client configurat
 
 Requirements: Windows x64, an installed Steam copy of the game, the [.NET 10 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/10.0), PowerShell, and an AI client that can start local stdio MCP servers.
 
-From the repository root:
+From Steam's **Browse local files** option, find the directory containing `Probably Stolen.exe`. Replace `<game-install-dir>` below with that directory, then run from the repository root:
 
 ~~~powershell
-.\scripts\Build.ps1 -GamePath 'D:\Apps\Steam\steamapps\common\Probably Stolen'
+$gamePath = '<game-install-dir>'
+.\scripts\Build.ps1 -GamePath $gamePath
 ~~~
 
-Adjust the game path. The command builds, tests, and produces:
+The command builds, tests, and produces:
 
 - `artifacts/mod/probably-stolen-mcp/`: copy its three files into the game's `Mods/probably-stolen-mcp/`, enable **Probably Automated**, and restart the game.
 - `artifacts/mcp/`: keep the full directory outside the game Mods folder.
