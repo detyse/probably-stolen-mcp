@@ -32,10 +32,10 @@ dotnet --version
 
 Cloning requires access while the repository is private. Downloading the source does not require Git. Run the remaining commands from the repository root.
 
-Use Steam's **Browse local files** option to find the directory containing `Probably Stolen.exe`. Replace the example path:
+Use Steam's **Browse local files** option to find the directory containing `Probably Stolen.exe`. Replace `<game-install-dir>` below with that directory:
 
 ~~~powershell
-$gamePath = 'D:\Apps\Steam\steamapps\common\Probably Stolen'
+$gamePath = '<game-install-dir>'
 .\scripts\Build.ps1 -GamePath $gamePath
 ~~~
 
@@ -92,15 +92,15 @@ Use the actual path reported in the Mod log. This file contains the current cont
 
 Open the generated `artifacts/mcp-config.json` and merge its `probably-stolen-mcp` entry into the client's MCP configuration, keeping your other servers.
 
-For clients using the `mcpServers` JSON format, the configuration looks like this. Use the actual paths from your generated file:
+For clients using the `mcpServers` JSON format, the structure is shown below. Each `<…>` placeholder represents an absolute path. Use the actual paths from your generated file:
 
 ~~~json
 {
   "mcpServers": {
     "probably-stolen-mcp": {
-      "command": "C:\\Program Files\\dotnet\\dotnet.exe",
+      "command": "<absolute-path-to-dotnet.exe>",
       "args": [
-        "D:\\Projects\\probably-stolen-mcp\\artifacts\\mcp\\PSMcp.Server.dll"
+        "<absolute-repo-path>\\artifacts\\mcp\\PSMcp.Server.dll"
       ]
     }
   }
