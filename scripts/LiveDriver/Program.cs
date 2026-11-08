@@ -3,9 +3,9 @@ using ModelContextProtocol.Client;
 using ModelContextProtocol.Protocol;
 
 // Local integration driver: only explicitly queued commands are sent to the real MCP server.
-if (args.Length != 2) throw new ArgumentException("Usage: LiveDriver <run-directory> <PSMcp.Server.dll>");
+if (args.Length != 2) throw new ArgumentException("Usage: LiveDriver <run-directory> <python-executable>");
 var runDirectory = Path.GetFullPath(args[0]);
-var serverDll = Path.GetFullPath(args[1]);
+var python = Path.GetFullPath(args[1]);
 Directory.CreateDirectory(runDirectory);
 var jsonOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web) { WriteIndented = true };
 McpClient? client = null;
@@ -17,13 +17,17 @@ async Task StartServer()
     client = await McpClient.CreateAsync(new StdioClientTransport(new StdioClientTransportOptions
     {
         Name = "PSMcp real-game validation",
-        Command = Environment.GetEnvironmentVariable("DOTNET_HOST_PATH") ?? "dotnet",
-        Arguments = [serverDll]
+        Command = "python",
+        EnvironmentVariables = new Dictionary<string, string?>
+        {
+            ["PATH"] = Path.GetDirectoryName(python) + Path.PathSeparator + Environment.GetEnvironmentVariable("PATH")
+        },
+        Arguments = ["-m", "psmcp"]
     }));
     var tools = await client.ListToolsAsync();
     await File.WriteAllTextAsync(Path.Combine(runDirectory, "server.json"), JsonSerializer.Serialize(new
     {
-        startedUtc = DateTimeOffset.UtcNow, serverDll, tools = tools.Select(t => t.Name).ToArray()
+        startedUtc = DateTimeOffset.UtcNow, python, tools = tools.Select(t => t.Name).ToArray()
     }, jsonOptions));
 }
 

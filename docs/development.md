@@ -6,7 +6,7 @@ This guide covers source builds, debugging, and changes to the game bridge or MC
 
 ## Build from source
 
-Use Windows x64, PowerShell, the [.NET 10 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/10.0), and a local Steam installation of *Probably Stolen*. The SDK includes the runtime. The initial dependency restore needs NuGet access. The Mod targets .NET Standard 2.1 and uses the game's Unity/Mono runtime; the MCP server targets .NET 10.
+Use Windows x64, PowerShell, [uv](https://docs.astral.sh/uv/getting-started/installation/), the [.NET 10 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/10.0), and a local Steam installation of *Probably Stolen*. The SDK is for compiling the C# Mod and running its integration tests. The Mod uses the game's Unity/Mono runtime. The default MCP server uses Python 3.11+ and needs no .NET Runtime. Initial setup downloads NuGet and Python dependencies.
 
 Clone the repository into any directory, or download and extract the source. Open PowerShell at the repository root, which contains `scripts`.
 
@@ -30,13 +30,12 @@ artifacts/
     manifest.xml
     PSMcp.Mod.dll
     PSMcp.Contracts.dll
-  mcp/
-    PSMcp.Server.dll
-    ... runtime dependencies
+  python/
+    probably_stolen_mcp-0.2.7-py3-none-any.whl
   mcp-config.json
 ```
 
-Use the [installation steps](../README.md#1-install-the-mod) next. Keep all files in `artifacts/mcp` together. The generated MCP configuration contains paths for the build machine; update them when moving the output.
+Use the [installation steps](../README.md#1-install-the-mod) next. Keep the source checkout for the generated uv launch command, or install the wheel separately. The generated MCP configuration contains paths for the build machine; update them when moving the output.
 
 Game assemblies are local compilation references. The Mod package contains only its manifest and the two project DLLs. Unity, Harmony, and Newtonsoft.Json are supplied by the game. Do not redistribute game libraries or extracted assets.
 
@@ -49,6 +48,33 @@ Game assemblies are local compilation references. The Mod package contains only 
 
 Build caches live under `.cache/`. Caches, `bin`, `obj`, and `artifacts` are ignored by Git. Stop the game and client-managed MCP process before rebuilding or replacing DLLs.
 
+## Python setup and packaging
+
+From the repository root, install the locked dependencies and check the entry point.
+
+```powershell
+uv sync --locked
+uv run --locked probably-stolen-mcp --help
+uv run --locked pytest
+```
+
+These Python checks run without .NET or game files. The project uses the official MCP Python SDK v2 (`MCPServer`, the successor to `FastMCP` used by STS2MCP) and httpx. The lockfile pins the tested versions.
+
+The default client configuration runs `uv --directory <repo> run --locked --no-dev probably-stolen-mcp`. It uses the existing Mod's `connection.json`; `--connection` and `PSMCP_CONNECTION_FILE` still work. Replace the old dotnet server entry when upgrading. Keep the same Mod ID and protocol 2.
+
+To use a standalone Python package, build a wheel and install it into a separate environment. The wheel includes all help topics and works outside the checkout.
+
+```powershell
+uv build --wheel
+uv venv .cache/package-test
+$packagePython = Join-Path $PWD '.cache/package-test/Scripts/python.exe'
+$wheel = (Get-ChildItem dist/*.whl | Select-Object -First 1).FullName
+uv pip install --python $packagePython $wheel
+& $packagePython -m psmcp --help
+```
+
+Configure that environment's absolute Python executable as `command`, with `["-m", "psmcp"]` as `args`. A plain Python 3.11+ environment can also install the wheel with pip. The wheel is not bundled Python itself; the interpreter and dependencies are still needed.
+
 ## Run checks
 
 Run the protocol, HTTP, stdio, and bundled-help checks without game files.
@@ -57,13 +83,13 @@ Run the protocol, HTTP, stdio, and bundled-help checks without game files.
 .\scripts\Test.ps1
 ```
 
-To check only the published help behavior, run the following. `-HelpOnly` and `-Offline` are mutually exclusive.
+To check only the source environment's offline help behavior, run the following. `-HelpOnly` and `-Offline` are mutually exclusive. CI separately installs a wheel and repeats this check outside the checkout.
 
 ```powershell
 .\scripts\Test.ps1 -HelpOnly
 ```
 
-The [CI workflow](../.github/workflows/ci.yml) runs the game-independent suite on Windows with .NET 10. Tests use simulated game state, production HTTP bridge code, a real MCP server process, and the official MCP client. They cover scheduling, stale observations, duplicate commands, failures, authentication, timeouts, and tool calls. Game-dependent Mod compilation and real gameplay require separate verification.
+The [CI workflow](../.github/workflows/ci.yml) runs Python checks, wheel installation checks, and the C# bridge integration suite on Windows with .NET 10 SDK and uv. The C# tests use simulated game state, production HTTP bridge code, the real Python MCP process, and the official C# MCP client. Python tests cover the transport boundaries and tool projections. They cover scheduling, stale observations, duplicate commands, failures, authentication, timeouts, and tool calls. Game-dependent Mod compilation and real gameplay require separate verification.
 
 Record gameplay evidence in the [capability record](capabilities.md), with the game and Mod versions, scenario, calls, outcomes, and evidence location. Existing results are in the [profession report](profession-tests.md) and [overnight report](overnight-tests.md).
 
@@ -71,7 +97,7 @@ Record gameplay evidence in the [capability record](capabilities.md), with the g
 
 ```text
 Agent / AI client
-    -> MCP over stdio: PSMcp.Server (.NET 10)
+    -> MCP over stdio: Python MCP (Python 3.11+)
     -> authenticated HTTP on 127.0.0.1:15527
     -> PSMcp.Mod (.NET Standard 2.1)
     -> main-thread queue and native game operations
@@ -85,7 +111,7 @@ Game-object access is queued onto Unity's main thread. The normal request queue 
 | --- | --- |
 | [PSMcp.Contracts](../src/PSMcp.Contracts) | Protocol models, snapshots, request deduplication, and queue |
 | [PSMcp.Mod](../src/PSMcp.Mod) | Native Mod entry point, game adapters, and local HTTP bridge |
-| [PSMcp.Server](../src/PSMcp.Server) | MCP tools, bundled help, and bridge client |
+| [Python MCP](../mcp/psmcp) | MCP tools, bundled help, and bridge client |
 | [PSMcp.SmokeTests](../tests/PSMcp.SmokeTests) | Behavior and protocol integration checks |
 | [Build.ps1](../scripts/Build.ps1) | Build, tests, packaging, and client configuration |
 | [Inspect-GameApi.ps1](../scripts/Inspect-GameApi.ps1) | Read local game assembly metadata without executing game code |
@@ -95,8 +121,8 @@ Game-object access is queued onto Unity's main thread. The normal request queue 
 For an Agent using the current interface, start with the [action loop](../README.md#action-loop) and [user guide](usage-guide.md#8-agent-calling-rules). For interface changes, use these entry points.
 
 - Add or adapt native game interactions in [PSMcp.Mod](../src/PSMcp.Mod), keeping discovery and execution consistent with the current game rules and parameter constraints.
-- Define shared data in [PSMcp.Contracts](../src/PSMcp.Contracts) and expose MCP tools through [PSMcp.Server](../src/PSMcp.Server). Read the [implementation notes](mcp-implementation.md) before expanding coverage.
-- Add help topics as lowercase Markdown filenames in [docs/help](help), starting with a `# Title`. Rebuild and restart the server to embed them. The filename becomes the topic and is listed automatically.
+- Define shared data in [PSMcp.Contracts](../src/PSMcp.Contracts) and expose MCP tools through [Python MCP](../mcp/psmcp). Read the [implementation notes](mcp-implementation.md) before expanding coverage.
+- Add help topics as lowercase Markdown filenames in [docs/help](help), starting with a `# Title`. Source runs load these files from the checkout; rebuild the wheel and restart the server for packaged deployments. The filename becomes the topic and is listed automatically.
 - Update [capabilities](capabilities.md) when changing tools, controls, or limits. Distinguish an implemented entry point from a scenario verified in the real game.
 
 Project names remain `PSMcp.*`, the Mod ID and MCP configuration key are `probably-stolen-mcp`, and environment variables use `PSMCP_*`. The in-game display name is **Probably Automated**.
@@ -106,7 +132,7 @@ Project names remain `PSMcp.*`, the Mod ID and MCP configuration key are `probab
 Check the server entry point from the repository root.
 
 ```powershell
-dotnet '.\artifacts\mcp\PSMcp.Server.dll' --help
+uv run --locked --no-dev probably-stolen-mcp --help
 ```
 
 Without `--help`, the server waits for stdio MCP requests. Logs go to stderr; stdout carries protocol messages.
@@ -154,4 +180,4 @@ If Windows blocks a DLL with `0x800711C7`, inspect `Microsoft-Windows-CodeIntegr
 4. Perform a currently allowed action and check its actual effect. Retry the identical request to check duplicate protection.
 5. Change the game state manually and confirm stale requests are rejected. Repeat relevant checks after changing saves or returning to the main menu.
 
-Use the [official API changes](https://github.com/dragonpan2/probably-stolen-modding/blob/main/APIChanges.md) and [modding code of conduct](https://github.com/dragonpan2/probably-stolen-modding/blob/main/CodeOfConduct.md) when extending or distributing the Mod. MCP development uses the [official C# SDK](https://github.com/modelcontextprotocol/csharp-sdk).
+Use the [official API changes](https://github.com/dragonpan2/probably-stolen-modding/blob/main/APIChanges.md) and [modding code of conduct](https://github.com/dragonpan2/probably-stolen-modding/blob/main/CodeOfConduct.md) when extending or distributing the Mod. MCP development uses the [official Python SDK](https://github.com/modelcontextprotocol/python-sdk).

@@ -1,6 +1,6 @@
 # Probably Automated 当前能力清单
 
-更新：**2026-11-07（亚洲／上海）**。对应仓库 **0.2.7 开发版、桥接协议 2**；新增跨夜实测基线为 Steam App 4348910、Build 26496118、`VERSION 100-Rev12`。此前 Build 26337366 / REV6 的证据保留为历史范围。
+更新：**2026-11-08（亚洲／上海）**。对应仓库 **0.2.7 开发版、桥接协议 2**；新增跨夜实测基线为 Steam App 4348910、Build 26496118、`VERSION 100-Rev12`。此前 Build 26337366 / REV6 的证据保留为历史范围。
 
 迁移说明：本次功能从旧 PawnPilot 开发目录合入本仓库，代码沿用 PSMcp 命名与 probably-stolen-mcp Mod ID。下方实机证据来自迁移前的同一功能实现，JSON、图片和哈希原样保留；其中旧名称属于历史来源。当前仓库已重新执行构建／协议测试，不能据此声称更名后的 Mod 已重跑全部实机场景。0.2.6 已另行安装 Probably Automated 并完成多职业物品实测；完整一天经营仍未在更名包重跑。[迁移验证记录](validation/2026-11-07-migration.json)：128 项检查通过，新目录服务注册 10 个工具；额外实时查询时游戏已关闭，返回 bridge_unavailable。
 
@@ -36,7 +36,7 @@
 
 ## 能力总览
 
-2026-11-07 新增 MCP 内置帮助 `get_help(topic?)`，当前共 11 个工具。省略主题返回入门与目录，可查询 actions、items、appraisal、machines、trade、night、menus、capabilities。帮助从程序集读取，游戏离线可用；`get_available_actions` 另返回 usage，解释完整动作名、参数约束、快照和重试。本次帮助变更的协议验证与历史实机证据分开记录，不增加玩法实测声明。新增帮助后完整 151 项检查通过，构建 0 警告、0 错误；发布产物的离线帮助验证记录见 [帮助验证记录](validation/2026-11-07-help.json)。
+2026-11-07 新增 MCP 内置帮助 `get_help(topic?)`，当前共 11 个工具。省略主题返回入门与目录，可查询 actions、items、appraisal、machines、trade、night、menus、capabilities。当时帮助从 C# 程序集读取，游戏离线可用；当前 Python 版本从源码文档或 wheel 资源读取；`get_available_actions` 另返回 usage，解释完整动作名、参数约束、快照和重试。本次帮助变更的协议验证与历史实机证据分开记录，不增加玩法实测声明。新增帮助后完整 151 项检查通过，构建 0 警告、0 错误；发布产物的离线帮助验证记录见 [帮助验证记录](validation/2026-11-07-help.json)。
 
 以下“未实测”均指真实游戏场景，自动化测试情况单列在后文。
 
@@ -148,8 +148,15 @@ Agent 可以通过 MCP 自己完成观察、使用工具、判断和提交。MCP
 
 内置帮助源码见 [入门](help/overview.md)、[动作规则](help/actions.md)、[物品与容器](help/items.md)、[鉴定](help/appraisal.md)。新增 docs/help 下的 Markdown 后重新发布 MCP 即可扩展主题；本能力清单也作为 capabilities 主题内嵌。
 
-定位入口：[游戏适配器](../src/PSMcp.Mod/GameAdapter.cs)、[可见 UI](../src/PSMcp.Mod/VisibleUi.cs)、[物品与容器](../src/PSMcp.Mod/InventoryAccess.cs)、[会话校验](../src/PSMcp.Contracts/GameSession.cs)、[MCP 工具](../src/PSMcp.Server/GameTools.cs)。
+定位入口：[游戏适配器](../src/PSMcp.Mod/GameAdapter.cs)、[可见 UI](../src/PSMcp.Mod/VisibleUi.cs)、[物品与容器](../src/PSMcp.Mod/InventoryAccess.cs)、[会话校验](../src/PSMcp.Contracts/GameSession.cs)、[Python MCP 工具](../mcp/psmcp/server.py)。
 
 0.2.6 新增[多职业实机报告](profession-tests.zh-CN.md)和[调用／状态证据](validation/2026-11-07-professions.json)：9 个职业开局与对应物品、3 个开发中职业原生限制、特性互斥与撤销、后退及主菜单往返、设备容器名称。原有 7 个存档文件哈希未变；该轮未验收跨夜生产；后续见下方 0.2.7 记录，更名包完整交易经营日仍未重跑。
 
 0.2.7 新增[中英文跨夜生产报告](overnight-tests.zh-CN.md)与[证据索引](validation/2026-11-07-overnight.json)：Build 26496118 / Rev12，打印第 4 天得到新手枪、水培第 2 天产出作物和种子、养鼠第 4 天得到 7 只新鼠仔、水产第 5 天将本轮鱼卵养成的幼鱼加工成鱼肉。修复 statusText 缺失和服务勾选状态；完整构建 153 项、发布帮助 21 项检查通过。原有 17 个存档文件哈希未变；新槽位 12–15，结束停在主菜单。详细范围、一次生长预期修正和最终白天动作持久化边界均见报告。
+
+
+## Python MCP 迁移（2026-11-08）
+
+默认外部服务改为 Python 3.11+，原 C# MCP 服务已移除。保留同名 11 个工具、camelCase 参数、结构化结果、图片、令牌重读、快照和 UUID 重试语义。协议仍为 2，Mod 版本仍为 0.2.7。玩家运行 Python MCP 不再需要 .NET Runtime，编译 Mod 和运行 C# 桥接集成测试仍需 .NET SDK。
+
+验证针对 Python 服务和生产 C# HTTP 桥接，游戏对象由替身提供。27 项 Python 测试、152 项跨语言集成检查及独立 wheel 帮助验证通过，见[迁移验证记录](validation/2026-11-08-python-mcp.json)。Python 服务的真实游戏验证尚未进行，之前的实机记录仍对应当时版本。启动和打包见[开发指南](development.zh-CN.md#python-环境与打包)。

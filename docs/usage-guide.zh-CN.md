@@ -12,7 +12,7 @@
 
 - 已安装的 Steam 版《Probably Stolen》，并能正常启动。
 - Windows x64 与 PowerShell。
-- [.NET 10 Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)（Windows x64；已安装 SDK 时也具备运行环境）。
+- [uv](https://docs.astral.sh/uv/getting-started/installation/)（用于管理 Python 3.11+ 和 MCP 依赖）。
 - 能启动**本地 stdio MCP** 的 AI 客户端，模型已配置好。看游戏图片还需要支持图片工具结果的客户端和视觉模型。
 
 客户端需要能启动本地进程，并访问游戏的连接文件。
@@ -26,7 +26,7 @@
 | 生成位置 | 用途 |
 | --- | --- |
 | `artifacts/mod/probably-stolen-mcp/` | 安装到游戏中的三个 Mod 文件 |
-| `artifacts/mcp/` | 由 AI 客户端启动的 MCP 程序及依赖；保留整个目录 |
+| `artifacts/python/*.whl` | 包含帮助文档的 Python 安装包，可选安装方式 |
 | `artifacts/mcp-config.json` | 根据本机路径生成的客户端配置 |
 
 移动文件位置或换一台电脑后，需要更新 `mcp-config.json` 中的绝对路径。
@@ -61,7 +61,7 @@ Probably Stolen/
       PSMcp.Contracts.dll
 ~~~
 
-启动游戏，在 Mods 菜单启用 **Probably Automated**，按游戏提示处理声明的 `network` 能力并重启。MCP 程序和它的依赖留在仓库的 `artifacts/mcp` 中。
+启动游戏，在 Mods 菜单启用 **Probably Automated**，按游戏提示处理声明的 `network` 能力并重启。保留源码目录供 Python MCP 服务使用。
 
 Mod 启动成功后，通常会生成：
 
@@ -81,9 +81,14 @@ Mod 启动成功后，通常会生成：
 {
   "mcpServers": {
     "probably-stolen-mcp": {
-      "command": "<dotnet 可执行文件的绝对路径>",
+      "command": "<uv 可执行文件的绝对路径>",
       "args": [
-        "<仓库绝对路径>\\artifacts\\mcp\\PSMcp.Server.dll"
+        "--directory",
+        "<仓库绝对路径>",
+        "run",
+        "--locked",
+        "--no-dev",
+        "probably-stolen-mcp"
       ]
     }
   }
@@ -182,7 +187,7 @@ Mod 启动成功后，通常会生成：
 
 | 现象 | 处理 |
 | --- | --- |
-| 找不到 `dotnet` 或缺少运行时 | 安装 .NET 10 x64 Runtime 并重启客户端；源码构建所需的 SDK 见[开发指南](development.zh-CN.md#环境要求) |
+| 找不到 `uv` 或 Python | 安装 uv 并重启客户端，检查 command 路径；首次启动需要联网下载 Python 和依赖 |
 | 提示缺少 `Assembly-CSharp.dll` | `-GamePath` 应指向游戏 exe 所在目录，不能指向仓库或 Managed 子目录 |
 | Mods 菜单找不到 Mod | 检查文件夹是否多套一层、三个文件是否齐全；查看游戏 Mod 日志 |
 | `connection_file_unavailable` | 启用 Mod 并重启游戏，核对连接文件位置；必要时设置 `--connection` |

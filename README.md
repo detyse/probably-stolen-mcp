@@ -8,7 +8,7 @@ Let your AI agent play *Probably Stolen* through MCP. The project provides a gam
 
 ## Get started
 
-You need Windows x64, an installed Steam copy of *Probably Stolen*, the [.NET 10 Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/10.0), and an AI client that can start local **stdio MCP** servers. A client and model that support image tool results can also inspect game screenshots.
+You need Windows x64, an installed Steam copy of *Probably Stolen*, [uv](https://docs.astral.sh/uv/getting-started/installation/) to manage Python 3.11+ and dependencies, and an AI client that can start local **stdio MCP** servers. A client and model that support image tool results can also inspect game screenshots.
 
 The repository currently distributes source only. Follow the [build guide](docs/development.md#build-from-source) to generate the installation files, then continue below. If you already have a build, use its `artifacts` directory.
 
@@ -18,7 +18,7 @@ The repository currently distributes source only. Follow the [build guide](docs/
 2. Copy `artifacts/mod/probably-stolen-mcp` into the game's `Mods` directory. The resulting `Mods/probably-stolen-mcp` folder should contain `manifest.xml`, `PSMcp.Mod.dll`, and `PSMcp.Contracts.dll`.
 3. Start the game, enable **Probably Automated** in the Mods menu, and restart when prompted.
 
-Keep the complete `artifacts/mcp` directory outside the game's Mods folder. For upgrades from PawnPilot, see the [installation guide](docs/usage-guide.md#3-install-the-mod).
+Keep the source checkout available for the Python MCP service. uv prepares its Python environment on first launch. For upgrades from PawnPilot, see the [installation guide](docs/usage-guide.md#3-install-the-mod).
 
 ### 2. Connect your AI client
 
@@ -30,8 +30,15 @@ For clients using `mcpServers`, the configuration has this structure. Replace th
 {
   "mcpServers": {
     "probably-stolen-mcp": {
-      "command": "<absolute-path-to-dotnet.exe>",
-      "args": ["<absolute-path-to-PSMcp.Server.dll>"]
+      "command": "<absolute-path-to-uv.exe>",
+      "args": [
+        "--directory",
+        "<absolute-repo-path>",
+        "run",
+        "--locked",
+        "--no-dev",
+        "probably-stolen-mcp"
+      ]
     }
   }
 }
@@ -96,7 +103,7 @@ Use `get_help(topic="actions")` for calling rules. Other topics include `items`,
 
 ### Extending the integration
 
-Use the current action list to drive interactions. For a new game interaction or MCP tool, see the [extension guide](docs/development.md#extend-the-agent-interface), [protocol models](src/PSMcp.Contracts), and [MCP tools](src/PSMcp.Server). The [implementation notes](docs/mcp-implementation.md) describe the existing adapters and their limits.
+Use the current action list to drive interactions. For a new game interaction or MCP tool, see the [extension guide](docs/development.md#extend-the-agent-interface), [protocol models](src/PSMcp.Contracts), and [MCP tools](mcp/psmcp). The [implementation notes](docs/mcp-implementation.md) describe the existing adapters and their limits.
 
 ## Help and data
 

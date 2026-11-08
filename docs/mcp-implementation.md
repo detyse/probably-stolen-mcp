@@ -15,8 +15,8 @@
 | 空间转移 | `InventoryAccess` + 原生 `SlotMarker` | 定量自动放置或指定坐标、旋转、翻转；检查归属、移出／插入锁、形状和最大数量；校验整数量可接受后才调用原生转移；不直接改归属或现金 |
 | 交易与等待 | `GameAdapter`、`TradeObservation` | 保留当前报价与公开线索；对话继续、对话选择、开闭店与叫客；确认、议价、估价等使用本次可见的 UI 动作 |
 | 图像 | `ViewCapture` | 帧结束后直接读回内存画面，避免 ScreenCapture 被原生 Mod 扫描器判定需要文件权限；最长边 1600 的 JPEG；通过 MCP 图片返回 |
-| 本地传输 | `HttpBridge`、`BridgeClient`、`GameTools` | 认证回环 HTTP、主线程队列、独立帧结束截图队列；与帮助合计 11 个 stdio MCP 工具 |
-| 按需帮助 | `HelpTools` | get_help(topic?) 读取内嵌 Markdown；省略主题返回入门与目录，游戏离线可读；新增文档自动成为新主题 |
+| 本地传输 | `HttpBridge`、Python `BridgeClient` 与 `server.py` | 认证回环 HTTP、主线程队列、独立帧结束截图队列；与帮助合计 11 个 stdio MCP 工具 |
+| 按需帮助 | Python `HelpCatalog` | get_help(topic?) 读取源码文档或 wheel 内的 Markdown；省略主题返回入门与目录，游戏离线可读；新增文档自动成为新主题 |
 
 参数由 `availableActions[].parameters` 给出，而不是把全部游戏操作编码成固定工具名。每个动态动作带 `kind`、`targetId` 和本次合法参数。机器、电话、电脑、夜间菜单等复用这些控件入口；游戏回调负责配方、花费、解锁、交货和剧情后果。
 
@@ -89,3 +89,6 @@
 [9 个职业的实机回归](profession-tests.zh-CN.md)覆盖开局、物品操作和菜单往返；完整经营日与跨夜生产仍在本轮范围外。针对库存分页结果丢失容器名称的风险，增加真实 MCP 传输回归检查。
 
 0.2.7 增加 InventoryItem.statusText：在普通游戏模式下，从已呈现且归玩家所有的物品读取限定的原生悬浮提示片段，覆盖生产进度、动物／鱼、笼舍、水箱、电池和工具次数。不读取完整 tooltip，不导出调试基因或真实估价；文本保留本地化及可能的富文本标记，限 8192 字符。新增真实 MCP 传输检查。TabletCheckbox 读取原生 IsOn 和可见服务标签，执行仍走原 Button 指针回调。跨夜生产的实际产出与回归结果见[独立报告](overnight-tests.zh-CN.md)。
+
+
+2026-11-08：外部 MCP 服务迁移到 [Python](../mcp/psmcp/server.py)，使用官方 MCP Python SDK v2 和 httpx。沿用协议 2 与游戏内 C# Mod，11 个工具及参数命名保持一致。HTTP 客户端限定本机地址、禁用代理和重定向、限制响应大小并区分未知动作结果；不自动重试动作。源码帮助来自 docs/help 和本能力清单，wheel 打包时嵌入相同内容。C# 协议测试通过官方客户端启动 Python 服务；该测试中的游戏状态仍为替身。

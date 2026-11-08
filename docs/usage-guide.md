@@ -12,7 +12,7 @@ You need:
 
 - An installed Steam copy of *Probably Stolen* that starts normally.
 - Windows x64 and PowerShell.
-- The [.NET 10 Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/10.0), Windows x64. An installed SDK also includes the runtime.
+- The [uv](https://docs.astral.sh/uv/getting-started/installation/), which manages Python 3.11+ and the MCP dependencies.
 - An AI client configured with a model and able to start a **local stdio MCP server**. To inspect game images, both the client and model must support image tool results.
 
 The client needs to start local processes and access the game's connection file.
@@ -26,7 +26,7 @@ The repository currently distributes source only, with no prebuilt Release. Foll
 | Location | Purpose |
 | --- | --- |
 | `artifacts/mod/probably-stolen-mcp/` | Three Mod files to install in the game |
-| `artifacts/mcp/` | MCP program and runtime dependencies; keep the entire directory |
+| `artifacts/python/*.whl` | Standalone Python package with bundled help; optional installation route |
 | `artifacts/mcp-config.json` | Client configuration generated for your local paths |
 
 Update the absolute paths in `mcp-config.json` if you move the files to another location or machine.
@@ -61,7 +61,7 @@ Probably Stolen/
       PSMcp.Contracts.dll
 ~~~
 
-Start the game, enable **Probably Automated** in the Mods menu, follow the game's prompts for its declared `network` capability, and restart. Leave the MCP program and its dependencies in the repository's `artifacts/mcp` directory.
+Start the game, enable **Probably Automated** in the Mods menu, follow the game's prompts for its declared `network` capability, and restart. Keep the source checkout available for the Python MCP service.
 
 When the Mod starts successfully, it normally creates:
 
@@ -81,9 +81,14 @@ For clients using the `mcpServers` JSON format, the structure is shown below. Ea
 {
   "mcpServers": {
     "probably-stolen-mcp": {
-      "command": "<absolute-path-to-dotnet.exe>",
+      "command": "<absolute-path-to-uv.exe>",
       "args": [
-        "<absolute-repo-path>\\artifacts\\mcp\\PSMcp.Server.dll"
+        "--directory",
+        "<absolute-repo-path>",
+        "run",
+        "--locked",
+        "--no-dev",
+        "probably-stolen-mcp"
       ]
     }
   }
@@ -182,7 +187,7 @@ Call `get_help(topic="actions")` for details. Other topics include `items`, `app
 
 | Symptom | What to check |
 | --- | --- |
-| `dotnet` or runtime missing | Install the .NET 10 x64 Runtime and restart the client; source-build SDK requirements are in the [development guide](development.md#build-from-source) |
+| `uv` or Python unavailable | Install uv, restart the client, and check its configured command path. The first launch needs access to download Python/dependencies |
 | Missing `Assembly-CSharp.dll` | `-GamePath` must point to the game exe's directory, not the repository or Managed subdirectory |
 | Mod missing from the menu | Check for an extra nested folder, all three files, and errors in the Mod log |
 | `connection_file_unavailable` | Enable the Mod, restart the game, and verify the connection-file path; set `--connection` if needed |

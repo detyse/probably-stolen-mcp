@@ -7,7 +7,6 @@ using ModelContextProtocol.Client;
 using ModelContextProtocol.Protocol;
 using Newtonsoft.Json;
 using PSMcp.Contracts;
-using PSMcp.Server;
 using PSMcp.Mod;
 
 var passed = 0;
@@ -96,8 +95,8 @@ if (args.Length == 1 && args[0] == "--offline")
     return;
 }
 
-var mcpDll = args.Length == 1 ? Path.GetFullPath(args[0]) : Path.Combine(AppContext.BaseDirectory, "PSMcp.Server.dll");
-await HelpChecks.Run(mcpDll, Check);
+var python = args.Length == 1 ? Path.GetFullPath(args[0]) : throw new ArgumentException("Pass the Python MCP environment executable.");
+await HelpChecks.Run(python, Check);
 
 var outputRoot = Path.Combine(Path.GetTempPath(), "PSMcp-tests-" + Guid.NewGuid().ToString("N"));
 Directory.CreateDirectory(outputRoot);
@@ -108,7 +107,7 @@ var port = ((IPEndPoint)probe.LocalEndpoint).Port;
 probe.Stop();
 var token = Guid.NewGuid().ToString("N") + Guid.NewGuid().ToString("N");
 var connection = new ConnectionInfo { BaseUrl = $"http://127.0.0.1:{port}/", Token = token };
-await File.WriteAllTextAsync(connectionFile, System.Text.Json.JsonSerializer.Serialize(connection, BridgeClient.JsonOptions));
+await File.WriteAllTextAsync(connectionFile, System.Text.Json.JsonSerializer.Serialize(connection, TestBridgeClient.JsonOptions));
 using var networkQueue = new MainThreadQueue();
 var networkGame = new FakeGame { Trade = ObservationChecks.SampleTrade() };
 var networkSession = Session(networkGame);
@@ -144,7 +143,7 @@ try
             throw new InvalidOperationException("The bridge started, but this host denied a TCP connection to 127.0.0.1 (SocketError.AccessDenied). HTTP/MCP end-to-end tests cannot run in this environment. Run scripts/Test.ps1 in a normal PowerShell session; -Offline only runs session, framing, and listener lifecycle checks.", ex);
         }
     }
-    using var bridge = new BridgeClient(connectionFile);
+    using var bridge = new TestBridgeClient(connectionFile);
     var health = await bridge.Health();
     Check(health.Success, "authenticated HTTP bridge health check" + (health.Success ? "" : $" ({health.ErrorCode}: {health.Message})"));
     var networkState = await bridge.State();
@@ -169,18 +168,16 @@ try
 
     await HttpTransportChecks.RunNetwork(port, token, Check);
 
-    var badFile = Path.Combine(outputRoot, "invalid.json");
-    await File.WriteAllTextAsync(badFile, System.Text.Json.JsonSerializer.Serialize(new ConnectionInfo { BaseUrl = "http://example.com:1234/", Token = token }, BridgeClient.JsonOptions));
-    using var badClient = new BridgeClient(badFile);
-    Check((await badClient.Health()).ErrorCode == "invalid_connection", "MCP cannot send the token to a remote host");
-
-    var dotnet = Environment.GetEnvironmentVariable("DOTNET_HOST_PATH") ?? "dotnet";
     using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(30));
     var transport = new StdioClientTransport(new StdioClientTransportOptions
     {
         Name = "PSMcp integration test",
-        Command = dotnet,
-        Arguments = [mcpDll, "--connection", connectionFile]
+        Command = "python",
+        EnvironmentVariables = new Dictionary<string, string?>
+        {
+            ["PATH"] = Path.GetDirectoryName(python) + Path.PathSeparator + Environment.GetEnvironmentVariable("PATH")
+        },
+        Arguments = ["-m", "psmcp", "--connection", connectionFile]
     });
     await using var client = await McpClient.CreateAsync(transport, cancellationToken: timeout.Token);
     var tools = await client.ListToolsAsync(cancellationToken: timeout.Token);

@@ -4,7 +4,7 @@ using PSMcp.Contracts;
 
 internal static class HelpChecks
 {
-    public static async Task Run(string serverDll, Action<bool, string> check)
+    public static async Task Run(string python, Action<bool, string> check)
     {
         // Empty working directory and missing game connection exercise standalone packaging.
         var directory = Path.Combine(Path.GetTempPath(), "psmcp-help-" + Guid.NewGuid().ToString("N"));
@@ -17,8 +17,12 @@ internal static class HelpChecks
             await using var client = await McpClient.CreateAsync(new StdioClientTransport(new StdioClientTransportOptions
             {
                 Name = "PSMcp offline help test",
-                Command = Environment.GetEnvironmentVariable("DOTNET_HOST_PATH") ?? "dotnet",
-                Arguments = [Path.GetFullPath(serverDll), "--connection", Path.Combine(directory, "missing.json")],
+                Command = "python",
+                EnvironmentVariables = new Dictionary<string, string?>
+                {
+                    ["PATH"] = Path.GetDirectoryName(Path.GetFullPath(python)) + Path.PathSeparator + Environment.GetEnvironmentVariable("PATH")
+                },
+                Arguments = ["-m", "psmcp", "--connection", Path.Combine(directory, "missing.json")],
                 WorkingDirectory = directory
             }), cancellationToken: timeout.Token);
             var tools = await client.ListToolsAsync(cancellationToken: timeout.Token);
@@ -35,8 +39,10 @@ internal static class HelpChecks
             check(overview.IsError != true && body.GetProperty("topic").GetString() == "overview"
                 && body.GetProperty("protocolVersion").GetInt32() == Protocol.Version
                 && !body.GetProperty("content").GetString()!.Contains("LOCAL_FILE_MUST_NOT_BE_READ"),
-                "default help comes from the assembly without a repository or game connection");
-            check(overview.Content.OfType<TextContentBlock>().Single().Text == body.GetRawText(),
+                "default help comes from the Python package without a repository or game connection");
+            check(System.Text.Json.Nodes.JsonNode.DeepEquals(
+                System.Text.Json.Nodes.JsonNode.Parse(overview.Content.OfType<TextContentBlock>().Single().Text),
+                System.Text.Json.Nodes.JsonNode.Parse(body.GetRawText())),
                 "text-only and structured MCP clients receive the same help");
 
             var topics = body.GetProperty("topics").EnumerateArray().Select(t => t.GetProperty("topic").GetString()!).ToArray();

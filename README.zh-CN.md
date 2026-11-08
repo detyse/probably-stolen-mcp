@@ -8,7 +8,7 @@
 
 ## 开始使用
 
-需要 Windows x64、已安装的 Steam 版游戏、[.NET 10 Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)，以及能启动本地 **stdio MCP** 服务的 AI 客户端。查看游戏截图还需要客户端和模型支持图片工具结果。
+需要 Windows x64、已安装的 Steam 版游戏、[uv](https://docs.astral.sh/uv/getting-started/installation/)，以及能启动本地 **stdio MCP** 服务的 AI 客户端。查看游戏截图还需要客户端和模型支持图片工具结果。
 
 仓库目前仅提供源码。请先按[构建指南](docs/development.zh-CN.md#从源码构建)生成安装文件，再继续下面的步骤。已有构建产物时，直接使用其中的 `artifacts` 目录。
 
@@ -18,7 +18,7 @@
 2. 将 `artifacts/mod/probably-stolen-mcp` 文件夹复制到游戏的 `Mods` 目录。最终的 `Mods/probably-stolen-mcp` 中应有 `manifest.xml`、`PSMcp.Mod.dll` 和 `PSMcp.Contracts.dll`。
 3. 启动游戏，在 Mods 菜单启用 **Probably Automated**，按提示重启。
 
-完整保留 `artifacts/mcp` 目录，放在游戏的 Mods 文件夹之外。从 PawnPilot 升级的步骤见[安装指南](docs/usage-guide.zh-CN.md#3-安装-mod)。
+保留源码目录供 Python MCP 服务使用，首次启动时 uv 会准备 Python 环境。从 PawnPilot 升级的步骤见[安装指南](docs/usage-guide.zh-CN.md#3-安装-mod)。
 
 ### 2. 连接 AI 客户端
 
@@ -30,8 +30,15 @@
 {
   "mcpServers": {
     "probably-stolen-mcp": {
-      "command": "<dotnet 可执行文件的绝对路径>",
-      "args": ["<PSMcp.Server.dll 的绝对路径>"]
+      "command": "<uv 可执行文件的绝对路径>",
+      "args": [
+        "--directory",
+        "<仓库绝对路径>",
+        "run",
+        "--locked",
+        "--no-dev",
+        "probably-stolen-mcp"
+      ]
     }
   }
 }
@@ -96,7 +103,7 @@ Mod 的 `http://127.0.0.1:15527` 是内部桥接地址。客户端使用上面�
 
 ### 扩展接口
 
-日常交互由实时动作列表驱动。需要增加游戏交互或 MCP 工具时，可从[扩展指南](docs/development.zh-CN.md#扩展-agent-接口)、[协议模型](src/PSMcp.Contracts)和[MCP 工具](src/PSMcp.Server)入手。[实现说明](docs/mcp-implementation.md)记录已有适配和限制。
+日常交互由实时动作列表驱动。需要增加游戏交互或 MCP 工具时，可从[扩展指南](docs/development.zh-CN.md#扩展-agent-接口)、[协议模型](src/PSMcp.Contracts)和[MCP 工具](mcp/psmcp)入手。[实现说明](docs/mcp-implementation.md)记录已有适配和限制。
 
 ## 帮助与数据
 

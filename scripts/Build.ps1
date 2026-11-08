@@ -4,6 +4,7 @@ param(
     [switch]$SkipTests
 )
 . (Join-Path $PSScriptRoot 'Build-Environment.ps1')
+. (Join-Path $PSScriptRoot 'Python-Environment.ps1')
 if (!$GamePath) { throw 'Pass -GamePath with the directory containing Probably Stolen.exe, or set PSMCP_GAME_PATH.' }
 $GamePath = (Resolve-Path -LiteralPath $GamePath).Path
 if (!(Test-Path -LiteralPath (Join-Path $GamePath 'Probably Stolen_Data/Managed/Assembly-CSharp.dll'))) {
@@ -11,11 +12,13 @@ if (!(Test-Path -LiteralPath (Join-Path $GamePath 'Probably Stolen_Data/Managed/
 }
 Push-Location $repoRoot
 try {
+    Initialize-PythonEnvironment
     if (!$NoRestore) { Invoke-DotNet restore PSMcp.slnx --locked-mode }
     Invoke-DotNet build PSMcp.slnx -c Release --no-restore --disable-build-servers '-m:1' '-p:UseSharedCompilation=false' "-p:GamePath=$GamePath"
     if (!$SkipTests) {
-        $mcpDll = Join-Path $repoRoot 'src/PSMcp.Server/bin/Release/net10.0/PSMcp.Server.dll'
-        Invoke-DotNet tests/PSMcp.SmokeTests/bin/Release/net10.0/PSMcp.SmokeTests.dll $mcpDll
+        & $python -m pytest
+        if ($LASTEXITCODE -ne 0) { throw 'Python MCP checks failed.' }
+        Invoke-DotNet tests/PSMcp.SmokeTests/bin/Release/net10.0/PSMcp.SmokeTests.dll $python
     }
     $modOutput = Join-Path $repoRoot 'artifacts/mod/probably-stolen-mcp'
     New-Item -ItemType Directory -Path $modOutput -Force | Out-Null
@@ -25,9 +28,8 @@ try {
     foreach ($file in $allowed) {
         Copy-Item -LiteralPath (Join-Path $repoRoot "src/PSMcp.Mod/bin/Release/netstandard2.1/$file") -Destination $modOutput -Force
     }
-    $mcpOutput = Join-Path $repoRoot 'artifacts/mcp'
-    Invoke-DotNet publish src/PSMcp.Server/PSMcp.Server.csproj -c Release --no-restore --disable-build-servers '-m:1' '-p:UseSharedCompilation=false' --self-contained false -o $mcpOutput
-    $config = @{ mcpServers = @{ 'probably-stolen-mcp' = @{ command = $dotnet; args = @((Join-Path $mcpOutput 'PSMcp.Server.dll')) } } }
+    Invoke-Uv build --wheel --out-dir (Join-Path $repoRoot 'artifacts/python')
+    $config = @{ mcpServers = @{ 'probably-stolen-mcp' = @{ command = $uv; args = @('--directory', $repoRoot, 'run', '--locked', '--no-dev', 'probably-stolen-mcp') } } }
     $config | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath (Join-Path $repoRoot 'artifacts/mcp-config.json') -Encoding utf8
     Write-Output "Mod package: $modOutput"
     Write-Output "MCP client config: $(Join-Path $repoRoot 'artifacts/mcp-config.json')"

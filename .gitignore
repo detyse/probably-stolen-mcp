@@ -25,3 +25,12 @@ connection.json
 *.pdb
 ModData/
 Saves/
+
+# Python MCP environment and build output
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+dist/
+*.egg-info/
