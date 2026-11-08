@@ -4,7 +4,7 @@
 
 迁移说明：本次功能从旧 PawnPilot 开发目录合入本仓库，代码沿用 PSMcp 命名与 probably-stolen-mcp Mod ID。下方实机证据来自迁移前的同一功能实现，JSON、图片和哈希原样保留；其中旧名称属于历史来源。当前仓库已重新执行构建／协议测试，不能据此声称更名后的 Mod 已重跑全部实机场景。0.2.6 已另行安装 Probably Automated 并完成多职业物品实测；完整一天经营仍未在更名包重跑。[迁移验证记录](validation/2026-11-07-migration.json)：128 项检查通过，新目录服务注册 10 个工具；额外实时查询时游戏已关闭，返回 bridge_unavailable。
 
-本文用于直接回答“现在能控制什么”，后续优先查这里。实现细节见 [实现与覆盖说明](mcp-implementation.md)，完整玩法目录见 [132 个交互族](game-interactions.md)，安装与 MCP 工具列表见 [README](../README.md)。设计稿和玩法目录不代表当前完成情况。
+本文用于直接回答“现在能控制什么”，后续优先查这里。实现细节见 [实现与覆盖说明](mcp-implementation.md)，完整玩法目录见 [132 个交互族](game-interactions.md)，安装与 MCP 工具列表见 [README](../README.zh-CN.md)。设计稿和玩法目录不代表当前完成情况。
 
 ## 开始菜单和选人界面能不能控制？
 

@@ -1,420 +1,107 @@
 # Probably Stolen MCP — Probably Automated
 
-[English](README.en.md) · [中文使用指南](docs/usage-guide.zh-CN.md) · [English user guide](docs/usage-guide.md)
+[简体中文](README.zh-CN.md) · [User guide](docs/usage-guide.md) · [Agent integration](#building-an-agent)
 
-《深空当铺：可能是偷的》（Probably Stolen）的独立全 C# AI 接入项目。它提供游戏 Mod 和 MCP 服务，让支持 MCP 的 AI 客户端读取游戏状态、执行当前允许的操作。模型与决策由 AI 客户端负责，项目本身不内置模型。
+Let your AI agent play *Probably Stolen* through MCP. The project provides a game Mod and a local MCP server for reading the current game state, inspecting items and screenshots, and performing available game actions. Your AI client supplies the model and decisions.
 
-**当前版本：0.2.7 实验性开发版，桥接协议 2，Mod 显示名 Probably Automated。** 已接入 11 个 MCP 工具（含离线可读的内置帮助）、结构化业务动作、原生 UI、物品与容器操作和游戏截图。能力范围与独立测试记录见 [当前能力清单](docs/capabilities.md)。
+**Experimental · version 0.2.7 · bridge protocol 2.** The in-game Mod is named **Probably Automated**. Supported scenarios and real-game evidence are tracked in the [capability record](docs/capabilities.md), [profession tests](docs/profession-tests.md), and [overnight production tests](docs/overnight-tests.md). Coverage varies by game version and scenario.
 
-项目和程序集沿用 `PSMcp.*`，Mod ID、目录和 MCP 配置键仍为 `probably-stolen-mcp`，环境变量仍用 `PSMCP_*`。首次使用请从[安装与操作指南](docs/usage-guide.zh-CN.md)开始；公开状态评估见[公开准备说明](docs/public-readiness.zh-CN.md)。
+## Get started
 
-## 工作方式
+You need Windows x64, an installed Steam copy of *Probably Stolen*, the [.NET 10 Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/10.0), and an AI client that can start local **stdio MCP** servers. A client and model that support image tool results can also inspect game screenshots.
 
-```text
-Agent / AI 客户端
-       │ MCP / stdio：客户端启动并管理服务进程
-       ▼
-PSMcp.Server（.NET 10）
-       │ HTTP：127.0.0.1:15527，Bearer 令牌
-       ▼
-PSMcp.Mod（.NET Standard 2.1）
-       │ 主线程队列
-       ▼
-游戏状态与原生操作接口
-```
+The repository currently distributes source only. Follow the [build guide](docs/development.md#build-from-source) to generate the installation files, then continue below. If you already have a build, use its `artifacts` directory.
 
-游戏查询请求当前状态，以 JSON 返回；`get_help` 直接读取 MCP 内置文档，无需游戏连接。`get_view` 可按需返回当前游戏帧；当前使用请求—响应方式，不持续推送状态或画面。Agent 完成一次操作后需要再次查询，确认游戏的变化。
+### 1. Install the Mod
 
-HTTP 服务仅监听本机，无需部署公网服务器。**AI 客户端应配置 stdio MCP 的启动命令；`http://127.0.0.1:15527` 是 Mod 的内部桥接地址，不是 Streamable HTTP MCP 地址。**
+1. Exit the game. In Steam, use **Browse local files** to open its installation directory.
+2. Copy `artifacts/mod/probably-stolen-mcp` into the game's `Mods` directory. The resulting `Mods/probably-stolen-mcp` folder should contain `manifest.xml`, `PSMcp.Mod.dll`, and `PSMcp.Contracts.dll`.
+3. Start the game, enable **Probably Automated** in the Mods menu, and restart when prompted.
 
-- [环境要求](#环境要求)
-- [快速开始](#快速开始)
-- [Agent 使用方式](#agent-使用方式)
-- [手动 HTTP 调用](#手动-http-调用)
-- [常见问题](#常见问题)
-- [开发与验证](#开发与验证)
+Keep the complete `artifacts/mcp` directory outside the game's Mods folder. For upgrades from PawnPilot, see the [installation guide](docs/usage-guide.md#3-install-the-mod).
 
-## 数据流与游戏进度
+### 2. Connect your AI client
 
-操作会正常影响当前游戏及自动保存。Mod 与 MCP 之间只使用本机认证连接；AI 客户端会接收请求的游戏状态和游戏截图，使用云端模型时可能将这些结果发送给该服务商，取决于客户端设置。本项目不内置模型账号，也不实现独立遥测上传。请勿分享含控制令牌的 `connection.json`。
+Open the generated `artifacts/mcp-config.json` and merge its `probably-stolen-mcp` entry into your client's MCP configuration. It already contains the absolute paths for the machine where it was built. If you move the files to another location or machine, update those paths.
 
-## 环境要求
-
-| 用途 | 要求 |
-|---|---|
-| 构建项目 | Windows x64、.NET 10 SDK、PowerShell；首次还原依赖需要访问 NuGet |
-| 加载 Mod | 已安装 Steam 正式版游戏，使用游戏自带的 Mod 加载器和 Unity/Mono 环境 |
-| 运行已构建的 MCP | .NET 10 Runtime；安装 SDK 后已具备运行环境 |
-| 使用 Agent | 支持启动本地 stdio MCP 服务的 AI 客户端，并在客户端配置好模型 |
-| 获取源码 | Git，或下载仓库源码 |
-
-Python、uv、Unity Editor 和完整 Visual Studio 均非必需。Mod 与 MCP 服务都是 C#，但目标框架不同：SDK 10 编译 `netstandard2.1` Mod，外部 MCP 服务运行在 .NET 10 上。
-
-游戏 DLL 仅供本机编译引用，不随项目分发。支持范围、游戏版本和验证结果见[能力清单](docs/capabilities.md)与[跨夜生产测试](docs/overnight-tests.zh-CN.md)。
-
-## 快速开始
-
-源码可克隆或下载解压到任意位置。以下命令均在仓库根目录（包含 `scripts` 的目录）执行。已有构建产物时，可从第 2 步开始。
-
-### 1. 构建项目
-
-在 Steam 的游戏管理菜单中选择“浏览本地文件”，找到包含 `Probably Stolen.exe` 的目录。将 `<游戏安装目录>` 替换为该目录，然后在 PowerShell 中执行：
-
-```powershell
-$gamePath = '<游戏安装目录>'
-.\scripts\Build.ps1 -GamePath $gamePath
-```
-
-脚本会还原锁定的 NuGet 依赖、编译、运行协议测试并生成：
-
-```text
-artifacts/
-  mod/probably-stolen-mcp/
-    manifest.xml
-    PSMcp.Mod.dll
-    PSMcp.Contracts.dll
-  mcp/
-    PSMcp.Server.dll
-    ... MCP 的运行依赖
-  mcp-config.json
-```
-
-只有编译、测试和打包全部完成，默认构建命令才成功。若遇 Windows 应用控制拦截，请看[常见问题](#常见问题)；编译通过不等于运行验证通过。
-
-### 2. 安装并启用 Mod
-
-**从 PawnPilot 升级。** 先在游戏内停用旧 Mod，退出后将旧的 `Mods/PawnPilot` 文件夹移出 `Mods`。按下面的步骤启用新 Mod，它会创建新的连接文件。若设置过自定义端口，请在新 Mod 配置中重新设置。重新构建后，用生成的 `mcp-config.json` 替换客户端中的旧服务条目，并更新自定义连接路径及环境变量 `PSMCP_CONNECTION_FILE`、`PSMCP_GAME_PATH`。
-
-**先关闭游戏。** 将 `<游戏安装目录>` 替换为 Steam 中找到的实际目录，然后在仓库根目录执行以下命令，将三个 Mod 文件复制到游戏中：
-
-```powershell
-$gamePath = '<游戏安装目录>'
-if (!(Test-Path -LiteralPath (Join-Path $gamePath 'Probably Stolen.exe'))) {
-    throw '游戏目录不正确，请修改 $gamePath。'
-}
-$modPath = Join-Path $gamePath 'Mods\probably-stolen-mcp'
-New-Item -ItemType Directory -Path $modPath -Force | Out-Null
-foreach ($file in @('manifest.xml', 'PSMcp.Mod.dll', 'PSMcp.Contracts.dll')) {
-    Copy-Item -LiteralPath (Join-Path '.\artifacts\mod\probably-stolen-mcp' $file) -Destination $modPath -Force
-}
-```
-
-也可以手动把 `artifacts/mod/probably-stolen-mcp` 文件夹复制到游戏的 `Mods` 目录。最终结构应为：
-
-```text
-Probably Stolen/
-  Probably Stolen.exe
-  Mods/
-    probably-stolen-mcp/
-      manifest.xml
-      PSMcp.Mod.dll
-      PSMcp.Contracts.dll
-```
-
-启动游戏，在 Mods 菜单启用 Probably Automated，并按提示重启。Mod 目录中只放上述三个文件；MCP 的依赖留在 `artifacts/mcp`，游戏的 Unity、Harmony、Newtonsoft.Json 等库由游戏提供。
-
-Mod 成功启动后监听 `127.0.0.1:15527`，生成本次运行的认证令牌，并写入：
-
-```text
-%USERPROFILE%\AppData\LocalLow\Questing Goose Studio\Probably Stolen\ModData\probably-stolen-mcp\connection.json
-```
-
-以 Mod 日志输出的实际路径为准。文件中包含连接地址和控制游戏所需的令牌，不要分享或提交到仓库。端口可在游戏的 Mod 配置中修改，重启生效；MCP 每次调用会重新读取连接文件。
-
-动作会影响当前游戏进度，也可能被游戏自动保存。首次联调请使用测试存档。
-
-### 3. 配置 MCP 客户端
-
-构建生成的 `artifacts/mcp-config.json` 包含本机可用的绝对路径。对于采用 `mcpServers` JSON 格式的客户端，将其中的 `probably-stolen-mcp` 条目合并到已有配置，保留其他服务。
-
-下面仅展示配置结构，`<…>` 表示需要替换的绝对路径。实际使用时请复制生成的 `artifacts/mcp-config.json`，其中已经填好本机的 .NET 程序和 MCP 程序路径：
+For clients using `mcpServers`, the configuration has this structure. Replace the placeholders with the actual paths from your generated file.
 
 ```json
 {
   "mcpServers": {
     "probably-stolen-mcp": {
-      "command": "<dotnet 可执行文件的绝对路径>",
-      "args": [
-        "<仓库绝对路径>\\artifacts\\mcp\\PSMcp.Server.dll"
-      ]
+      "command": "<absolute-path-to-dotnet.exe>",
+      "args": ["<absolute-path-to-PSMcp.Server.dll>"]
     }
   }
 }
 ```
 
-如果客户端通过界面添加服务，选择 **stdio / 本地命令**，填写同样的 command 和 args。不同客户端的配置位置、格式可能不同；配置后刷新 MCP 连接或重启客户端。
+If the client has a configuration form, choose **stdio / local command** and enter the same `command` and `args`. Refresh the MCP connection or restart the client. The client starts and manages the MCP process.
 
-通常由客户端启动服务，无需提前在终端手动运行。以下命令仅用于检查启动方式：
+The Mod's `http://127.0.0.1:15527` address is an internal bridge. Configure the client with the stdio launch command above. Custom connection-file locations are covered in the [client setup guide](docs/usage-guide.md#4-connect-your-ai-client).
 
-```powershell
-dotnet '.\artifacts\mcp\PSMcp.Server.dll' --help
-```
+### 3. Try it
 
-不加 `--help` 会启动 stdio 服务并等待协议请求，这是正常行为。日志写入 stderr，stdout 专用于 MCP 协议。
+Start the game and send this to your agent.
 
-如果连接文件不在默认位置，在客户端的 args 中追加 `--connection` 和连接文件的绝对路径。完整 args 结构如下，使用时替换所有 `<…>` 占位符：
+> Use probably-stolen-mcp. Read get_help, then call get_bridge_status and get_game_state. Report whether the bridge is connected, whether a save is loaded, and the current day, cash, and available actions. Only inspect state during this check.
+
+At the main menu, `gameLoaded: false` is expected. Load a test save, then try one action.
+
+> Read the latest state. If open_shop is available, execute it once and read the state again to confirm the shop opened. If the action is unavailable or the result is uncertain, explain why.
+
+Actions affect the current game and may be autosaved. Use a test save for your first session. For longer tasks, see the [business-day example](docs/usage-guide.md#6-complete-a-business-day) and [item and night-outing examples](docs/usage-guide.md#7-showcases-placement-trash-and-night-outings).
+
+## Building an agent
+
+Connect through MCP and use **observe → choose a current action → execute → verify**. Game rules, legal targets, and argument constraints come from the Mod. Your agent handles planning, interpreting evidence, and deciding whether the result meets the task.
+
+### Tools
+
+| Tool | Purpose |
+| --- | --- |
+| `get_help(topic?)` | Read bundled instructions and topic listings, even when the game is closed |
+| `get_bridge_status` | Check the authenticated connection to the Mod |
+| `get_game_state` | Read the current day, phase, cash, customer, inventory, interface, and available actions |
+| `get_trade_state` | Inspect the current counter, visible quotes, and trade interaction |
+| `get_inventory(containerId?, offset?, limit?)` | Read presented containers and opened contents, with pagination |
+| `get_available_actions` | Get current actions, parameter constraints, `snapshotId`, limitations, and usage notes |
+| `get_ui_state` | Read visible text, controls, disabled reasons, and interface actions |
+| `get_entity(entityId)` | Inspect an item, container, or control already exposed by the current session |
+| `get_view` | Get a game screenshot and its corresponding observation |
+| `get_action_status(requestId)` | Look up a retained command result without executing it again |
+| `perform_action(action, expectedSnapshotId, requestId, arguments?)` | Perform one currently permitted native game action |
+
+### Action loop
+
+1. Read the latest state. `get_game_state` nests its observation under `state`; `get_available_actions` returns `snapshotId` and `availableActions` at the top level.
+2. Copy an exact `availableActions[].name`. Fill `arguments` using that action's `parameters`, including its required fields, ranges, and candidate references.
+3. Call `perform_action` with that observation's `snapshotId` and a new UUID as `requestId`. The following is a template for an action with no arguments.
 
 ```json
-[
-  "<仓库绝对路径>\\artifacts\\mcp\\PSMcp.Server.dll",
-  "--connection",
-  "<连接文件绝对路径>"
-]
-```
-
-也可设置 MCP 进程的环境变量 `PSMCP_CONNECTION_FILE`；`--connection` 优先。客户端需要能启动本地进程并访问游戏的连接文件；仅支持云端远程 MCP 的客户端无法直接使用这个 stdio 服务。
-
-### 4. 验证连接
-
-1. 游戏停留在主菜单，让 Agent 调用 `get_bridge_status`。返回 `success: true` 表示 Mod 的认证 HTTP 服务可达。
-2. 调用 `get_game_state`。尚未载入存档时，预期 `state.gameLoaded: false`；这与桥接是否连通是两件事。
-3. 载入测试存档，再次调用 `get_game_state`。对比游戏界面与返回的现金、顾客和库存。
-4. 调用 `get_available_actions` 查看当前允许的操作。确认状态正确后，再执行一个动作并读取新状态。
-
-看到十一个 MCP 工具只代表服务注册成功；应完成上述检查，确认它确实连上正在运行的游戏。游戏未启动时也可调用 `get_help` 检查内置帮助。
-
-## Agent 使用方式
-
-### 工具与当前能力
-
-| MCP 工具 | 参数 | 返回内容 / 行为 |
-|---|---|---|
-| `get_help` | `topic?` | 默认返回简短入门和主题目录；按主题读取内置说明，无需游戏连接 |
-| `get_bridge_status` | 无 | 检查认证连接，不要求已载入存档 |
-| `get_game_state` | 无 | 天数、经营阶段、现金、顾客、交易、容器、界面和可用动作 |
-| `get_trade_state` | 无 | 当前柜台与交易方向、公开报价和交互等待 |
-| `get_inventory` | `containerId?`、`offset?`、`limit?` | 已呈现容器与已打开嵌套内容；归属、形状、位置和分页 |
-| `get_available_actions` | 无 | 当前动作、参数范围、合法候选引用、`snapshotId`、`limitations` 与调用说明 `usage` |
-| `get_ui_state` | 无 | 可见文字、控件、禁用原因、当前面板与动作 |
-| `get_entity` | `entityId` | 查询本次已暴露的物品、容器或控件 |
-| `get_view` | 无 | 最长边 1600 像素的游戏帧及对应观察 |
-| `get_action_status` | `requestId` | 查询保留的命令结果，不重复执行 |
-| `perform_action` | `action`、`expectedSnapshotId`、`requestId`、`arguments?` | 执行一个当前允许的原生动作 |
-
-状态查询的完整数据位于 `get_game_state` 返回的 `state` 中；`get_inventory` 和 `get_available_actions` 会把所需字段放在结果顶层。MCP 同时返回结构化 JSON 和文本内容，工具错误标记为 `isError`。
-
-复制 `availableActions[].name` 为 `perform_action.action`；`kind` 是类别，`description` 说明效果，`targetId` 是动作所属对象。`arguments` 只填该动作 `parameters` 列出的字段，遵守必填项、范围、步长和候选引用。例如工具动作自身 `targetId` 指工具，`arguments.targetId` 才是要作用的目标。`usage` 会直接说明这些对应关系、执行后检查和空列表处理。
-
-### 按需查询内置帮助
-
-Agent 通常直接读状态、执行当前动作并检查结果，不清楚时调用：
-
-```text
-get_help()                    简短入门和全部主题
-get_help(topic="actions")     动作参数、快照、UUID 和重试
-get_help(topic="items")       物品激活、工具使用、容器和移动
-get_help(topic="appraisal")   验货、图像线索、真假声明和估价
-get_help(topic="machines")    机器槽位、参数与生产流程
-```
-
-其他主题有 `trade`、`night`、`menus`、`capabilities`；以返回的 `topics` 为准。主题忽略大小写；未知主题返回 `unknown_help_topic` 和有效目录。帮助随 MCP 程序集内嵌，离开仓库、游戏未运行时仍可读取，不把 topic 当成本机路径或 URL。工具说明和初始化消息会提示此入口。帮助标明接入与验收边界；具体动作始终以实时列表为准。
-
-### 当前动作
-
-| 动作名 | 行为 |
-|---|---|
-| `open_shop` | 使用原生卷帘门按钮开店 |
-| `next_customer` | 呼叫下一位顾客 |
-| `dismiss_customer` | 送走当前顾客，不自动呼叫下一位 |
-| `close_shop` | 使用原生卷帘门按钮关店 |
-| `dialogue_choice:<index>` | 选择当前可见且可点击的对话选项；使用返回的实际 index |
-| `advance_dialogue` | 继续明确等待玩家输入的对话 |
-| `sleep` | 打开原生睡眠结算，之后按面板选择服务并确认 |
-| 动态动作 | 物品移动、整理／撤销、原生 UI、长按举报、升级卡片、夜间目的地等；名称、参数和引用以当前返回值为准 |
-
-仅执行 `availableActions` 中返回的完整动作名。开关店、升级、夜间返回等可能出现原生确认；操作后读取新状态并使用当前面板动作。业务操作使用原生阶段、Can/May、锁、所有权和容量规则；普通 UI 另检查遮挡与可交互性。
-
-**仍有未验收场景：** 共用入口不代表所有交易、议价、鉴定、生产和夜间地点已通过实机测试。具体已验证范围见[独立测试报告](docs/profession-tests.zh-CN.md)。库存只包含已呈现容器和已打开内容，不导出隐藏真假、NPC 隐藏身份、未来事件或真实物品价值。覆盖和限制见 [实现说明](docs/mcp-implementation.md)。
-
-### 可以直接发给 Agent 的指令
-
-先做只读检查：
-
-> 使用 probably-stolen-mcp 的 get_bridge_status 和 get_game_state 检查连接，告诉我是否载入存档、当前现金、顾客和可用动作。先不要执行动作。
-
-确认连接后，可做一次操作：
-
-> 读取最新状态。如果 availableActions 中有 next_customer，就生成一个新的 UUID，使用当前 snapshotId 调用 perform_action，只呼叫一次下一位顾客。随后读取状态说明结果。如果动作不可用或结果不确定，报告原因。
-
-### 动作与重试规则
-
-1. 读取状态，从 `availableActions` 选择动作；保存作出决定时的 `snapshotId`。
-2. 为这次决定生成一个标准 UUID（`xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`），传入 `requestId`；将快照 ID 传入 `expectedSnapshotId`。
-3. `success: true`、`actionStatus: dispatched` 表示游戏处理函数已执行。动画或对话可能尚未完成，应再读状态确认效果。
-4. `stale_snapshot` 表示局面已变化。根据返回的新状态重新判断，并为新决定使用新 UUID。
-5. 超时或断线后先用 `get_action_status` 查询原结果。如需重试原命令，使用**相同 requestId、相同 action、相同 expectedSnapshotId 和完整 arguments**，不能仅为重试换一个 UUID。
-6. 桥接运行期间保留近期 256 条已处理命令的结果；记录尚在缓存中时，相同请求直接返回原结果。游戏重启后不会保留该缓存，旧快照也会失效，应重新观察。
-
-## 手动 HTTP 调用
-
-这是调试接口，不需要启动 MCP 服务，但必须先启用 Mod 并运行游戏。所有路由都需要当前连接文件中的 Bearer 令牌。
-
-| 方法 | 路径 | 用途 |
-|---|---|---|
-| GET | `/health` | 检查桥接，不访问游戏主线程 |
-| GET | `/state` | 在游戏主线程读取状态 |
-| POST | `/actions` | 提交带快照 ID 和请求 UUID 的动作 |
-
-### 查询状态
-
-在 PowerShell 中定义下面的辅助函数。它每次调用都读取当前令牌，不会把令牌打印出来：
-
-```powershell
-$connectionPath = Join-Path $env:USERPROFILE 'AppData\LocalLow\Questing Goose Studio\Probably Stolen\ModData\probably-stolen-mcp\connection.json'
-
-function Invoke-PSMcp {
-    param(
-        [Parameter(Mandatory)]
-        [ValidateSet('health', 'state', 'actions')]
-        [string]$Path,
-        [string]$ActionJson
-    )
-    $connection = Get-Content -LiteralPath $connectionPath -Raw | ConvertFrom-Json
-    $requestArgs = @{
-        Uri = $connection.baseUrl + $Path
-        Headers = @{ Authorization = "Bearer $($connection.token)" }
-        TimeoutSec = 10
-    }
-    if ($PSBoundParameters.ContainsKey('ActionJson')) {
-        $requestArgs.Method = 'Post'
-        $requestArgs.ContentType = 'application/json; charset=utf-8'
-        $requestArgs.Body = [System.Text.Encoding]::UTF8.GetBytes($ActionJson)
-    } else {
-        $requestArgs.Method = 'Get'
-    }
-    Invoke-RestMethod @requestArgs
+{
+  "action": "<exact availableActions[].name>",
+  "expectedSnapshotId": "<snapshotId from the same observation>",
+  "requestId": "<new UUID>"
 }
-
-Invoke-PSMcp -Path health
-$stateReply = Invoke-PSMcp -Path state
-$stateReply | ConvertTo-Json -Depth 12
 ```
 
-连接文件路径不同的话，修改 `$connectionPath`。返回值中的 `success`、`errorCode`、`message` 表示实际结果。**即使 HTTP 状态码为 200，也需要检查 JSON 中的 success**；例如过期快照会作为业务错误返回。
+4. Observe again to verify the effect. `dispatched` means the handler ran; animation, confirmation, or production may still be in progress.
+5. On `stale_snapshot`, observe again and make a new decision with a new UUID. After a timeout or disconnect, query `get_action_status` and the current state first. A retry of the original command must preserve its UUID, action, snapshot, and complete arguments.
 
-### 执行一个动作
+Result history holds the latest 256 commands during the Mod session. A missing result does not prove an action never happened. After changing saves or restarting the game, obtain fresh observations and references. When no action is available, inspect the waiting state and limitations before proceeding.
 
-以下示例会改变游戏进度。在同一个 PowerShell 会话中执行，先查看可用动作，再输入你要执行的完整动作名：
+Use `get_help(topic="actions")` for calling rules. Other topics include `items`, `appraisal`, `machines`, `trade`, `night`, `menus`, and `capabilities`. Bundled help is currently primarily in Chinese; the [English user guide](docs/usage-guide.md#8-agent-calling-rules) covers operating rules.
 
-```powershell
-$stateReply = Invoke-PSMcp -Path state
-if (!$stateReply.success) { throw $stateReply.message }
-$stateReply.state.availableActions | Format-Table name, description
-$actionName = Read-Host '输入上表中要执行的完整动作名'
+### Extending the integration
 
-# 输入期间游戏可能变化，提交前再取一次快照。
-$stateReply = Invoke-PSMcp -Path state
-if (!$stateReply.success) { throw $stateReply.message }
-if ($actionName -notin @($stateReply.state.availableActions.name)) {
-    throw '这个动作当前不可用，请重新观察。'
-}
-$actionJson = [ordered]@{
-    action = $actionName
-    expectedSnapshotId = $stateReply.state.snapshotId
-    requestId = [guid]::NewGuid().ToString('D')
-} | ConvertTo-Json -Compress
+Use the current action list to drive interactions. For a new game interaction or MCP tool, see the [extension guide](docs/development.md#extend-the-agent-interface), [protocol models](src/PSMcp.Contracts), and [MCP tools](src/PSMcp.Server). The [implementation notes](docs/mcp-implementation.md) describe the existing adapters and their limits.
 
-$actionReply = Invoke-PSMcp -Path actions -ActionJson $actionJson
-$actionReply | ConvertTo-Json -Depth 12
-Invoke-PSMcp -Path state | ConvertTo-Json -Depth 12
-```
+## Help and data
 
-如果响应丢失，先通过 `GET /actions/<requestId>` 查询原结果。重试同一次命令时，复用上面的 `$actionJson`，不要重新生成 UUID。POST 请求必须是带 Content-Length 的 JSON，正文不超过 16 KiB；上述 PowerShell 调用会按此方式发送。
+If the Mod is missing, the bridge cannot connect, or an action fails, see [troubleshooting](docs/usage-guide.md#9-troubleshooting). Include the game Build, Mod/MCP version, tool name, error code, and reproduction steps when reporting a problem.
 
-桥接使用 `TcpListener`，不依赖 HTTP.sys。支持 `GET /health`、`GET /state`、`GET /view`、`GET /actions/<requestId>` 和 `POST /actions`。桥接只接受 `127.0.0.1` 对应的 Host，并拒绝携带 Origin 的请求。请使用 MCP 客户端或上述 PowerShell 示例，不要从网页脚本直接访问。
+The Mod connection stays on the local machine. Your AI client receives requested game state and images and may forward them to its model provider. Keep the control token in `connection.json` private and remove personal paths from shared logs.
 
-## 常见问题
-
-| 现象 | 检查或处理 |
-|---|---|
-| 找不到 `dotnet` | 安装 SDK 后重新打开终端；构建脚本也会尝试 `%ProgramFiles%\dotnet\dotnet.exe`。客户端可直接填写绝对路径。 |
-| 缺少游戏程序集 / GamePath 错误 | `-GamePath` 应指向包含 `Probably Stolen.exe` 和 `Probably Stolen_Data` 的目录。 |
-| Mods 菜单找不到 Probably Automated | 检查是否多套了一层目录，以及 `Mods/probably-stolen-mcp/manifest.xml` 是否存在。 |
-| `connection_file_unavailable` | 确认 Mod 已启用并重启游戏；查看日志中的真实连接文件路径，必要时配置 `--connection`。 |
-| `bridge_unavailable` | 游戏可能未启动、Mod 启动失败，或连接文件来自上一次运行。查看游戏日志。 |
-| HTTP 401 / `unauthorized` | 令牌已失效；重新读取当前连接文件。MCP 和上面的辅助函数会自动重读。 |
-| HTTP 403 / `forbidden_origin` | 使用连接文件中的 `127.0.0.1` 地址，不改成 `localhost`；不要附加 Origin。 |
-| `queue_timeout` / `bridge_timeout` | 让游戏保持响应并回到前台；失焦、暂停或加载期间可能不处理主线程请求。 |
-| `stale_snapshot` / `action_unavailable` | 重新读取状态与动作列表，根据新状态决定。 |
-| `request_id_conflict` | 一个 UUID 被用于不同参数；原命令的重试必须保持动作、快照和完整 arguments 一致，新决定使用新 UUID。 |
-| `action_outcome_unknown` | 动作可能已经发生，先查状态；不要用新 UUID 盲目重试。 |
-| `protocol_mismatch` | 同时更新 Mod 和 MCP，避免混用不同协议版本。 |
-| MCP 启动后终端一直等待 | stdio 服务在等待客户端请求；应由支持 MCP 的客户端连接。 |
-
-游戏日志通常位于：
-
-```text
-%USERPROFILE%\AppData\LocalLow\Questing Goose Studio\Probably Stolen\Player.log
-```
-
-若默认端口被占用，在游戏的 Mod 配置中修改 Probably Automated 的 `port`，重启后再连接。
-
-**Windows 应用控制拦截：** 若运行时出现 `0x800711C7` 或“应用程序控制策略已阻止此文件”，表示系统拒绝加载 DLL。编译成功仍可能遇到此问题。查看事件查看器中的 `Microsoft-Windows-CodeIntegrity/Operational`，核实被拦截文件和适用策略，并由设备策略管理方按本机开发软件流程处理；本文不提供关闭安全策略的步骤。`-SkipTests` 只能跳过测试完成打包，不能解决运行拦截。
-
-### 更新与停用
-
-更新时先关闭游戏，并停止客户端中的 MCP 服务（包括本地测试驱动），再构建以免发布文件被占用。覆盖 Mod 的三个文件后重启游戏和 MCP 服务。保持 Mod 与 MCP 来自同一次构建。
-
-移动项目目录后，重新构建以更新 `artifacts/mcp-config.json` 中的绝对路径，并同步修改客户端配置。
-
-在 Mods 菜单停用 Probably Automated 并重启游戏，即可停止游戏桥接；同时可从 AI 客户端移除服务配置。停用不会撤销已经发生的游戏操作。本版本不添加自定义物品或存档格式。
-
-## 开发与验证
-
-构建参数：
-
-| 参数 / 环境变量 | 用途 |
-|---|---|
-| `-GamePath <目录>` | 指定本机游戏目录 |
-| `PSMCP_GAME_PATH` | 设置后可省略 `-GamePath` |
-| `-NoRestore` | 使用当前目录中已还原的依赖；首次构建或迁移目录后应先还原 |
-| `-SkipTests` | 跳过测试、只构建和打包；不能据此声称运行验证通过 |
-
-构建缓存位于 `.cache/`，缓存、bin、obj 和 artifacts 均被 Git 忽略。仅测试协议和 MCP 时无需游戏文件：
-
-```powershell
-.\scripts\Test.ps1
-```
-
-GitHub [自动检查](.github/workflows/ci.yml) 在 Windows / .NET 10 上运行同一套无需游戏文件的测试；它不编译依赖游戏 DLL 的 Mod，也不替代实机验收。
-
-测试使用模拟游戏状态，运行生产 HTTP 桥接代码、真实 MCP 服务进程和官方 MCP 客户端，覆盖主线程调度、过期状态、重复动作、部分失败、排队超时、认证和 stdio 工具调用。它不能代替游戏内测试。
-
-完整测试包含内置帮助的 stdio 验证；也可单独运行 `.\scripts\Test.ps1 -HelpOnly`。该模式从临时工作目录启动 MCP，使用不存在的游戏连接文件，检查所有主题、工具声明和非法主题处理；不验证游戏 HTTP 桥接。`-HelpOnly` 与 `-Offline` 互斥。
-
-扩展帮助只需在 [docs/help](docs/help) 增加小写英文文件名的 Markdown，以 `# 标题` 开头，然后重新构建／发布 MCP。文件名即 topic，自动列入目录，无需新增工具或注册表。同步更新 [能力清单](docs/capabilities.md) 的支持和验证状态；帮助固定为构建时内容，更新后重启 MCP 生效。
-
-测试结果、版本与证据单独维护在 [能力清单](docs/capabilities.md)、[职业测试记录](docs/profession-tests.zh-CN.md)和[跨夜生产记录](docs/overnight-tests.zh-CN.md)。
-
-### 主线程与动作处理
-
-游戏访问全部在 Unity `Update` 中处理，网络线程不直接操作游戏对象。队列最多容纳 64 个请求，每帧最多处理 8 个；等待主线程的超时为 5 秒。排队超时且尚未开始的动作会被取消，不会在后续帧补执行。已开始执行却超时的操作报告结果不确定，不自动重试。
-
-### 实机验证顺序
-
-1. 按[官方指南](https://github.com/dragonpan2/probably-stolen-modding/blob/main/ModdingGuide.zh-CN.md)在游戏可执行文件旁创建空的 `dev.txt`，用 F8 打开开发控制台，执行 `mod-scan probably-stolen-mcp`。确认能力声明覆盖扫描结果且无拒绝项；当前清单声明 `network`。
-2. 启用 Mod 并重启，在主菜单检查 `get_bridge_status` 和未载入存档的状态。
-3. 载入测试存档，对比现金、租金、顾客、对话选项和背包。
-4. 执行一个当前允许的动作并检查效果；用相同 UUID 和参数重试，确认没有重复操作。
-5. 手动改变局面后提交旧快照，确认被拒绝；切换存档和返回主菜单后重复检查。
-
-### 项目结构
-
-| 路径 | 职责 |
-|---|---|
-| [src/PSMcp.Contracts](src/PSMcp.Contracts) | 协议模型、快照版本、请求去重和主线程队列 |
-| [src/PSMcp.Mod](src/PSMcp.Mod) | 官方 IMod 入口、游戏适配器和本机 HTTP 服务 |
-| [src/PSMcp.Server](src/PSMcp.Server) | 官方 C# MCP SDK、stdio 工具和桥接客户端 |
-| [tests/PSMcp.SmokeTests](tests/PSMcp.SmokeTests) | 行为测试和端到端协议测试 |
-| [scripts/Build.ps1](scripts/Build.ps1) | 构建、测试、打包并生成客户端配置 |
-| [scripts/Inspect-GameApi.ps1](scripts/Inspect-GameApi.ps1) | 只读查看本机游戏程序集元数据，不执行游戏代码 |
-
-## 参考
-
-- [官方 Mod 入门](https://github.com/dragonpan2/probably-stolen-modding/blob/main/README.zh-CN.md)
-- [官方 Mod 指南](https://github.com/dragonpan2/probably-stolen-modding/blob/main/ModdingGuide.zh-CN.md)
-- [官方 Mod API 变更](https://github.com/dragonpan2/probably-stolen-modding/blob/main/APIChanges.zh-CN.md)
-- [官方 C# MCP SDK](https://github.com/modelcontextprotocol/csharp-sdk)
-- [STS2MCP 架构参考](https://github.com/Gennadiyev/STS2MCP)
-
-项目原创代码与文档使用 [MIT License](LICENSE)。游戏名称、游戏内文字和实测截图属于各自权利人，不因本仓库 MIT 许可证获得额外授权；游戏程序、反编译代码和提取素材不随项目分发。依赖保留各自许可证。本项目是独立 Mod，不是游戏官方发行。分发边界见[官方模组行为准则](https://github.com/dragonpan2/probably-stolen-modding/blob/main/CodeOfConduct.zh-CN.md)。
+Original code and documentation use the [MIT License](LICENSE). Game content retains its owners' rights. This is an independent project. Mod development follows the [official modding guide](https://github.com/dragonpan2/probably-stolen-modding), with architecture inspiration from [STS2MCP](https://github.com/Gennadiyev/STS2MCP).

@@ -1,45 +1,27 @@
 # Probably Automated 使用指南
 
-[English](usage-guide.md) · [项目首页](../README.md) · [能力与实测记录](capabilities.md)
+[English](usage-guide.md) · [项目首页](../README.zh-CN.md) · [能力与实测记录](capabilities.md)
 
 适用版本：**0.2.7 开发版 / 桥接协议 2**，Windows x64。本项目让你自己的 AI 客户端操作《Probably Stolen》；模型、模型账号和推理由客户端提供。
 
 这是实验性 Mod。已有经营、展示柜、电话与升级、举报、拾荒、整理和垃圾桶的实机记录；记录来自迁移前构建。0.2.6 更名包已通过 9 个可开局职业与对应物品操作，见[职业实测报告](profession-tests.zh-CN.md)。0.2.7 补充[跨夜生产验证](overnight-tests.zh-CN.md)。完整经营日、完整鉴定和全部夜间地点仍未在更名包全面验收。具体以[能力清单](capabilities.md)为准。
 
-## 1. 准备环境
+## 1. 使用前准备
 
 需要：
 
 - 已安装的 Steam 版《Probably Stolen》，并能正常启动。
 - Windows x64 与 PowerShell。
-- [.NET 10 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)（选择 Windows x64 SDK；包含运行时）。
-- Git，或下载并解压本仓库源码。
+- [.NET 10 Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)（Windows x64；已安装 SDK 时也具备运行环境）。
 - 能启动**本地 stdio MCP** 的 AI 客户端，模型已配置好。看游戏图片还需要支持图片工具结果的客户端和视觉模型。
 
-不需要 Python、uv、Unity Editor 或完整 Visual Studio。仅支持云端远程 MCP 的客户端不能直接连接本项目。
+客户端需要能启动本地进程，并访问游戏的连接文件。
 
 本项目使用游戏自带的 Mod 加载器。当前编译／实测基线为 Steam Build **26496118**、画面版本 **VERSION 100-Rev12**；其他游戏版本尚未保证兼容。
 
-## 2. 获取源码并构建
+## 2. 获取安装文件
 
-在你希望存放项目的目录打开 PowerShell：
-
-~~~powershell
-git clone https://github.com/detyse/probably-stolen-mcp.git
-Set-Location '.\probably-stolen-mcp'
-dotnet --version
-~~~
-
-仓库仍为私有时，克隆需要访问权限；源码下载方式不需要 Git。以下命令均在仓库根目录执行。
-
-在 Steam 的游戏管理菜单中选择“浏览本地文件”，找到包含 `Probably Stolen.exe` 的目录。将 `<游戏安装目录>` 替换为该目录：
-
-~~~powershell
-$gamePath = '<游戏安装目录>'
-.\scripts\Build.ps1 -GamePath $gamePath
-~~~
-
-首次构建需要从 NuGet 下载依赖。默认命令会编译、测试并打包；看到成功结果后应有：
+仓库目前仅提供源码，尚无预编译 Release。请按[开发指南](development.zh-CN.md#从源码构建)生成安装文件，然后回到这里继续。已有构建产物时直接使用其中的 `artifacts` 目录。
 
 | 生成位置 | 用途 |
 | --- | --- |
@@ -47,15 +29,16 @@ $gamePath = '<游戏安装目录>'
 | `artifacts/mcp/` | 由 AI 客户端启动的 MCP 程序及依赖；保留整个目录 |
 | `artifacts/mcp-config.json` | 根据本机路径生成的客户端配置 |
 
-游戏 DLL 只在本机用于编译，不要复制进仓库或分发包。无游戏文件时可以运行协议测试，但不能构建完整 Mod。
+移动文件位置或换一台电脑后，需要更新 `mcp-config.json` 中的绝对路径。
 
 ## 3. 安装 Mod
 
 先退出游戏。如果使用过旧 PawnPilot，先在游戏内停用它，再退出，将旧 `Mods/PawnPilot` 文件夹移出 `Mods`，避免两个桥接争用端口。
 
-在刚才的 PowerShell 中执行：
+在 Steam 中选择“浏览本地文件”，找到包含 `Probably Stolen.exe` 的目录。将下方 `<游戏安装目录>` 替换为实际路径，在仓库根目录打开 PowerShell 并执行：
 
 ~~~powershell
+$gamePath = '<游戏安装目录>'
 if (!(Test-Path -LiteralPath (Join-Path $gamePath 'Probably Stolen.exe'))) {
     throw '请先将 $gamePath 设置为正确的游戏目录。'
 }
@@ -199,7 +182,7 @@ Mod 启动成功后，通常会生成：
 
 | 现象 | 处理 |
 | --- | --- |
-| 找不到 `dotnet` 或没有 SDK | 安装 .NET 10 x64 SDK，重新打开终端；仅 Runtime 不能编译 |
+| 找不到 `dotnet` 或缺少运行时 | 安装 .NET 10 x64 Runtime 并重启客户端；源码构建所需的 SDK 见[开发指南](development.zh-CN.md#环境要求) |
 | 提示缺少 `Assembly-CSharp.dll` | `-GamePath` 应指向游戏 exe 所在目录，不能指向仓库或 Managed 子目录 |
 | Mods 菜单找不到 Mod | 检查文件夹是否多套一层、三个文件是否齐全；查看游戏 Mod 日志 |
 | `connection_file_unavailable` | 启用 Mod 并重启游戏，核对连接文件位置；必要时设置 `--connection` |
@@ -212,7 +195,7 @@ Mod 启动成功后，通常会生成：
 | 游戏查询或截图超时 | 让游戏恢复响应并保持画面渲染；处理动画／窗口后再观察 |
 | 手动启动 MCP 后没输出 | stdio 服务在等待客户端请求；用 `--help` 检查启动命令 |
 
-更多调试接口见 [README](../README.md#手动-http-调用)。反馈问题时附游戏 Build、Mod／MCP 版本、复现步骤、工具名和错误码；去掉令牌、个人路径以及不相关的存档信息。
+更多调试接口见 [开发指南](development.zh-CN.md#手动-http-调用)。反馈问题时附游戏 Build、Mod／MCP 版本、复现步骤、工具名和错误码；去掉令牌、个人路径以及不相关的存档信息。
 
 ## 10. 更新、卸载与数据说明
 

@@ -1,6 +1,6 @@
 # Probably Automated user guide
 
-[简体中文](usage-guide.zh-CN.md) · [Project home](../README.en.md) · [Capabilities and evidence (Chinese)](capabilities.md)
+[简体中文](usage-guide.zh-CN.md) · [Project home](../README.md) · [Capabilities and evidence (Chinese)](capabilities.md)
 
 For **0.2.7 development builds / bridge protocol 2**, on Windows x64. This project lets your own AI client operate *Probably Stolen*. Your client supplies the model, account, and inference.
 
@@ -12,34 +12,16 @@ You need:
 
 - An installed Steam copy of *Probably Stolen* that starts normally.
 - Windows x64 and PowerShell.
-- The [.NET 10 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/10.0), Windows x64. The SDK includes the runtime.
-- Git, or a downloaded and extracted copy of this repository.
+- The [.NET 10 Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/10.0), Windows x64. An installed SDK also includes the runtime.
 - An AI client configured with a model and able to start a **local stdio MCP server**. To inspect game images, both the client and model must support image tool results.
 
-Python, uv, Unity Editor, and a full Visual Studio installation are not required. A client that only connects to remote, cloud-hosted MCP servers cannot connect directly to this server.
+The client needs to start local processes and access the game's connection file.
 
 The project uses the game's built-in Mod loader. The current compilation and gameplay baseline is Steam Build **26496118**, displaying **VERSION 100-Rev12**. Compatibility with other game versions is unverified.
 
-## 2. Get the source and build
+## 2. Get installation files
 
-Open PowerShell in the directory where you want to keep the project:
-
-~~~powershell
-git clone https://github.com/detyse/probably-stolen-mcp.git
-Set-Location '.\probably-stolen-mcp'
-dotnet --version
-~~~
-
-Cloning requires access while the repository is private. Downloading the source does not require Git. Run the remaining commands from the repository root.
-
-Use Steam's **Browse local files** option to find the directory containing `Probably Stolen.exe`. Replace `<game-install-dir>` below with that directory:
-
-~~~powershell
-$gamePath = '<game-install-dir>'
-.\scripts\Build.ps1 -GamePath $gamePath
-~~~
-
-The first build downloads dependencies from NuGet. The default command compiles, tests, and packages the project. A successful build produces:
+The repository currently distributes source only, with no prebuilt Release. Follow the [development guide](development.md#build-from-source) to generate the installation files, then return here. If you already have a build, use its `artifacts` directory.
 
 | Location | Purpose |
 | --- | --- |
@@ -47,15 +29,16 @@ The first build downloads dependencies from NuGet. The default command compiles,
 | `artifacts/mcp/` | MCP program and runtime dependencies; keep the entire directory |
 | `artifacts/mcp-config.json` | Client configuration generated for your local paths |
 
-Game DLLs are local compilation references. Do not copy them into the repository or distribution packages. Protocol tests can run without game files, but a full Mod build requires them.
+Update the absolute paths in `mcp-config.json` if you move the files to another location or machine.
 
 ## 3. Install the Mod
 
 Exit the game first. If upgrading from PawnPilot, disable the old Mod in the game, exit, and move its `Mods/PawnPilot` folder outside `Mods` so two bridges do not compete for the same port.
 
-In the same PowerShell session, run:
+Use Steam's **Browse local files** option to find the directory containing `Probably Stolen.exe`. Replace `<game-install-dir>` below with that path, then run from the repository root:
 
 ~~~powershell
+$gamePath = '<game-install-dir>'
 if (!(Test-Path -LiteralPath (Join-Path $gamePath 'Probably Stolen.exe'))) {
     throw 'Set $gamePath to the correct game installation directory first.'
 }
@@ -199,7 +182,7 @@ Call `get_help(topic="actions")` for details. Other topics include `items`, `app
 
 | Symptom | What to check |
 | --- | --- |
-| `dotnet` or SDK missing | Install the .NET 10 x64 SDK and reopen the terminal; the runtime alone cannot compile |
+| `dotnet` or runtime missing | Install the .NET 10 x64 Runtime and restart the client; source-build SDK requirements are in the [development guide](development.md#build-from-source) |
 | Missing `Assembly-CSharp.dll` | `-GamePath` must point to the game exe's directory, not the repository or Managed subdirectory |
 | Mod missing from the menu | Check for an extra nested folder, all three files, and errors in the Mod log |
 | `connection_file_unavailable` | Enable the Mod, restart the game, and verify the connection-file path; set `--connection` if needed |
@@ -212,7 +195,7 @@ Call `get_help(topic="actions")` for details. Other topics include `items`, `app
 | Game query or screenshot times out | Restore a responsive, rendering game window, allow transitions to finish, and observe again |
 | Manually launched MCP appears idle | A stdio server waits for client requests; use `--help` to check the launch command |
 
-The [Chinese README](../README.md#手动-http-调用) documents advanced HTTP debugging. When reporting a bug, include the game Build, Mod/MCP versions, reproduction steps, tool name, and error code. Remove tokens, personal paths, and unrelated save information.
+The [development guide](development.md#debug-the-connection) documents advanced HTTP debugging. When reporting a bug, include the game Build, Mod/MCP versions, reproduction steps, tool name, and error code. Remove tokens, personal paths, and unrelated save information.
 
 ## 10. Updating, removal, and data handling
 
