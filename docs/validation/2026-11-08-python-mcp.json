@@ -1,0 +1,31 @@
+{
+  "date": "2026-11-08",
+  "scope": "Default Python MCP server replacing the external C# server; C# game Mod and protocol 2 retained",
+  "baseline": "748eaeaa16ff6277a39be39d66f7053ac86e7a53",
+  "environment": {
+    "os": "Windows x64",
+    "python": "3.11.5",
+    "uv": "0.10.11",
+    "mcpPythonSdk": "2.3.0",
+    "dotnetSdkForTests": "10.0.403"
+  },
+  "checks": {
+    "pythonTests": {"passed": 27, "command": "python -m pytest", "source": "tests/python"},
+    "crossLanguageIntegration": {
+      "passed": 152,
+      "source": "tests/PSMcp.SmokeTests",
+      "path": "Official C# MCP client -> actual Python stdio server -> production C# HTTP bridge -> fake game adapter",
+      "coverage": ["11 tools", "structured JSON", "Unicode", "screenshots", "inventory pagination", "native statusText", "stale snapshots", "UUID deduplication", "argument rejection", "retained action results", "offline help", "authentication", "HTTP framing"]
+    },
+    "standaloneWheel": {
+      "passed": true,
+      "test": "Wheel installed into a separate Python environment, launched from a temporary directory without a game connection; all nine help topics readable"
+    },
+    "developerClientBuild": {"passed": true, "warnings": 0, "errors": 0}
+  },
+  "limitations": [
+    "No game installed on this machine; no real-game run of the Python server was performed",
+    "Game-dependent Mod compilation and the complete Build.ps1 workflow were not run",
+    "Historical gameplay records still describe their original versions"
+  ]
+}

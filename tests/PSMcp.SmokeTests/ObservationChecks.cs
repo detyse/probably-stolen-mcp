@@ -1,6 +1,5 @@
 using Newtonsoft.Json;
 using PSMcp.Contracts;
-using PSMcp.Server;
 using PSMcp.Mod;
 
 internal static class ObservationChecks
@@ -89,14 +88,14 @@ internal static class ObservationChecks
         check(beforeModal.SnapshotId != session.Observe().SnapshotId, "opening a confirmation invalidates the snapshot");
 
         var json = JsonConvert.SerializeObject(BridgeResponse.Ok(session.Observe()), HttpBridge.JsonSettings);
-        var roundTrip = System.Text.Json.JsonSerializer.Deserialize<BridgeResponse>(json, BridgeClient.JsonOptions)!;
-        var mcpJson = System.Text.Json.JsonSerializer.SerializeToElement(roundTrip, BridgeClient.JsonOptions);
+        var roundTrip = System.Text.Json.JsonSerializer.Deserialize<BridgeResponse>(json, TestBridgeClient.JsonOptions)!;
+        var mcpJson = System.Text.Json.JsonSerializer.SerializeToElement(roundTrip, TestBridgeClient.JsonOptions);
         var stateJson = mcpJson.GetProperty("state");
         check(stateJson.GetProperty("trade").GetProperty("quotes")[0].GetProperty("amount").GetInt64() == 5_000_000_001L
             && stateJson.GetProperty("trade").GetProperty("items")[0].GetProperty("features")[0].GetProperty("knowledge").GetString() == "revealed"
             && stateJson.GetProperty("interaction").GetProperty("kind").GetString() == "confirmation",
             "trade, long quote amounts and wait states survive the Mod-to-MCP JSON round trip");
-        var oldState = System.Text.Json.JsonSerializer.Deserialize<GameSnapshot>("{\"gameLoaded\":true}", BridgeClient.JsonOptions)!;
+        var oldState = System.Text.Json.JsonSerializer.Deserialize<GameSnapshot>("{\"gameLoaded\":true}", TestBridgeClient.JsonOptions)!;
         check(oldState.Trade == null && oldState.Interaction.Kind == "unknown", "older Mod payloads report unavailable observations rather than fabricated readiness");
         fake.GameLoaded = false;
         check(session.Observe().Trade == null, "returning to the main menu clears customer trade information");

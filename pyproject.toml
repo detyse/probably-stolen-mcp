@@ -1,0 +1,44 @@
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "probably-stolen-mcp"
+dynamic = ["version"]
+description = "Python MCP bridge for Probably Stolen"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+dependencies = ["mcp>=2.0,<3", "httpx>=0.28.1,<1"]
+
+[project.scripts]
+probably-stolen-mcp = "psmcp.server:main"
+
+[dependency-groups]
+dev = ["pytest>=8,<10", "pytest-asyncio>=1,<2", "ruff>=0.12,<1"]
+
+[tool.hatch.version]
+path = "mcp/psmcp/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["mcp/psmcp"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"docs/help" = "psmcp/help"
+"docs/capabilities.md" = "psmcp/help/capabilities.md"
+
+[tool.hatch.build.targets.sdist]
+include = ["mcp", "docs/help", "docs/capabilities.md", "README.md", "LICENSE", "pyproject.toml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests/python"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+markers = ["integration: subprocess or network integration checks"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]

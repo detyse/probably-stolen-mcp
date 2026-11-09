@@ -8,13 +8,13 @@
 
 | 用途 | 要求 |
 |---|---|
-| 构建项目 | Windows x64、.NET 10 SDK、PowerShell；首次还原依赖需要访问 NuGet |
+| 构建 Mod 与运行集成测试 | Windows x64、.NET 10 SDK、PowerShell、uv；首次需要下载 NuGet 和 Python 依赖 |
 | 加载 Mod | 已安装 Steam 正式版游戏，使用游戏自带的 Mod 加载器和 Unity/Mono 环境 |
-| 运行已构建的 MCP | .NET 10 Runtime；安装 SDK 后已具备运行环境 |
+| 运行 Python MCP | [uv](https://docs.astral.sh/uv/getting-started/installation/) 管理 Python 3.11+ 和依赖；无需 .NET Runtime |
 | 使用 Agent | 支持启动本地 stdio MCP 服务的 AI 客户端，并在客户端配置好模型 |
 | 获取源码 | Git，或下载仓库源码 |
 
-Python、uv、Unity Editor 和完整 Visual Studio 均非必需。Mod 与 MCP 服务都是 C#，但目标框架不同：SDK 10 编译 `netstandard2.1` Mod，外部 MCP 服务运行在 .NET 10 上。
+SDK 10 用于编译 `netstandard2.1` C# Mod 和开发测试，游戏内使用自带的 Unity/Mono。默认外部 MCP 服务为 Python，原 C# MCP 服务已移除。
 
 游戏 DLL 仅供本机编译引用，不随项目分发。支持范围、游戏版本和验证结果见[能力清单](capabilities.md)与[跨夜生产测试](overnight-tests.zh-CN.md)。
 
@@ -44,9 +44,8 @@ artifacts/
     manifest.xml
     PSMcp.Mod.dll
     PSMcp.Contracts.dll
-  mcp/
-    PSMcp.Server.dll
-    ... MCP 的运行依赖
+  python/
+    probably_stolen_mcp-0.2.7-py3-none-any.whl
   mcp-config.json
 ```
 
@@ -54,13 +53,29 @@ artifacts/
 
 生成文件后，继续按[安装步骤](../README.zh-CN.md#1-安装-mod)安装 Mod 并连接客户端。`mcp-config.json` 包含构建机器上的绝对路径，移动文件位置或换机器后需要更新。
 
+## Python 环境与打包
+
+在仓库根目录安装锁定依赖并检查入口，下面的 Python 测试无需 .NET 或游戏文件。
+
+```powershell
+uv sync --locked
+uv run --locked probably-stolen-mcp --help
+uv run --locked pytest
+```
+
+使用官方 MCP Python SDK v2（`MCPServer`，对应 STS2MCP 所用 `FastMCP` 的新入口）和 httpx，版本由 `uv.lock` 锁定。首次运行可由 uv 下载 Python 和依赖。
+
+默认客户端命令为 `uv --directory <仓库目录> run --locked --no-dev probably-stolen-mcp`。升级时用生成配置替换旧 dotnet 服务条目，沿用原 Mod 的 `connection.json`、`--connection` 和 `PSMCP_CONNECTION_FILE`，Mod ID 与桥接协议 2 保持兼容。
+
+独立安装时运行 `uv build --wheel`，将生成的 wheel 安装到 Python 3.11+ 环境（可用 pip）。客户端 command 指向该环境的 Python 绝对路径，args 为 `["-m", "psmcp"]`。wheel 内含全部帮助主题，离开源码目录也能使用；仍需 Python 解释器及依赖。具体命令见[英文打包步骤](development.md#python-setup-and-packaging)。
+
 ## 工作方式
 
 ```text
 Agent / AI 客户端
        │ MCP / stdio：客户端启动并管理服务进程
        ▼
-PSMcp.Server（.NET 10）
+Python MCP（Python 3.11+）
        │ HTTP：127.0.0.1:15527，Bearer 令牌
        ▼
 PSMcp.Mod（.NET Standard 2.1）
@@ -78,8 +93,8 @@ HTTP 服务仅监听本机，无需部署公网服务器。**AI 客户端应配�
 使用已有接口开发 Agent 时，先看[动作循环](../README.zh-CN.md#动作循环)与[调用规则](usage-guide.zh-CN.md#8-agent-的调用规则)。扩展项目时可从以下位置入手。
 
 - 在 [PSMcp.Mod](../src/PSMcp.Mod) 增加原生交互适配，让动作发现与执行遵守同一套游戏规则和参数约束。
-- 在 [PSMcp.Contracts](../src/PSMcp.Contracts) 定义共享数据，通过 [PSMcp.Server](../src/PSMcp.Server) 暴露 MCP 工具。已有适配与限制见[实现说明](mcp-implementation.md)。
-- 在 [docs/help](help) 增加帮助主题，重新构建并重启 MCP 后生效。文档文件名即主题名，使用小写英文，以 `# 标题` 开头。
+- 在 [PSMcp.Contracts](../src/PSMcp.Contracts) 定义共享数据，通过 [Python MCP](../mcp/psmcp) 暴露 MCP 工具。已有适配与限制见[实现说明](mcp-implementation.md)。
+- 在 [docs/help](help) 增加帮助主题，源码运行直接读取文档，wheel 部署需重新打包并重启 MCP。文档文件名即主题名，使用小写英文，以 `# 标题` 开头。
 - 修改工具、控件或限制时同步更新[能力清单](capabilities.md)，分别记录已接入与实机验证状态。
 
 项目与程序集使用 `PSMcp.*`，Mod ID 和 MCP 配置键为 `probably-stolen-mcp`，环境变量使用 `PSMCP_*`，游戏内显示名为 **Probably Automated**。
@@ -89,7 +104,7 @@ HTTP 服务仅监听本机，无需部署公网服务器。**AI 客户端应配�
 在仓库根目录检查服务入口。
 
 ```powershell
-dotnet '.\artifacts\mcp\PSMcp.Server.dll' --help
+uv run --locked --no-dev probably-stolen-mcp --help
 ```
 
 不加 `--help` 会启动 stdio 服务并等待客户端请求。日志写入 stderr，stdout 用于 MCP 协议。
@@ -184,7 +199,7 @@ Invoke-PSMcp -Path state | ConvertTo-Json -Depth 12
 
 | 现象 | 检查或处理 |
 | --- | --- |
-| 找不到 `dotnet` | 安装 .NET 10 SDK 后重新打开终端；构建脚本也会尝试 `%ProgramFiles%\dotnet\dotnet.exe`。客户端可使用生成配置中的绝对路径。 |
+| 找不到 `dotnet` | 安装 .NET 10 SDK 后重新打开终端；构建脚本也会尝试 `%ProgramFiles%\dotnet\dotnet.exe`。此项仅涉及 Mod 构建与开发测试。 |
 | 缺少游戏程序集 / GamePath 错误 | `-GamePath` 应指向包含 `Probably Stolen.exe` 和 `Probably Stolen_Data` 的目录。 |
 | 发布文件被占用 | 先关闭游戏，停止客户端中的 MCP 服务及本地测试驱动，再重新构建。 |
 
@@ -217,13 +232,13 @@ Invoke-PSMcp -Path state | ConvertTo-Json -Depth 12
 .\scripts\Test.ps1
 ```
 
-GitHub [自动检查](../.github/workflows/ci.yml) 在 Windows / .NET 10 上运行同一套无需游戏文件的测试；它不编译依赖游戏 DLL 的 Mod，也不替代实机验收。
+GitHub [自动检查](../.github/workflows/ci.yml) 在 Windows / .NET 10 SDK / uv 上运行 Python 测试、wheel 安装检查，以及 C# 桥接到 Python MCP 的集成测试；它不编译依赖游戏 DLL 的 Mod，也不替代实机验收。
 
-测试使用模拟游戏状态，运行生产 HTTP 桥接代码、真实 MCP 服务进程和官方 MCP 客户端，覆盖主线程调度、过期状态、重复动作、部分失败、排队超时、认证和 stdio 工具调用。它不能代替游戏内测试。
+测试使用模拟游戏状态，运行生产 HTTP 桥接代码、真实 Python MCP 服务进程和官方 C# MCP 客户端，覆盖主线程调度、过期状态、重复动作、部分失败、排队超时、认证和 stdio 工具调用。它不能代替游戏内测试。
 
 完整测试包含内置帮助的 stdio 验证；也可单独运行 `.\scripts\Test.ps1 -HelpOnly`。该模式从临时工作目录启动 MCP，使用不存在的游戏连接文件，检查所有主题、工具声明和非法主题处理；不验证游戏 HTTP 桥接。`-HelpOnly` 与 `-Offline` 互斥。
 
-扩展帮助只需在 [docs/help](help) 增加小写英文文件名的 Markdown，以 `# 标题` 开头，然后重新构建／发布 MCP。文件名即 topic，自动列入目录，无需新增工具或注册表。同步更新 [能力清单](capabilities.md) 的支持和验证状态；帮助固定为构建时内容，更新后重启 MCP 生效。
+扩展帮助只需在 [docs/help](help) 增加小写英文文件名的 Markdown，以 `# 标题` 开头，然后重新构建／发布 MCP。文件名即 topic，自动列入目录，无需新增工具或注册表。同步更新 [能力清单](capabilities.md) 的支持和验证状态；源码运行从文档读取帮助，wheel 使用打包时内容，更新安装包后重启 MCP。
 
 测试结果、版本与证据单独维护在 [能力清单](capabilities.md)、[职业测试记录](profession-tests.zh-CN.md)和[跨夜生产记录](overnight-tests.zh-CN.md)。
 
@@ -245,7 +260,7 @@ GitHub [自动检查](../.github/workflows/ci.yml) 在 Windows / .NET 10 上运�
 |---|---|
 | [src/PSMcp.Contracts](../src/PSMcp.Contracts) | 协议模型、快照版本、请求去重和主线程队列 |
 | [src/PSMcp.Mod](../src/PSMcp.Mod) | 官方 IMod 入口、游戏适配器和本机 HTTP 服务 |
-| [src/PSMcp.Server](../src/PSMcp.Server) | 官方 C# MCP SDK、stdio 工具和桥接客户端 |
+| [mcp/psmcp](../mcp/psmcp) | 官方 Python MCP SDK、stdio 工具和桥接客户端 |
 | [tests/PSMcp.SmokeTests](../tests/PSMcp.SmokeTests) | 行为测试和端到端协议测试 |
 | [scripts/Build.ps1](../scripts/Build.ps1) | 构建、测试、打包并生成客户端配置 |
 | [scripts/Inspect-GameApi.ps1](../scripts/Inspect-GameApi.ps1) | 只读查看本机游戏程序集元数据，不执行游戏代码 |
@@ -255,7 +270,7 @@ GitHub [自动检查](../.github/workflows/ci.yml) 在 Windows / .NET 10 上运�
 - [官方 Mod 入门](https://github.com/dragonpan2/probably-stolen-modding/blob/main/README.zh-CN.md)
 - [官方 Mod 指南](https://github.com/dragonpan2/probably-stolen-modding/blob/main/ModdingGuide.zh-CN.md)
 - [官方 Mod API 变更](https://github.com/dragonpan2/probably-stolen-modding/blob/main/APIChanges.zh-CN.md)
-- [官方 C# MCP SDK](https://github.com/modelcontextprotocol/csharp-sdk)
+- [官方 Python MCP SDK](https://github.com/modelcontextprotocol/python-sdk)
 - [STS2MCP 架构参考](https://github.com/Gennadiyev/STS2MCP)
 
 项目原创代码与文档使用 [MIT License](../LICENSE)。游戏名称、游戏内文字和实测截图属于各自权利人，不因本仓库 MIT 许可证获得额外授权；游戏程序、反编译代码和提取素材不随项目分发。依赖保留各自许可证。本项目是独立 Mod，不是游戏官方发行。分发边界见[官方模组行为准则](https://github.com/dragonpan2/probably-stolen-modding/blob/main/CodeOfConduct.zh-CN.md)。
