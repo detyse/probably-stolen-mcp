@@ -21,9 +21,9 @@
 
 ## 2. 获取安装文件
 
-从 [Releases](https://github.com/detyse/probably-stolen-mcp/releases/tag/v0.2.7) 下载 `probably-stolen-mcp-0.2.7-windows-x64.zip` 并解压到固定目录。包内有已编译 Mod、Python MCP 源码、依赖锁文件、wheel 和文档，使用时无需 .NET SDK。首次启动 MCP 需要联网准备 Python 和依赖。GitHub 另列的 **Source code** 压缩包仍需按[开发指南](development.zh-CN.md#从源码构建)编译。
+从 [Releases](https://github.com/detyse/probably-stolen-mcp/releases/tag/v0.2.7) 下载 `probably-stolen-mcp-0.2.7-mod.zip`。ZIP 仅含 `Mods/probably-stolen-mcp/` 目录及三个已编译 Mod 文件，直接解压到游戏安装目录即可，无需 .NET SDK。
 
-在解压目录根部用 PowerShell 运行 `./scripts/Configure-Mcp.ps1`，生成使用本机路径的 `artifacts/mcp-config.json`；脚本要求 uv 已加入 PATH。发布附件还提供 `SHA256SUMS.txt`，解压前可用 `Get-FileHash -Algorithm SHA256 ./probably-stolen-mcp-0.2.7-windows-x64.zip` 核对 ZIP 的哈希。
+Python MCP 服务另行克隆或下载本仓库到固定目录。将 uv 加入 PATH 后，在仓库根目录运行 `./scripts/Configure-Mcp.ps1` 生成 `artifacts/mcp-config.json`；首次启动 MCP 时会联网准备 Python 和依赖。使用预编译 Mod 可跳过 .NET 构建步骤。如需自行编译 Mod，请参考[开发指南](development.zh-CN.md#从源码构建)；源码构建会生成以下文件：
 
 | 生成位置 | 用途 |
 | --- | --- |
@@ -37,7 +37,7 @@
 
 先退出游戏。如果使用过旧 PawnPilot，先在游戏内停用它，再退出，将旧 `Mods/PawnPilot` 文件夹移出 `Mods`，避免两个桥接争用端口。
 
-在 Steam 中选择“浏览本地文件”，找到包含 `Probably Stolen.exe` 的目录。将下方 `<游戏安装目录>` 替换为实际路径，在仓库根目录打开 PowerShell 并执行：
+在 Steam 中选择“浏览本地文件”，找到包含 `Probably Stolen.exe` 的目录，将 Release ZIP 解压到这里即可。如果使用源码构建产物，则将下方 `<游戏安装目录>` 替换为实际路径，在仓库根目录打开 PowerShell 并执行：
 
 ~~~powershell
 $gamePath = '<游戏安装目录>'
@@ -63,7 +63,7 @@ Probably Stolen/
       PSMcp.Contracts.dll
 ~~~
 
-启动游戏，在 Mods 菜单启用 **Probably Automated**，按游戏提示处理声明的 `network` 能力并重启。保留解压后的发布目录或源码目录供 Python MCP 服务使用。
+启动游戏，在 Mods 菜单启用 **Probably Automated**，按游戏提示处理声明的 `network` 能力并重启。另行保留源码目录供 Python MCP 服务使用。
 
 Mod 启动成功后，通常会生成：
 

@@ -10,19 +10,19 @@
 
 需要 Windows x64、已安装的 Steam 版游戏、[uv](https://docs.astral.sh/uv/getting-started/installation/)，以及能启动本地 **stdio MCP** 服务的 AI 客户端。查看游戏截图还需要客户端和模型支持图片工具结果。
 
-从 [Releases](https://github.com/detyse/probably-stolen-mcp/releases/tag/v0.2.7) 下载 `probably-stolen-mcp-0.2.7-windows-x64.zip`，解压到固定目录。实验版安装包包含已编译的 Mod、Python MCP 源码和锁定依赖，使用时无需 .NET SDK；首次启动 MCP 需要联网准备 Python 和依赖。GitHub 另列的 **Source code** 压缩包仍需按[构建指南](docs/development.zh-CN.md#从源码构建)编译。
+从 [Releases](https://github.com/detyse/probably-stolen-mcp/releases/tag/v0.2.7) 下载 `probably-stolen-mcp-0.2.7-mod.zip`。包内只有放进游戏的三个 Mod 文件，安装无需 .NET SDK。
 
 ### 1. 安装 Mod
 
 1. 退出游戏，在 Steam 中选择“浏览本地文件”，打开游戏安装目录。
-2. 将 `artifacts/mod/probably-stolen-mcp` 文件夹复制到游戏的 `Mods` 目录。最终的 `Mods/probably-stolen-mcp` 中应有 `manifest.xml`、`PSMcp.Mod.dll` 和 `PSMcp.Contracts.dll`。
+2. 将 ZIP 解压到游戏安装目录。包内已有 `Mods/probably-stolen-mcp/`，其中包含 `manifest.xml`、`PSMcp.Mod.dll` 和 `PSMcp.Contracts.dll`。
 3. 启动游戏，在 Mods 菜单启用 **Probably Automated**，按提示重启。
 
-保留解压后的发布目录或源码目录供 Python MCP 服务使用，首次启动时 uv 会准备 Python 环境。从 PawnPilot 升级的步骤见[安装指南](docs/usage-guide.zh-CN.md#3-安装-mod)。
+从 PawnPilot 升级的步骤见[安装指南](docs/usage-guide.zh-CN.md#3-安装-mod)。
 
 ### 2. 连接 AI 客户端
 
-在解压目录根部打开 PowerShell，运行 `./scripts/Configure-Mcp.ps1`，按本机路径生成 `artifacts/mcp-config.json`。将其中的 `probably-stolen-mcp` 条目合并到客户端的 MCP 配置；移动目录后重新运行此脚本。源码构建也会自动生成这个文件。
+另行克隆或下载本仓库，放到固定目录供 Python MCP 服务使用。在仓库根目录打开 PowerShell，运行 `./scripts/Configure-Mcp.ps1`，按本机路径生成 `artifacts/mcp-config.json`，将其中的服务条目合并到客户端配置。移动目录后重新运行此脚本；首次启动时 uv 会联网准备 Python 和依赖。使用预编译 Mod 时可跳过 .NET 构建步骤。
 
 使用 `mcpServers` 格式的客户端可参考以下结构，将占位符替换为生成文件中的实际路径。
 

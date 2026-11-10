@@ -2,7 +2,7 @@
 
 更新：**2026-11-11（亚洲／上海）**。对应仓库 **0.2.7 实验版、桥接协议 2**；新增跨夜实测基线为 Steam App 4348910、Build 26496118、`VERSION 100-Rev12`。此前 Build 26337366 / REV6 的证据保留为历史范围。
 
-0.2.7 Release 增加预编译 Mod、Python MCP 源码与锁定依赖的安装包，通过 `scripts/Configure-Mcp.ps1` 生成本机客户端配置。发布包使用 Build **26525552** 的游戏程序集编译（0 警告、0 错误）；本次未运行真实游戏，不增加玩法实测或新版兼容性声明。Python 服务的协议检查与历史实机证据仍分开记录。
+0.2.7 Release 仅分发预编译 Mod 本体，ZIP 内为 `Mods/probably-stolen-mcp/` 及清单、两个项目 DLL，可直接解压到游戏目录。Python MCP 从仓库单独运行，通过 `scripts/Configure-Mcp.ps1` 生成本机客户端配置。发布包使用 Build **26525552** 的游戏程序集编译（0 警告、0 错误）；本次打包未运行真实游戏，不增加玩法实测或新版兼容性声明。Python 服务的协议检查与历史实机证据仍分开记录。
 
 迁移说明：本次功能从旧 PawnPilot 开发目录合入本仓库，代码沿用 PSMcp 命名与 probably-stolen-mcp Mod ID。下方实机证据来自迁移前的同一功能实现，JSON、图片和哈希原样保留；其中旧名称属于历史来源。当前仓库已重新执行构建／协议测试，不能据此声称更名后的 Mod 已重跑全部实机场景。0.2.6 已另行安装 Probably Automated 并完成多职业物品实测；完整一天经营仍未在更名包重跑。[迁移验证记录](validation/2026-11-07-migration.json)：128 项检查通过，新目录服务注册 10 个工具；额外实时查询时游戏已关闭，返回 bridge_unavailable。
 

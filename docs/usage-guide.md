@@ -21,9 +21,9 @@ The project uses the game's built-in Mod loader. The recorded gameplay baseline 
 
 ## 2. Get installation files
 
-Download `probably-stolen-mcp-0.2.7-windows-x64.zip` from [Releases](https://github.com/detyse/probably-stolen-mcp/releases/tag/v0.2.7) and extract it to a permanent folder. It contains the compiled Mod, Python MCP source, dependency lockfile, wheel, and documentation. No .NET SDK is needed to use this package. The first MCP launch needs internet access for Python and dependencies. To build GitHub's separate **Source code** archives, follow the [development guide](development.md#build-from-source).
+Download `probably-stolen-mcp-0.2.7-mod.zip` from [Releases](https://github.com/detyse/probably-stolen-mcp/releases/tag/v0.2.7). This ZIP contains only `Mods/probably-stolen-mcp/` and its three compiled Mod files. Extract it into the game installation directory; no .NET SDK is needed.
 
-Run `./scripts/Configure-Mcp.ps1` in PowerShell from the extracted root to generate `artifacts/mcp-config.json` with your local paths. The script requires uv on PATH. Release downloads include `SHA256SUMS.txt`; compare the ZIP hash with `Get-FileHash -Algorithm SHA256 ./probably-stolen-mcp-0.2.7-windows-x64.zip` before extraction.
+For the Python MCP service, clone or download the repository into a separate permanent folder. With uv on PATH, run `./scripts/Configure-Mcp.ps1` from that repository root to generate `artifacts/mcp-config.json`. The first MCP launch downloads Python and dependencies as needed. You can skip the .NET build steps when using the prebuilt Mod. If building the Mod yourself, see the [development guide](development.md#build-from-source); source builds generate these files:
 
 | Location | Purpose |
 | --- | --- |
@@ -37,7 +37,7 @@ Run `./scripts/Configure-Mcp.ps1` again if you move the files to another locatio
 
 Exit the game first. If upgrading from PawnPilot, disable the old Mod in the game, exit, and move its `Mods/PawnPilot` folder outside `Mods` so two bridges do not compete for the same port.
 
-Use Steam's **Browse local files** option to find the directory containing `Probably Stolen.exe`. Replace `<game-install-dir>` below with that path, then run from the repository root:
+Use Steam's **Browse local files** option to find the directory containing `Probably Stolen.exe`, then extract the Release ZIP there. If you built the Mod from source instead, replace `<game-install-dir>` below with that path and run from the repository root:
 
 ~~~powershell
 $gamePath = '<game-install-dir>'
@@ -63,7 +63,7 @@ Probably Stolen/
       PSMcp.Contracts.dll
 ~~~
 
-Start the game, enable **Probably Automated** in the Mods menu, follow the game's prompts for its declared `network` capability, and restart. Keep the extracted release folder or source checkout available for the Python MCP service.
+Start the game, enable **Probably Automated** in the Mods menu, follow the game's prompts for its declared `network` capability, and restart. Keep the separate source checkout available for the Python MCP service.
 
 When the Mod starts successfully, it normally creates:
 

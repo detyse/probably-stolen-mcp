@@ -10,19 +10,19 @@ Let your AI agent play *Probably Stolen* through MCP. The project provides a gam
 
 You need Windows x64, an installed Steam copy of *Probably Stolen*, [uv](https://docs.astral.sh/uv/getting-started/installation/) to manage Python 3.11+ and dependencies, and an AI client that can start local **stdio MCP** servers. A client and model that support image tool results can also inspect game screenshots.
 
-Download `probably-stolen-mcp-0.2.7-windows-x64.zip` from [Releases](https://github.com/detyse/probably-stolen-mcp/releases/tag/v0.2.7) and extract it to a permanent folder. This experimental package contains the compiled Mod and Python MCP source with locked dependencies; using it does not require the .NET SDK. The first MCP launch needs internet access to prepare Python and its dependencies. GitHub's separate **Source code** archives require the [build steps](docs/development.md#build-from-source).
+Download `probably-stolen-mcp-0.2.7-mod.zip` from [Releases](https://github.com/detyse/probably-stolen-mcp/releases/tag/v0.2.7). It contains only the three compiled Mod files for the game. No .NET SDK is needed to install it.
 
 ### 1. Install the Mod
 
 1. Exit the game. In Steam, use **Browse local files** to open its installation directory.
-2. Copy `artifacts/mod/probably-stolen-mcp` into the game's `Mods` directory. The resulting `Mods/probably-stolen-mcp` folder should contain `manifest.xml`, `PSMcp.Mod.dll`, and `PSMcp.Contracts.dll`.
+2. Extract the ZIP into that game directory. It provides `Mods/probably-stolen-mcp/` containing `manifest.xml`, `PSMcp.Mod.dll`, and `PSMcp.Contracts.dll`.
 3. Start the game, enable **Probably Automated** in the Mods menu, and restart when prompted.
 
-Keep the extracted release folder or source checkout available for the Python MCP service. uv prepares its Python environment on first launch. For upgrades from PawnPilot, see the [installation guide](docs/usage-guide.md#3-install-the-mod).
+For upgrades from PawnPilot, see the [installation guide](docs/usage-guide.md#3-install-the-mod).
 
 ### 2. Connect your AI client
 
-In PowerShell at the extracted release root, run `./scripts/Configure-Mcp.ps1` to generate `artifacts/mcp-config.json` using your local paths. Merge its `probably-stolen-mcp` entry into your client's MCP configuration. Run the script again if you move the folder. Source builds also generate this file automatically.
+Clone or download this repository separately for the Python MCP service and keep it in a permanent folder. In PowerShell at the repository root, run `./scripts/Configure-Mcp.ps1` to generate `artifacts/mcp-config.json` using your local paths. Merge its `probably-stolen-mcp` entry into your client's MCP configuration. Run the script again if you move the folder. uv prepares Python and dependencies on first launch; internet access is required. Using the prebuilt Mod means you can skip the .NET build steps.
 
 For clients using `mcpServers`, the configuration has this structure. Replace the placeholders with the actual paths from your generated file.
 
