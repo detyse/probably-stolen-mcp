@@ -17,11 +17,13 @@
 
 客户端需要能启动本地进程，并访问游戏的连接文件。
 
-本项目使用游戏自带的 Mod 加载器。当前编译／实测基线为 Steam Build **26496118**、画面版本 **VERSION 100-Rev12**；其他游戏版本尚未保证兼容。
+本项目使用游戏自带的 Mod 加载器。已有实机记录的基线为 Steam Build **26496118**、画面版本 **VERSION 100-Rev12**。0.2.7 发布包使用 Build **26525552** 的程序集编译；编译成功不能证明已在这个新版游戏中完成实测。
 
 ## 2. 获取安装文件
 
-仓库目前仅提供源码，尚无预编译 Release。请按[开发指南](development.zh-CN.md#从源码构建)生成安装文件，然后回到这里继续。已有构建产物时直接使用其中的 `artifacts` 目录。
+从 [Releases](https://github.com/detyse/probably-stolen-mcp/releases/tag/v0.2.7) 下载 `probably-stolen-mcp-0.2.7-windows-x64.zip` 并解压到固定目录。包内有已编译 Mod、Python MCP 源码、依赖锁文件、wheel 和文档，使用时无需 .NET SDK。首次启动 MCP 需要联网准备 Python 和依赖。GitHub 另列的 **Source code** 压缩包仍需按[开发指南](development.zh-CN.md#从源码构建)编译。
+
+在解压目录根部用 PowerShell 运行 `./scripts/Configure-Mcp.ps1`，生成使用本机路径的 `artifacts/mcp-config.json`；脚本要求 uv 已加入 PATH。发布附件还提供 `SHA256SUMS.txt`，解压前可用 `Get-FileHash -Algorithm SHA256 ./probably-stolen-mcp-0.2.7-windows-x64.zip` 核对 ZIP 的哈希。
 
 | 生成位置 | 用途 |
 | --- | --- |
@@ -29,7 +31,7 @@
 | `artifacts/python/*.whl` | 包含帮助文档的 Python 安装包，可选安装方式 |
 | `artifacts/mcp-config.json` | 根据本机路径生成的客户端配置 |
 
-移动文件位置或换一台电脑后，需要更新 `mcp-config.json` 中的绝对路径。
+移动文件位置或换一台电脑后，重新运行 `./scripts/Configure-Mcp.ps1` 更新配置。
 
 ## 3. 安装 Mod
 
@@ -61,7 +63,7 @@ Probably Stolen/
       PSMcp.Contracts.dll
 ~~~
 
-启动游戏，在 Mods 菜单启用 **Probably Automated**，按游戏提示处理声明的 `network` 能力并重启。保留源码目录供 Python MCP 服务使用。
+启动游戏，在 Mods 菜单启用 **Probably Automated**，按游戏提示处理声明的 `network` 能力并重启。保留解压后的发布目录或源码目录供 Python MCP 服务使用。
 
 Mod 启动成功后，通常会生成：
 

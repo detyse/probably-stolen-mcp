@@ -17,11 +17,13 @@ You need:
 
 The client needs to start local processes and access the game's connection file.
 
-The project uses the game's built-in Mod loader. The current compilation and gameplay baseline is Steam Build **26496118**, displaying **VERSION 100-Rev12**. Compatibility with other game versions is unverified.
+The project uses the game's built-in Mod loader. The recorded gameplay baseline is Steam Build **26496118**, displaying **VERSION 100-Rev12**. The 0.2.7 release was compiled against Build **26525552**; compilation does not establish real-game compatibility with that newer build.
 
 ## 2. Get installation files
 
-The repository currently distributes source only, with no prebuilt Release. Follow the [development guide](development.md#build-from-source) to generate the installation files, then return here. If you already have a build, use its `artifacts` directory.
+Download `probably-stolen-mcp-0.2.7-windows-x64.zip` from [Releases](https://github.com/detyse/probably-stolen-mcp/releases/tag/v0.2.7) and extract it to a permanent folder. It contains the compiled Mod, Python MCP source, dependency lockfile, wheel, and documentation. No .NET SDK is needed to use this package. The first MCP launch needs internet access for Python and dependencies. To build GitHub's separate **Source code** archives, follow the [development guide](development.md#build-from-source).
+
+Run `./scripts/Configure-Mcp.ps1` in PowerShell from the extracted root to generate `artifacts/mcp-config.json` with your local paths. The script requires uv on PATH. Release downloads include `SHA256SUMS.txt`; compare the ZIP hash with `Get-FileHash -Algorithm SHA256 ./probably-stolen-mcp-0.2.7-windows-x64.zip` before extraction.
 
 | Location | Purpose |
 | --- | --- |
@@ -29,7 +31,7 @@ The repository currently distributes source only, with no prebuilt Release. Foll
 | `artifacts/python/*.whl` | Standalone Python package with bundled help; optional installation route |
 | `artifacts/mcp-config.json` | Client configuration generated for your local paths |
 
-Update the absolute paths in `mcp-config.json` if you move the files to another location or machine.
+Run `./scripts/Configure-Mcp.ps1` again if you move the files to another location or machine.
 
 ## 3. Install the Mod
 
@@ -61,7 +63,7 @@ Probably Stolen/
       PSMcp.Contracts.dll
 ~~~
 
-Start the game, enable **Probably Automated** in the Mods menu, follow the game's prompts for its declared `network` capability, and restart. Keep the source checkout available for the Python MCP service.
+Start the game, enable **Probably Automated** in the Mods menu, follow the game's prompts for its declared `network` capability, and restart. Keep the extracted release folder or source checkout available for the Python MCP service.
 
 When the Mod starts successfully, it normally creates:
 

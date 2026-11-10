@@ -29,8 +29,6 @@ try {
         Copy-Item -LiteralPath (Join-Path $repoRoot "src/PSMcp.Mod/bin/Release/netstandard2.1/$file") -Destination $modOutput -Force
     }
     Invoke-Uv build --wheel --out-dir (Join-Path $repoRoot 'artifacts/python')
-    $config = @{ mcpServers = @{ 'probably-stolen-mcp' = @{ command = $uv; args = @('--directory', $repoRoot, 'run', '--locked', '--no-dev', 'probably-stolen-mcp') } } }
-    $config | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath (Join-Path $repoRoot 'artifacts/mcp-config.json') -Encoding utf8
+    & (Join-Path $PSScriptRoot 'Configure-Mcp.ps1')
     Write-Output "Mod package: $modOutput"
-    Write-Output "MCP client config: $(Join-Path $repoRoot 'artifacts/mcp-config.json')"
 } finally { Pop-Location }

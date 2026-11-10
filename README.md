@@ -10,7 +10,7 @@ Let your AI agent play *Probably Stolen* through MCP. The project provides a gam
 
 You need Windows x64, an installed Steam copy of *Probably Stolen*, [uv](https://docs.astral.sh/uv/getting-started/installation/) to manage Python 3.11+ and dependencies, and an AI client that can start local **stdio MCP** servers. A client and model that support image tool results can also inspect game screenshots.
 
-The repository currently distributes source only. Follow the [build guide](docs/development.md#build-from-source) to generate the installation files, then continue below. If you already have a build, use its `artifacts` directory.
+Download `probably-stolen-mcp-0.2.7-windows-x64.zip` from [Releases](https://github.com/detyse/probably-stolen-mcp/releases/tag/v0.2.7) and extract it to a permanent folder. This experimental package contains the compiled Mod and Python MCP source with locked dependencies; using it does not require the .NET SDK. The first MCP launch needs internet access to prepare Python and its dependencies. GitHub's separate **Source code** archives require the [build steps](docs/development.md#build-from-source).
 
 ### 1. Install the Mod
 
@@ -18,11 +18,11 @@ The repository currently distributes source only. Follow the [build guide](docs/
 2. Copy `artifacts/mod/probably-stolen-mcp` into the game's `Mods` directory. The resulting `Mods/probably-stolen-mcp` folder should contain `manifest.xml`, `PSMcp.Mod.dll`, and `PSMcp.Contracts.dll`.
 3. Start the game, enable **Probably Automated** in the Mods menu, and restart when prompted.
 
-Keep the source checkout available for the Python MCP service. uv prepares its Python environment on first launch. For upgrades from PawnPilot, see the [installation guide](docs/usage-guide.md#3-install-the-mod).
+Keep the extracted release folder or source checkout available for the Python MCP service. uv prepares its Python environment on first launch. For upgrades from PawnPilot, see the [installation guide](docs/usage-guide.md#3-install-the-mod).
 
 ### 2. Connect your AI client
 
-Open the generated `artifacts/mcp-config.json` and merge its `probably-stolen-mcp` entry into your client's MCP configuration. It already contains the absolute paths for the machine where it was built. If you move the files to another location or machine, update those paths.
+In PowerShell at the extracted release root, run `./scripts/Configure-Mcp.ps1` to generate `artifacts/mcp-config.json` using your local paths. Merge its `probably-stolen-mcp` entry into your client's MCP configuration. Run the script again if you move the folder. Source builds also generate this file automatically.
 
 For clients using `mcpServers`, the configuration has this structure. Replace the placeholders with the actual paths from your generated file.
 

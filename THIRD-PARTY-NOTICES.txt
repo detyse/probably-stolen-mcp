@@ -1,0 +1,15 @@
+Probably Automated / probably-stolen-mcp
+
+The project source, PSMcp.Mod.dll, PSMcp.Contracts.dll, and the
+probably_stolen_mcp Python wheel are distributed under the MIT license in
+LICENSE. The wheel also includes the project license in its metadata.
+
+The release does not bundle third-party runtime binaries. uv installs Python
+dependencies separately using uv.lock. Each dependency retains its own license;
+installed package metadata contains its license information. uv and Python are
+separate prerequisites and are not included in this archive.
+
+The Mod references assemblies supplied by the installed game, including Unity
+and Newtonsoft.Json. Those assemblies and game assets are not included.
+Game text and screenshots in validation documents remain the property of their
+respective rights holders. This project is independent of the game developer.
