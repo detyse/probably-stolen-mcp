@@ -1,10 +1,10 @@
-# Probably Stolen MCP — Probably Automated
+# Probably Stolen MCP
 
 [English](README.md) · [使用指南](docs/usage-guide.zh-CN.md) · [Agent 开发](#agent-开发)
 
 让你的 AI Agent 通过 MCP 操作《深空当铺：可能是偷的》（Probably Stolen）。项目提供游戏 Mod 和本地 MCP 服务，用于读取当前局面、查看物品和截图、执行当前允许的游戏操作。模型与决策由你的 AI 客户端负责。
 
-**实验性版本 0.2.7 · 桥接协议 2。** 游戏内 Mod 名称为 **Probably Automated**。支持范围和实机证据见[能力清单](docs/capabilities.md)、[职业测试](docs/profession-tests.zh-CN.md)和[跨夜生产测试](docs/overnight-tests.zh-CN.md)。不同游戏版本和场景的覆盖程度有所不同。
+**实验性版本 0.2.7 · 桥接协议 2。** 支持范围和实机证据见[能力清单](docs/capabilities.md)、[职业测试](docs/profession-tests.zh-CN.md)和[跨夜生产测试](docs/overnight-tests.zh-CN.md)。不同游戏版本和场景的覆盖程度有所不同。
 
 ## 开始使用
 
@@ -16,7 +16,7 @@
 
 1. 退出游戏，在 Steam 中选择“浏览本地文件”，打开游戏安装目录。
 2. 将 ZIP 解压到游戏安装目录。包内已有 `Mods/probably-stolen-mcp/`，其中包含 `manifest.xml`、`PSMcp.Mod.dll` 和 `PSMcp.Contracts.dll`。
-3. 启动游戏，在 Mods 菜单启用 **Probably Automated**，按提示重启。
+3. 启动游戏，在 Mods 菜单启用 **Probably Stolen MCP**，按提示重启。如果下载包的菜单名称不同，以安装目录中 `manifest.xml` 的 `<Name>` 为准。
 
 从 PawnPilot 升级的步骤见[安装指南](docs/usage-guide.zh-CN.md#3-安装-mod)。
 

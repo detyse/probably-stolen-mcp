@@ -1,4 +1,4 @@
-# Probably Automated 使用指南
+# Probably Stolen MCP 使用指南
 
 [English](usage-guide.md) · [项目首页](../README.zh-CN.md) · [能力与实测记录](capabilities.md)
 
@@ -63,7 +63,7 @@ Probably Stolen/
       PSMcp.Contracts.dll
 ~~~
 
-启动游戏，在 Mods 菜单启用 **Probably Automated**，按游戏提示处理声明的 `network` 能力并重启。另行保留源码目录供 Python MCP 服务使用。
+启动游戏，在 Mods 菜单启用 **Probably Stolen MCP**，按游戏提示处理声明的 `network` 能力并重启。早期下载包的菜单名称以安装目录中 `manifest.xml` 的 `<Name>` 为准。另行保留源码目录供 Python MCP 服务使用。
 
 Mod 启动成功后，通常会生成：
 
@@ -208,7 +208,7 @@ Mod 启动成功后，通常会生成：
 
 更新前退出游戏，并停止客户端中的 MCP 服务和本地联调驱动，避免构建时发布文件被占用。拉取源码并重新构建，覆盖三个 Mod 文件，再启动游戏和 MCP。移动仓库后重新生成配置，并更新客户端中的绝对路径。旧 PawnPilot 的自定义端口及连接文件设置需要迁移。
 
-停用时在 Mods 菜单关闭 Probably Automated 并重启，客户端可移除 MCP 配置。停用不会撤销已经发生的操作；本版本不新增自定义物品或存档格式。
+停用时在 Mods 菜单关闭 Probably Stolen MCP 并重启，客户端可移除 MCP 配置。停用不会撤销已经发生的操作；本版本不新增自定义物品或存档格式。
 
 Mod 与 MCP 之间只使用本机认证连接。AI 客户端会接收请求的游戏状态与游戏截图；使用云端模型时，这些工具结果可能发送给该服务商，取决于客户端设置。本项目不内置模型账号，也不实现独立遥测上传。连接令牌只用于本机桥接。
 

@@ -1,10 +1,10 @@
-# Probably Stolen MCP — Probably Automated
+# Probably Stolen MCP
 
 [简体中文](README.zh-CN.md) · [User guide](docs/usage-guide.md) · [Agent integration](#building-an-agent)
 
 Let your AI agent play *Probably Stolen* through MCP. The project provides a game Mod and a local MCP server for reading the current game state, inspecting items and screenshots, and performing available game actions. Your AI client supplies the model and decisions.
 
-**Experimental · version 0.2.7 · bridge protocol 2.** The in-game Mod is named **Probably Automated**. Supported scenarios and real-game evidence are tracked in the [capability record](docs/capabilities.md), [profession tests](docs/profession-tests.md), and [overnight production tests](docs/overnight-tests.md). Coverage varies by game version and scenario.
+**Experimental · version 0.2.7 · bridge protocol 2.** Supported scenarios and real-game evidence are tracked in the [capability record](docs/capabilities.md), [profession tests](docs/profession-tests.md), and [overnight production tests](docs/overnight-tests.md). Coverage varies by game version and scenario.
 
 ## Get started
 
@@ -16,7 +16,7 @@ Download `probably-stolen-mcp-0.2.7-mod.zip` from [Releases](https://github.com/
 
 1. Exit the game. In Steam, use **Browse local files** to open its installation directory.
 2. Extract the ZIP into that game directory. It provides `Mods/probably-stolen-mcp/` containing `manifest.xml`, `PSMcp.Mod.dll`, and `PSMcp.Contracts.dll`.
-3. Start the game, enable **Probably Automated** in the Mods menu, and restart when prompted.
+3. Start the game, enable **Probably Stolen MCP** in the Mods menu, and restart when prompted. If your ZIP shows a different menu label, use the name in its installed `manifest.xml` (`<Name>`).
 
 For upgrades from PawnPilot, see the [installation guide](docs/usage-guide.md#3-install-the-mod).
 

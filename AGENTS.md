@@ -1,9 +1,9 @@
-# Probably Automated 项目说明
+# Probably Stolen MCP 项目说明
 
 ## 默认仓库
 
 - 本仓库是后续开发、构建、提交和 push 的默认目标；不再回写旧 PawnPilot 开发目录。
-- 保留当前项目和命名空间 PSMcp.*、Mod ID probably-stolen-mcp、环境变量 PSMCP_*；Mod 显示名为 Probably Automated。
+- 保留当前项目和命名空间 PSMcp.*、Mod ID probably-stolen-mcp、环境变量 PSMCP_*；Mod 显示名为 Probably Stolen MCP。
 
 ## 能力问题先查文档
 

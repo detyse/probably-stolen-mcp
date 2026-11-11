@@ -1,6 +1,6 @@
-# Probably Automated MCP 设计草案
+# Probably Stolen MCP 设计草案
 
-Probably Automated 按《深空当铺》的经营流程组织控制能力：在现金、空间、时间和风险约束下观察局面、判断货物、交易与加工，再处理夜间准备和长期经营。设计依据见 [132 个交互族及来源](game-interactions.md)。本文保留整体目标；0.2 已接入共用观察与执行层，实际接口、覆盖及尚未验收部分见 [实现说明](mcp-implementation.md)。
+Probably Stolen MCP 按《深空当铺》的经营流程组织控制能力：在现金、空间、时间和风险约束下观察局面、判断货物、交易与加工，再处理夜间准备和长期经营。设计依据见 [132 个交互族及来源](game-interactions.md)。本文保留整体目标；0.2 已接入共用观察与执行层，实际接口、覆盖及尚未验收部分见 [实现说明](mcp-implementation.md)。
 
 ## 游戏循环与模块
 
