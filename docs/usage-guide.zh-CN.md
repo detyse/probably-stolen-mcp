@@ -63,7 +63,7 @@ Probably Stolen/
       PSMcp.Contracts.dll
 ~~~
 
-启动游戏，在 Mods 菜单启用 **Probably Stolen MCP**，按游戏提示处理声明的 `network` 能力并重启。早期下载包的菜单名称以安装目录中 `manifest.xml` 的 `<Name>` 为准。另行保留源码目录供 Python MCP 服务使用。
+启动游戏，在 Mods 菜单启用 **Probably Stolen MCP**，按提示允许网络连接，以便 AI 客户端连接游戏，然后重启游戏。另行保留源码目录供 Python MCP 服务使用。
 
 Mod 启动成功后，通常会生成：
 

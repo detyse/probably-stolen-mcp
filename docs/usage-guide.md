@@ -63,7 +63,7 @@ Probably Stolen/
       PSMcp.Contracts.dll
 ~~~
 
-Start the game, enable **Probably Stolen MCP** in the Mods menu, follow the game's prompts for its declared `network` capability, and restart. For earlier downloads, the installed manifest’s `<Name>` gives the menu label. Keep the separate source checkout available for the Python MCP service.
+Start the game, enable **Probably Stolen MCP** in the Mods menu, accept the network permission so your AI client can connect, and restart the game. Keep the separate source checkout available for the Python MCP service.
 
 When the Mod starts successfully, it normally creates:
 

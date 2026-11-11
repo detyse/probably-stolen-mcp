@@ -1,64 +1,44 @@
 # Probably Stolen MCP
 
-[简体中文](README.zh-CN.md) · [User guide](docs/usage-guide.md) · [Agent integration](#building-an-agent)
+[Simplified Chinese](README.zh-CN.md) · [User guide](docs/usage-guide.md) · [Agent integration](#building-an-agent)
 
-Let your AI agent play *Probably Stolen* through MCP. The project provides a game Mod and a local MCP server for reading the current game state, inspecting items and screenshots, and performing available game actions. Your AI client supplies the model and decisions.
-
-**Experimental · version 0.2.7 · bridge protocol 2.** Supported scenarios and real-game evidence are tracked in the [capability record](docs/capabilities.md), [profession tests](docs/profession-tests.md), and [overnight production tests](docs/overnight-tests.md). Coverage varies by game version and scenario.
+Probably Stolen MCP lets you ask your AI assistant what's in your shop, inspect a customer's offer, or open for business in *Probably Stolen*.
 
 ## Get started
 
-You need Windows x64, an installed Steam copy of *Probably Stolen*, [uv](https://docs.astral.sh/uv/getting-started/installation/) to manage Python 3.11+ and dependencies, and an AI client that can start local **stdio MCP** servers. A client and model that support image tool results can also inspect game screenshots.
-
-Download `probably-stolen-mcp-0.2.7-mod.zip` from [Releases](https://github.com/detyse/probably-stolen-mcp/releases/tag/v0.2.7). It contains only the three compiled Mod files for the game. No .NET SDK is needed to install it.
+You'll need the Steam version of *Probably Stolen* on Windows x64 and an AI client that supports local MCP servers.
 
 ### 1. Install the Mod
 
-1. Exit the game. In Steam, use **Browse local files** to open its installation directory.
-2. Extract the ZIP into that game directory. It provides `Mods/probably-stolen-mcp/` containing `manifest.xml`, `PSMcp.Mod.dll`, and `PSMcp.Contracts.dll`.
-3. Start the game, enable **Probably Stolen MCP** in the Mods menu, and restart when prompted. If your ZIP shows a different menu label, use the name in its installed `manifest.xml` (`<Name>`).
+1. [Download the mod ZIP](https://github.com/detyse/probably-stolen-mcp/releases/download/v0.2.7/probably-stolen-mcp-0.2.7-mod.zip) and open it.
+2. Close the game. In your Steam library, right-click *Probably Stolen* and choose **Manage → Browse local files**.
+3. Copy the **Mods** folder from the ZIP into the game folder. If you're updating, replace the files when Windows asks.
+4. Start the game, enable **Probably Stolen MCP** in the **Mods** menu, and accept the network permission so your AI client can connect. Restart the game.
 
-For upgrades from PawnPilot, see the [installation guide](docs/usage-guide.md#3-install-the-mod).
+Upgrading from PawnPilot? Follow the [migration steps](docs/usage-guide.md#3-install-the-mod).
 
 ### 2. Connect your AI client
 
-Clone or download this repository separately for the Python MCP service and keep it in a permanent folder. In PowerShell at the repository root, run `./scripts/Configure-Mcp.ps1` to generate `artifacts/mcp-config.json` using your local paths. Merge its `probably-stolen-mcp` entry into your client's MCP configuration. Run the script again if you move the folder. uv prepares Python and dependencies on first launch; internet access is required. Using the prebuilt Mod means you can skip the .NET build steps.
+1. [Install uv](https://docs.astral.sh/uv/getting-started/installation/). It sets up Python and the required packages the first time your AI client connects.
+2. [Download the MCP server source](https://github.com/detyse/probably-stolen-mcp/archive/refs/heads/main.zip) and unzip it somewhere you can keep it. Open PowerShell in the extracted folder that contains `pyproject.toml`.
+3. Run the following command to generate the settings for your computer.
 
-For clients using `mcpServers`, the configuration has this structure. Replace the placeholders with the actual paths from your generated file.
+   ```powershell
+   .\scripts\Configure-Mcp.ps1
+   ```
 
-```json
-{
-  "mcpServers": {
-    "probably-stolen-mcp": {
-      "command": "<absolute-path-to-uv.exe>",
-      "args": [
-        "--directory",
-        "<absolute-repo-path>",
-        "run",
-        "--locked",
-        "--no-dev",
-        "probably-stolen-mcp"
-      ]
-    }
-  }
-}
-```
-
-If the client has a configuration form, choose **stdio / local command** and enter the same `command` and `args`. Refresh the MCP connection or restart the client. The client starts and manages the MCP process.
-
-The Mod's `http://127.0.0.1:15527` address is an internal bridge. Configure the client with the stdio launch command above. Custom connection-file locations are covered in the [client setup guide](docs/usage-guide.md#4-connect-your-ai-client).
+4. Open the generated `artifacts/mcp-config.json`. In your client's MCP settings, add the `probably-stolen-mcp` entry under `mcpServers`. If the client uses a form, choose **stdio** (local command) and copy the `command` and `args` values.
+5. Refresh the client's MCP connections or restart the client. Keep the server folder where it is. If you move it, run the script again and update the client settings.
 
 ### 3. Try it
 
-Start the game and send this to your agent.
+Load a save and try this question.
 
-> Use probably-stolen-mcp. Read get_help, then call get_bridge_status and get_game_state. Report whether the bridge is connected, whether a save is loaded, and the current day, cash, and available actions. Only inspect state during this check.
+> How much cash do I have, and what's in my shop?
 
-At the main menu, `gameLoaded: false` is expected. Load a test save, then try one action.
+Once your assistant can see the shop, you can ask it to take an action, such as opening for business. The game may save those changes, so use a test save for your first session. See the [business-day walkthrough](docs/usage-guide.md#6-complete-a-business-day) for a longer example.
 
-> Read the latest state. If open_shop is available, execute it once and read the state again to confirm the shop opened. If the action is unavailable or the result is uncertain, explain why.
-
-Actions affect the current game and may be autosaved. Use a test save for your first session. For longer tasks, see the [business-day example](docs/usage-guide.md#6-complete-a-business-day) and [item and night-outing examples](docs/usage-guide.md#7-showcases-placement-trash-and-night-outings).
+Version 0.2.7 is experimental. See [tested features](docs/capabilities.md) for gameplay coverage by version.
 
 ## Building an agent
 
