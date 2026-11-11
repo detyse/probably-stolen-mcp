@@ -1,64 +1,44 @@
-# Probably Stolen MCP — Probably Automated
+# Probably Stolen MCP
 
 [English](README.md) · [使用指南](docs/usage-guide.zh-CN.md) · [Agent 开发](#agent-开发)
 
-让你的 AI Agent 通过 MCP 操作《深空当铺：可能是偷的》（Probably Stolen）。项目提供游戏 Mod 和本地 MCP 服务，用于读取当前局面、查看物品和截图、执行当前允许的游戏操作。模型与决策由你的 AI 客户端负责。
-
-**实验性版本 0.2.7 · 桥接协议 2。** 游戏内 Mod 名称为 **Probably Automated**。支持范围和实机证据见[能力清单](docs/capabilities.md)、[职业测试](docs/profession-tests.zh-CN.md)和[跨夜生产测试](docs/overnight-tests.zh-CN.md)。不同游戏版本和场景的覆盖程度有所不同。
+用 Probably Stolen MCP，你可以问 AI 助手店里有哪些货，让它查看顾客的报价，或替你开店营业。
 
 ## 开始使用
 
-需要 Windows x64、已安装的 Steam 版游戏、[uv](https://docs.astral.sh/uv/getting-started/installation/)，以及能启动本地 **stdio MCP** 服务的 AI 客户端。查看游戏截图还需要客户端和模型支持图片工具结果。
-
-从 [Releases](https://github.com/detyse/probably-stolen-mcp/releases/tag/v0.2.7) 下载 `probably-stolen-mcp-0.2.7-mod.zip`。包内只有放进游戏的三个 Mod 文件，安装无需 .NET SDK。
+你需要在 Windows 64 位电脑上安装 Steam 版《深空当铺》，并准备一个支持本地 MCP 服务的 AI 客户端。
 
 ### 1. 安装 Mod
 
-1. 退出游戏，在 Steam 中选择“浏览本地文件”，打开游戏安装目录。
-2. 将 ZIP 解压到游戏安装目录。包内已有 `Mods/probably-stolen-mcp/`，其中包含 `manifest.xml`、`PSMcp.Mod.dll` 和 `PSMcp.Contracts.dll`。
-3. 启动游戏，在 Mods 菜单启用 **Probably Automated**，按提示重启。
+1. [下载模组压缩包](https://github.com/detyse/probably-stolen-mcp/releases/download/v0.2.7/probably-stolen-mcp-0.2.7-mod.zip)，打开 ZIP。
+2. 退出游戏。在 Steam 库中右键点击《深空当铺》，选择 **管理 → 浏览本地文件**。
+3. 把 ZIP 里的 **Mods** 文件夹复制到刚打开的游戏目录。如果是更新旧版，Windows 提示文件已存在时选择替换。
+4. 启动游戏，在**模组（Mods）**菜单中启用 **Probably Stolen MCP**。按提示允许网络连接，以便 AI 客户端连接游戏，然后重启游戏。
 
-从 PawnPilot 升级的步骤见[安装指南](docs/usage-guide.zh-CN.md#3-安装-mod)。
+如果之前装过 PawnPilot，请按[升级说明](docs/usage-guide.zh-CN.md#3-安装-mod)迁移。
 
 ### 2. 连接 AI 客户端
 
-另行克隆或下载本仓库，放到固定目录供 Python MCP 服务使用。在仓库根目录打开 PowerShell，运行 `./scripts/Configure-Mcp.ps1`，按本机路径生成 `artifacts/mcp-config.json`，将其中的服务条目合并到客户端配置。移动目录后重新运行此脚本；首次启动时 uv 会联网准备 Python 和依赖。使用预编译 Mod 时可跳过 .NET 构建步骤。
+1. [安装 uv](https://docs.astral.sh/uv/getting-started/installation/)。第一次连接时，它会自动准备 Python 和所需的软件包。
+2. [下载 MCP 服务源码](https://github.com/detyse/probably-stolen-mcp/archive/refs/heads/main.zip)，解压到打算长期保留的位置。在包含 `pyproject.toml` 的文件夹中打开 PowerShell。
+3. 运行下面的命令，生成适用于这台电脑的配置。
 
-使用 `mcpServers` 格式的客户端可参考以下结构，将占位符替换为生成文件中的实际路径。
+   ```powershell
+   .\scripts\Configure-Mcp.ps1
+   ```
 
-```json
-{
-  "mcpServers": {
-    "probably-stolen-mcp": {
-      "command": "<uv 可执行文件的绝对路径>",
-      "args": [
-        "--directory",
-        "<仓库绝对路径>",
-        "run",
-        "--locked",
-        "--no-dev",
-        "probably-stolen-mcp"
-      ]
-    }
-  }
-}
-```
-
-通过设置界面添加时，选择 **stdio / 本地命令**，分别填写 `command` 和 `args`，然后刷新 MCP 连接或重启客户端。MCP 服务进程由客户端启动和管理。
-
-Mod 的 `http://127.0.0.1:15527` 是内部桥接地址。客户端使用上面的 stdio 启动配置；自定义连接文件位置见[客户端配置指南](docs/usage-guide.zh-CN.md#4-把-mcp-接到-ai-客户端)。
+4. 打开生成的 `artifacts/mcp-config.json`，把其中的 `probably-stolen-mcp` 条目添加到 AI 客户端 MCP 设置的 `mcpServers` 下。如果客户端用表单添加服务，选择 **stdio（本地命令）**，填入文件里的 `command` 和 `args`。
+5. 刷新客户端的 MCP 连接或重启客户端。如果以后移动了源码文件夹，重新运行脚本，并更新客户端配置。
 
 ### 3. 试一次
 
-启动游戏，把下面的话发给 Agent。
+载入存档后，可以这样问 AI 助手。
 
-> 使用 probably-stolen-mcp。先读 get_help，再调用 get_bridge_status 和 get_game_state。报告是否连通、是否载入存档，以及当前天数、现金和可用动作。此步骤只检查状态。
+> 我现在有多少钱？店里有哪些货？
 
-主菜单中的 `gameLoaded: false` 是正常的。载入测试存档后，可以尝试一个动作。
+等它能读到店里的情况，再试试让它开店营业。游戏可能会自动保存这些操作，第一次尝试时可以用测试存档。更多例子见[让 AI 经营一天](docs/usage-guide.zh-CN.md#6-跑完一天)。
 
-> 读取最新状态。如果 open_shop 可用，就执行一次并重新读取状态，确认是否开店。如果动作不可用或结果不确定，说明原因。
-
-操作会影响当前游戏，也可能被自动保存。首次使用请用测试存档。更长的任务示例见[完成一天经营](docs/usage-guide.zh-CN.md#6-跑完一天)和[物品、摆放与夜间出行](docs/usage-guide.zh-CN.md#7-展示柜摆放垃圾桶和夜间)。
+0.2.7 是实验版，各版本已经验证的玩法见[能力清单](docs/capabilities.md)。
 
 ## Agent 开发
 

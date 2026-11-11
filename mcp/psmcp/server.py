@@ -370,7 +370,7 @@ def create_server(path: Path, *, bridge: BridgeClient | None = None) -> MCPServe
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Probably Automated Python MCP server (stdio)")
+    parser = argparse.ArgumentParser(description="Probably Stolen MCP (Python stdio server)")
     parser.add_argument("--connection", help="connection.json path; overrides PSMCP_CONNECTION_FILE")
     parser.add_argument("--version", action="version", version=__version__)
     args = parser.parse_args()

@@ -71,7 +71,7 @@ public sealed class WorkTicket
         catch (Exception error)
         {
             try { reportError?.Invoke(error); } catch { /* Logging must not strand the request. */ }
-            completion.TrySetResult(BridgeResponse.Error("game_error", "Unable to read the game. Check the Probably Automated game log."));
+            completion.TrySetResult(BridgeResponse.Error("game_error", "Unable to read the game. Check the Probably Stolen MCP game log."));
         }
         finally { Interlocked.Exchange(ref state, 2); }
     }

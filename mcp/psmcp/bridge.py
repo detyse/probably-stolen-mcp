@@ -75,7 +75,7 @@ class BridgeClient:
         except (OSError, ValueError, RecursionError):
             return error(
                 "connection_file_unavailable",
-                "Enable Probably Automated and restart the game. Set --connection or PSMCP_CONNECTION_FILE "
+                "Enable Probably Stolen MCP and restart the game. Set --connection or PSMCP_CONNECTION_FILE "
                 "to the connection.json path reported by the Mod.",
             )
         version = connection.get("protocolVersion")
@@ -151,7 +151,7 @@ class BridgeClient:
                 if action is not None
                 else error(
                     "bridge_unavailable",
-                    "Cannot reach the Mod. Start the game with Probably Automated enabled.",
+                    "Cannot reach the Mod. Start the game with Probably Stolen MCP enabled.",
                 )
             )
         except (ValueError, RecursionError):

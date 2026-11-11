@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Manifest>
   <ID>probably-stolen-mcp</ID>
-  <Name>Probably Automated</Name>
+  <Name>Probably Stolen MCP</Name>
   <Author>detyse</Author>
   <ModVersion>0.2.7</ModVersion>
   <Description>Local AI bridge. Exposes selected visible game state and allows an attached MCP client to perform game actions. Actions can affect your current run and its saves. Disabling the mod removes remote control; it does not undo actions already taken. No custom items or save format are added.</Description>

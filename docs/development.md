@@ -125,7 +125,7 @@ For an Agent using the current interface, start with the [action loop](../README
 - Add help topics as lowercase Markdown filenames in [docs/help](help), starting with a `# Title`. Source runs load these files from the checkout; rebuild the wheel and restart the server for packaged deployments. The filename becomes the topic and is listed automatically.
 - Update [capabilities](capabilities.md) when changing tools, controls, or limits. Distinguish an implemented entry point from a scenario verified in the real game.
 
-Project names remain `PSMcp.*`, the Mod ID and MCP configuration key are `probably-stolen-mcp`, and environment variables use `PSMCP_*`. The in-game display name is **Probably Automated**.
+Project names remain `PSMcp.*`, the Mod ID and MCP configuration key are `probably-stolen-mcp`, and environment variables use `PSMCP_*`. The in-game display name is **Probably Stolen MCP**.
 
 ## Debug the connection
 

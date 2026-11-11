@@ -2,7 +2,7 @@
 
 [简体中文](overnight-tests.zh-CN.md) · [Capabilities](capabilities.md) · [Earlier profession item tests](profession-tests.md)
 
-Date: 2026-11-07, Asia/Shanghai. Steam Build **26496118**, game **VERSION 100-Rev12**, Probably Automated **0.2.7 / protocol 2**. The first two printer nights used 0.2.6; reload on day 3 and completion used 0.2.7. The other three scenarios used 0.2.7 throughout. Earlier REV6 evidence remains historical rather than verification of this game build.
+Date: 2026-11-07, Asia/Shanghai. Steam Build **26496118**, game **VERSION 100-Rev12**, Mod **0.2.7 / protocol 2**. The first two printer nights used 0.2.6; reload on day 3 and completion used 0.2.7. The other three scenarios used 0.2.7 throughout. Earlier REV6 evidence remains historical rather than verification of this game build.
 
 All four scenarios produced new items that could be retrieved through current item actions. The path was the official C# MCP client → stdio MCP → authenticated local bridge → native Unity operations. These were separate new saves on normal difficulty, without developer mode or edits to days, money, items, or saves.
 

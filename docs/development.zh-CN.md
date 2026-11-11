@@ -97,7 +97,7 @@ HTTP 服务仅监听本机，无需部署公网服务器。**AI 客户端应配�
 - 在 [docs/help](help) 增加帮助主题，源码运行直接读取文档，wheel 部署需重新打包并重启 MCP。文档文件名即主题名，使用小写英文，以 `# 标题` 开头。
 - 修改工具、控件或限制时同步更新[能力清单](capabilities.md)，分别记录已接入与实机验证状态。
 
-项目与程序集使用 `PSMcp.*`，Mod ID 和 MCP 配置键为 `probably-stolen-mcp`，环境变量使用 `PSMCP_*`，游戏内显示名为 **Probably Automated**。
+项目与程序集使用 `PSMcp.*`，Mod ID 和 MCP 配置键为 `probably-stolen-mcp`，环境变量使用 `PSMCP_*`，游戏内显示名为 **Probably Stolen MCP**。
 
 ## 连接配置与启动检查
 
@@ -209,7 +209,7 @@ Invoke-PSMcp -Path state | ConvertTo-Json -Depth 12
 %USERPROFILE%\AppData\LocalLow\Questing Goose Studio\Probably Stolen\Player.log
 ```
 
-若默认端口被占用，在游戏的 Mod 配置中修改 Probably Automated 的 `port`，重启后再连接。
+若默认端口被占用，在游戏的 Mod 配置中修改 Probably Stolen MCP 的 `port`，重启后再连接。
 
 **Windows 应用控制拦截：** 若运行时出现 `0x800711C7` 或“应用程序控制策略已阻止此文件”，表示系统拒绝加载 DLL。编译成功仍可能遇到此问题。查看事件查看器中的 `Microsoft-Windows-CodeIntegrity/Operational`，核实被拦截文件和适用策略，并由设备策略管理方按本机开发软件流程处理；本文不提供关闭安全策略的步骤。`-SkipTests` 只能跳过测试完成打包，不能解决运行拦截。
 

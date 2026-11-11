@@ -1,4 +1,4 @@
-# Probably Automated user guide
+# Probably Stolen MCP user guide
 
 [简体中文](usage-guide.zh-CN.md) · [Project home](../README.md) · [Capabilities and evidence (Chinese)](capabilities.md)
 
@@ -63,7 +63,7 @@ Probably Stolen/
       PSMcp.Contracts.dll
 ~~~
 
-Start the game, enable **Probably Automated** in the Mods menu, follow the game's prompts for its declared `network` capability, and restart. Keep the separate source checkout available for the Python MCP service.
+Start the game, enable **Probably Stolen MCP** in the Mods menu, accept the network permission so your AI client can connect, and restart the game. Keep the separate source checkout available for the Python MCP service.
 
 When the Mod starts successfully, it normally creates:
 
@@ -208,7 +208,7 @@ The [development guide](development.md#debug-the-connection) documents advanced 
 
 Exit the game and stop the client’s MCP service and any local integration driver before rebuilding, so published DLLs are not locked. Pull the source, rebuild, replace the three Mod files, and start the game and MCP again. If you move the repository, regenerate configuration and update the client's absolute paths. Custom ports and connection-file settings need migration when upgrading from PawnPilot.
 
-To disable control, turn off Probably Automated in the Mods menu and restart; remove the client's MCP entry if desired. Disabling does not undo actions already taken. This version adds no custom items or save format.
+To disable control, turn off Probably Stolen MCP in the Mods menu and restart; remove the client's MCP entry if desired. Disabling does not undo actions already taken. This version adds no custom items or save format.
 
 The Mod-to-MCP connection is authenticated and local. Your AI client receives requested game state and game screenshots. If it uses a cloud model, it may send those tool results to that provider, depending on client settings. This project includes no model account and implements no separate telemetry uploader. The connection token is used only for the local bridge.
 

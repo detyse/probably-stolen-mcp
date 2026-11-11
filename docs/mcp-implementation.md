@@ -1,4 +1,4 @@
-# Probably Automated 0.2.7 实现与覆盖
+# Probably Stolen MCP 0.2.7 实现与覆盖
 
 对应 [132 个交互族](game-interactions.md) 和 [整体设计](mcp-design.md)。2026-11-07，基于本机 Steam Build 26496118 编译；Mod 与 MCP 桥接协议均为 2。此处的“已接入”指实现了原生执行入口，不代表所有玩法变体都已在存档中验收。
 

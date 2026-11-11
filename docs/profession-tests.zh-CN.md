@@ -2,7 +2,7 @@
 
 [English](profession-tests.md) · [使用指南](usage-guide.zh-CN.md) · [能力清单](capabilities.md)
 
-2026-11-07，Steam Build **26337366 / VERSION 100-REV6**，Probably Automated **0.2.6 / 协议 2**。通过官方 MCP 客户端、stdio 服务和实际加载的 Mod 操作游戏；早期菜单及枪械匠记录来自本轮 0.2.5 开发候选，随后以 0.2.6 候选完成回归。[调用与状态证据](validation/2026-11-07-professions.json)区分版本、修复、测试预期纠正与未验证范围。
+2026-11-07，Steam Build **26337366 / VERSION 100-REV6**，Mod **0.2.6 / 协议 2**。通过官方 MCP 客户端、stdio 服务和实际加载的 Mod 操作游戏；早期菜单及枪械匠记录来自本轮 0.2.5 开发候选，随后以 0.2.6 候选完成回归。[调用与状态证据](validation/2026-11-07-professions.json)区分版本、修复、测试预期纠正与未验证范围。
 
 ## 覆盖结果
 

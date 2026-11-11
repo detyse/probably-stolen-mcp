@@ -2,7 +2,7 @@
 
 [简体中文](profession-tests.zh-CN.md) · [User guide](usage-guide.md) · [Capability record](capabilities.md)
 
-Tested on **2026-11-07**, Steam Build **26337366 / VERSION 100-REV6**, Probably Automated **0.2.6 / protocol 2**. Calls used the official MCP client, the stdio server, and the installed game Mod. Early menu/gunsmith captures used a 0.2.5 development candidate; subsequent regressions used 0.2.6 candidates. The [call and state evidence](validation/2026-11-07-professions.json) distinguishes versions, fixes, corrected expectations, and limits.
+Tested on **2026-11-07**, Steam Build **26337366 / VERSION 100-REV6**, Mod **0.2.6 / protocol 2**. Calls used the official MCP client, the stdio server, and the installed game Mod. Early menu/gunsmith captures used a 0.2.5 development candidate; subsequent regressions used 0.2.6 candidates. The [call and state evidence](validation/2026-11-07-professions.json) distinguishes versions, fixes, corrected expectations, and limits.
 
 ## Results
 

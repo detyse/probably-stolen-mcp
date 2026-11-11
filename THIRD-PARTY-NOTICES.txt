@@ -1,4 +1,4 @@
-Probably Automated / probably-stolen-mcp
+Probably Stolen MCP
 
 The project source, PSMcp.Mod.dll, PSMcp.Contracts.dll, and the
 probably_stolen_mcp Python wheel are distributed under the MIT license in
