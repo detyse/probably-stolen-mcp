@@ -17,11 +17,7 @@ internal static class HelpChecks
             await using var client = await McpClient.CreateAsync(new StdioClientTransport(new StdioClientTransportOptions
             {
                 Name = "PSMcp offline help test",
-                Command = "python",
-                EnvironmentVariables = new Dictionary<string, string?>
-                {
-                    ["PATH"] = Path.GetDirectoryName(Path.GetFullPath(python)) + Path.PathSeparator + Environment.GetEnvironmentVariable("PATH")
-                },
+                Command = Path.GetFullPath(python),
                 Arguments = ["-m", "psmcp", "--connection", Path.Combine(directory, "missing.json")],
                 WorkingDirectory = directory
             }), cancellationToken: timeout.Token);

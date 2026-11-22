@@ -8,7 +8,7 @@
 
 | 用途 | 要求 |
 |---|---|
-| 构建 Mod 与运行集成测试 | Windows x64、.NET 10 SDK、PowerShell、uv；首次需要下载 NuGet 和 Python 依赖 |
+| 构建 Mod 与运行集成测试 | Windows x64 / PowerShell 或 Linux x64 / Bash；.NET 10 SDK、uv；首次需要下载 NuGet 和 Python 依赖。Linux 步骤见 [Linux 指南](linux.zh-CN.md) |
 | 加载 Mod | 已安装 Steam 正式版游戏，使用游戏自带的 Mod 加载器和 Unity/Mono 环境 |
 | 运行 Python MCP | [uv](https://docs.astral.sh/uv/getting-started/installation/) 管理 Python 3.11+ 和依赖；无需 .NET Runtime |
 | 使用 Agent | 支持启动本地 stdio MCP 服务的 AI 客户端，并在客户端配置好模型 |
@@ -45,7 +45,7 @@ artifacts/
     PSMcp.Mod.dll
     PSMcp.Contracts.dll
   python/
-    probably_stolen_mcp-0.2.7-py3-none-any.whl
+    probably_stolen_mcp-0.2.8-py3-none-any.whl
   mcp-config.json
 ```
 

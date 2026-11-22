@@ -1,0 +1,71 @@
+{
+  "date": "2026-11-21",
+  "timezone": "Asia/Shanghai",
+  "version": "0.2.7 development",
+  "protocolVersion": 2,
+  "platform": "Linux x64",
+  "python": "3.12.3",
+  "dotnetSdk": "10.0.100",
+  "uv": "0.10.11",
+  "game": {
+    "steamAppId": "4348910",
+    "steamBuildId": "26525552",
+    "installation": "Windows Steam depot with an existing Proton prefix",
+    "assembliesUsedOnlyAsBuildReferences": true,
+    "proton": "Proton Experimental",
+    "reportedVersion": "0.46D"
+  },
+  "checks": {
+    "python": {
+      "passed": 45,
+      "failed": 0
+    },
+    "csharpProtocolHttpStdio": {
+      "passed": 152,
+      "failed": 0
+    },
+    "standaloneWheelHelp": {
+      "passed": 1,
+      "failed": 0
+    },
+    "modBuild": {
+      "warnings": 0,
+      "errors": 0
+    },
+    "ruff": "passed",
+    "bashSyntax": "passed",
+    "localProtonConnectionPathDiscovery": "passed; Mod connection file not yet present"
+  },
+  "commands": [
+    "ruff check mcp tests/python scripts/Configure-Mcp.py",
+    "bash -n scripts/Environment.sh scripts/Build.sh scripts/Test.sh",
+    "bash scripts/Build.sh --game-path <local-steam-game-directory>",
+    "PSMCP_TEST_PYTHON=<separate-wheel-environment>/bin/python python -m pytest tests/python/test_stdio.py"
+  ],
+  "limitations": [
+    "A stdio handshake in the restricted execution sandbox timed out. The same test passed with normal subprocess permissions in the full build and isolated wheel checks.",
+    "Windows and Ubuntu CI matrix configured; hosted CI was not run in this local validation.",
+    "Flatpak and additional Steam library discovery are covered by temporary-directory tests, not live Flatpak gameplay.",
+    "Real-game Mod loading, Proton loopback communication, screenshots and gameplay actions remain unverified. The user must enable the Mod, approve its network permission and restart the game."
+  ],
+  "realGameValidated": false,
+  "launchCheck": {
+    "status": "passed",
+    "arguments": [
+      "-screen-fullscreen",
+      "0",
+      "-screen-width",
+      "1280",
+      "-screen-height",
+      "720"
+    ],
+    "modRegistered": true,
+    "modEnabled": false,
+    "connectionFilePresent": false,
+    "logEvidence": [
+      "[ModLoader] === 1 mod(s) registered, 0 enabled ===",
+      "[ModLoader] audit: probably-stolen-mcp v0.2.7 source=Local workshop=0 owner=0 running=False trust=Unknown caps=declared network"
+    ],
+    "nextStep": "Enable the Mod and approve its network permission in the game menu, then restart and verify the bridge."
+  }
+}

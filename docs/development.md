@@ -6,7 +6,7 @@ This guide covers source builds, debugging, and changes to the game bridge or MC
 
 ## Build from source
 
-Use Windows x64, PowerShell, [uv](https://docs.astral.sh/uv/getting-started/installation/), the [.NET 10 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/10.0), and a local Steam installation of *Probably Stolen*. The SDK is for compiling the C# Mod and running its integration tests. The Mod uses the game's Unity/Mono runtime. The default MCP server uses Python 3.11+ and needs no .NET Runtime. Initial setup downloads NuGet and Python dependencies.
+For Linux/Bash builds and tests, see the [Linux guide](linux.md). On Windows, use Windows x64, PowerShell, [uv](https://docs.astral.sh/uv/getting-started/installation/), the [.NET 10 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/10.0), and a local Steam installation of *Probably Stolen*. The SDK is for compiling the C# Mod and running its integration tests. The Mod uses the game's Unity/Mono runtime. The default MCP server uses Python 3.11+ and needs no .NET Runtime. Initial setup downloads NuGet and Python dependencies.
 
 Clone the repository into any directory, or download and extract the source. Open PowerShell at the repository root, which contains `scripts`.
 
@@ -31,7 +31,7 @@ artifacts/
     PSMcp.Mod.dll
     PSMcp.Contracts.dll
   python/
-    probably_stolen_mcp-0.2.7-py3-none-any.whl
+    probably_stolen_mcp-0.2.8-py3-none-any.whl
   mcp-config.json
 ```
 
@@ -89,7 +89,7 @@ To check only the source environment's offline help behavior, run the following.
 .\scripts\Test.ps1 -HelpOnly
 ```
 
-The [CI workflow](../.github/workflows/ci.yml) runs Python checks, wheel installation checks, and the C# bridge integration suite on Windows with .NET 10 SDK and uv. The C# tests use simulated game state, production HTTP bridge code, the real Python MCP process, and the official C# MCP client. Python tests cover the transport boundaries and tool projections. They cover scheduling, stale observations, duplicate commands, failures, authentication, timeouts, and tool calls. Game-dependent Mod compilation and real gameplay require separate verification.
+The [CI workflow](../.github/workflows/ci.yml) runs Python checks, wheel installation checks, and the C# bridge integration suite on Windows and Ubuntu with .NET 10 SDK and uv. The C# tests use simulated game state, production HTTP bridge code, the real Python MCP process, and the official C# MCP client. Python tests cover the transport boundaries and tool projections. They cover scheduling, stale observations, duplicate commands, failures, authentication, timeouts, and tool calls. Game-dependent Mod compilation and real gameplay require separate verification.
 
 Record gameplay evidence in the [capability record](capabilities.md), with the game and Mod versions, scenario, calls, outcomes, and evidence location. Existing results are in the [profession report](profession-tests.md) and [overnight report](overnight-tests.md).
 

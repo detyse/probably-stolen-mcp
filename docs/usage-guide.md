@@ -2,7 +2,7 @@
 
 [简体中文](usage-guide.zh-CN.md) · [Project home](../README.md) · [Capabilities and evidence (Chinese)](capabilities.md)
 
-For **0.2.7 development builds / bridge protocol 2**, on Windows x64. This project lets your own AI client operate *Probably Stolen*. Your client supplies the model, account, and inference.
+For **0.2.8 / bridge protocol 2**, on Windows x64. For experimental Linux/Steam Proton support, see the [Linux guide](linux.md). This project lets your own AI client operate *Probably Stolen*. Your client supplies the model, account, and inference.
 
 This is an experimental mod. Recorded gameplay covers a business day, showcases, phone calls and upgrades, reporting, scavenging, sorting, and trash containers. That evidence comes from builds before the project rename. The renamed 0.2.6 package additionally tested all 9 startable professions and representative item operations; see the [profession report](profession-tests.md). Version 0.2.7 adds [overnight production verification](overnight-tests.md). A complete business day, full appraisal, and all night destinations have not been comprehensively repeated with the renamed package. See the [capability record](capabilities.md) for the precise scope.
 
@@ -17,11 +17,11 @@ You need:
 
 The client needs to start local processes and access the game's connection file.
 
-The project uses the game's built-in Mod loader. The recorded gameplay baseline is Steam Build **26496118**, displaying **VERSION 100-Rev12**. The 0.2.7 release was compiled against Build **26525552**; compilation does not establish real-game compatibility with that newer build.
+The project uses the game's built-in Mod loader. The recorded gameplay baseline is Steam Build **26496118**, displaying **VERSION 100-Rev12**. Build **26525552**, displaying **VERSION 100-Rev13**, also has a Linux/Proton main-menu connection, screenshot, and menu-action smoke-test record. That record used the Linux-support development build before the 0.2.8 version bump; it does not validate complete gameplay or the final release binary. See the [Linux validation record](validation/2026-11-22-linux.json).
 
 ## 2. Get installation files
 
-Download `probably-stolen-mcp-0.2.7-mod.zip` from [Releases](https://github.com/detyse/probably-stolen-mcp/releases/tag/v0.2.7). This ZIP contains only `Mods/probably-stolen-mcp/` and its three compiled Mod files. Extract it into the game installation directory; no .NET SDK is needed.
+Download `probably-stolen-mcp-0.2.8-mod.zip` from [Releases](https://github.com/detyse/probably-stolen-mcp/releases/tag/v0.2.8). This ZIP contains only `Mods/probably-stolen-mcp/` and its three compiled Mod files. Extract it into the game installation directory; no .NET SDK is needed.
 
 For the Python MCP service, clone or download the repository into a separate permanent folder. With uv on PATH, run `./scripts/Configure-Mcp.ps1` from that repository root to generate `artifacts/mcp-config.json`. The first MCP launch downloads Python and dependencies as needed. You can skip the .NET build steps when using the prebuilt Mod. If building the Mod yourself, see the [development guide](development.md#build-from-source); source builds generate these files:
 

@@ -17,11 +17,7 @@ async Task StartServer()
     client = await McpClient.CreateAsync(new StdioClientTransport(new StdioClientTransportOptions
     {
         Name = "PSMcp real-game validation",
-        Command = "python",
-        EnvironmentVariables = new Dictionary<string, string?>
-        {
-            ["PATH"] = Path.GetDirectoryName(python) + Path.PathSeparator + Environment.GetEnvironmentVariable("PATH")
-        },
+        Command = python,
         Arguments = ["-m", "psmcp"]
     }));
     var tools = await client.ListToolsAsync();

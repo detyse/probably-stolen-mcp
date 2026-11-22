@@ -15,7 +15,11 @@ concurrency:
 
 jobs:
   protocol:
-    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
@@ -31,16 +35,21 @@ jobs:
       - name: Check Python code
         run: |
           uv sync --locked
-          uv run --locked ruff check mcp tests/python
+          uv run --locked ruff check mcp tests/python scripts/Configure-Mcp.py
       - name: Test protocol, HTTP, stdio, and bundled help without game files
+        if: runner.os == 'Windows'
         shell: pwsh
         run: ./scripts/Test.ps1
+      - name: Test protocol, HTTP, stdio, and bundled help on Linux
+        if: runner.os == 'Linux'
+        shell: bash
+        run: bash scripts/Test.sh
       - name: Verify standalone wheel help from a separate environment
         shell: pwsh
         run: |
           uv build --wheel
           uv venv .cache/package-test
-          $packagePython = Join-Path $PWD '.cache/package-test/Scripts/python.exe'
+          $packagePython = Join-Path $PWD $(if ($IsWindows) { '.cache/package-test/Scripts/python.exe' } else { '.cache/package-test/bin/python' })
           $wheel = (Get-ChildItem dist/*.whl | Select-Object -First 1).FullName
           uv pip install --python $packagePython $wheel
           $env:PSMCP_TEST_PYTHON = $packagePython
