@@ -376,7 +376,11 @@ def main() -> None:
     args = parser.parse_args()
     # MCP protocol exclusively owns stdout, including on non-UTF-8 Windows terminals.
     sys.stderr.reconfigure(encoding="utf-8")
-    create_server(connection_path(args.connection)).run(transport="stdio")
+    try:
+        path = connection_path(args.connection)
+    except ValueError as exc:
+        parser.error(str(exc))
+    create_server(path).run(transport="stdio")
 
 
 if __name__ == "__main__":

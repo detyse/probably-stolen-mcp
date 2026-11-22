@@ -1,0 +1,187 @@
+{
+  "date": "2026-11-22",
+  "timezone": "Asia/Shanghai",
+  "version": "0.2.7 development",
+  "protocolVersion": 2,
+  "platform": "Linux x64 / Proton Experimental",
+  "transport": "Linux Python MCP stdio -> authenticated IPv4 loopback HTTP -> Proton Unity Mod",
+  "game": {
+    "steamAppId": "4348910",
+    "steamBuildId": "26525552",
+    "displayedVersion": "VERSION 100-Rev13",
+    "loaderAuditVersion": "0.46D",
+    "gameLoaded": false,
+    "scene": "main_menu"
+  },
+  "realGameValidated": true,
+  "scope": "Mod startup, main-menu observation, screenshot, reversible menu actions and connection after game restart only.",
+  "toolsRegistered": [
+    "get_help",
+    "get_bridge_status",
+    "get_game_state",
+    "get_trade_state",
+    "get_inventory",
+    "get_available_actions",
+    "get_ui_state",
+    "get_entity",
+    "get_view",
+    "get_action_status",
+    "perform_action"
+  ],
+  "readChecks": [
+    {
+      "tool": "get_bridge_status",
+      "arguments": {},
+      "isError": false
+    },
+    {
+      "tool": "get_game_state",
+      "arguments": {},
+      "isError": false
+    },
+    {
+      "tool": "get_ui_state",
+      "arguments": {},
+      "isError": false
+    },
+    {
+      "tool": "get_available_actions",
+      "arguments": {},
+      "isError": false
+    },
+    {
+      "tool": "get_inventory",
+      "arguments": {},
+      "isError": false
+    },
+    {
+      "tool": "get_trade_state",
+      "arguments": {},
+      "isError": false
+    },
+    {
+      "tool": "get_view",
+      "arguments": {},
+      "isError": false
+    },
+    {
+      "tool": "get_entity",
+      "arguments": {
+        "entityId": "e427c15f234fe_1"
+      },
+      "isError": false
+    }
+  ],
+  "actions": [
+    {
+      "testedAt": "2026-11-22T16:35:53.939773+08:00",
+      "label": "选项",
+      "arguments": {
+        "action": "ui_click:e427c15f234fe_3",
+        "expectedSnapshotId": "45ca5afc654142ff908aa315e83be99c:1",
+        "requestId": "c616fec1-b1f5-4b26-b26d-1bc932deaa93"
+      },
+      "success": true,
+      "actionStatus": "dispatched",
+      "retainedStatus": "dispatched",
+      "afterSnapshotId": "45ca5afc654142ff908aa315e83be99c:4",
+      "verifiedEffect": "Options panel visible; main-menu buttons occluded."
+    },
+    {
+      "testedAt": "2026-11-22T16:36:41.113956+08:00",
+      "label": "scroll",
+      "arguments": {
+        "action": "ui_scroll_vertical:e427c15f234fe_68",
+        "expectedSnapshotId": "45ca5afc654142ff908aa315e83be99c:4",
+        "requestId": "c8419fb5-1e29-494a-b0eb-3f46c8c9599f",
+        "arguments": {
+          "value": 0.55
+        }
+      },
+      "success": true,
+      "actionStatus": "dispatched",
+      "retainedStatus": "dispatched",
+      "afterSnapshotId": "45ca5afc654142ff908aa315e83be99c:7",
+      "verifiedEffect": "Scroll position 0.55; display-mode control visible and set to Windowed."
+    },
+    {
+      "testedAt": "2026-11-22T16:36:54.550252+08:00",
+      "label": "CloseButton",
+      "arguments": {
+        "action": "ui_click:e427c15f234fe_67",
+        "expectedSnapshotId": "45ca5afc654142ff908aa315e83be99c:7",
+        "requestId": "8ec0641a-3a39-4dda-bfe1-dc9f5acf69fb"
+      },
+      "success": true,
+      "actionStatus": "dispatched",
+      "retainedStatus": "dispatched",
+      "afterSnapshotId": "45ca5afc654142ff908aa315e83be99c:10",
+      "verifiedEffect": "Options closed; original eight main-menu controls restored."
+    }
+  ],
+  "display": {
+    "mode": "窗口化",
+    "modeIndex": 2.0,
+    "resolutionSetting": "1920 x 1080 (recommended)",
+    "screenshot": {
+      "protocolVersion": 2,
+      "snapshotId": "45ca5afc654142ff908aa315e83be99c:1",
+      "width": 1599,
+      "height": 899,
+      "mimeType": "image/jpeg",
+      "context": {
+        "location": "main_menu",
+        "mode": "normal",
+        "dialogueState": "idle",
+        "inputLocks": [],
+        "modalPanels": []
+      },
+      "interaction": {
+        "kind": "game_not_loaded",
+        "waitingFor": "player",
+        "message": "Load a game to observe shop interactions.",
+        "requiredInput": "load_game",
+        "mcpSupported": true,
+        "blockers": [],
+        "panels": []
+      }
+    }
+  },
+  "restart": {
+    "connectionPassed": true,
+    "newGameSession": true,
+    "sameMcpProcess": false,
+    "continuousProbe": "The earlier long-running probe terminated with exit 143 before completion; same-process recovery remains unverified."
+  },
+  "evidence": {
+    "calls": "2026-11-22-linux/calls.json",
+    "images": [
+      {
+        "path": "2026-11-22-linux/main-menu.jpg",
+        "sha256": "e4f313e620423a37896e530ab865eea93e2e5bd27bbe3f5bda23e2d81e6ed25d"
+      },
+      {
+        "path": "2026-11-22-linux/display-options.jpg",
+        "sha256": "82dc442360d55a29e9802913b4d2d215c852fa1dc741be82edde2f04fc075c0a"
+      }
+    ]
+  },
+  "modHashes": {
+    "PSMcp.Mod.dll": "53a214838897777d2e01101bf3054ee3850ce0312cf4f85d25eab8b03d5b3f19",
+    "PSMcp.Contracts.dll": "6827be3eb5e6a3f26e8cf557803f67c6d2b5e36c8f94c42cc16106c0e96669d8",
+    "manifest.xml": "84c423c1bc3ac25878a036d6b6b5040e57dc2b5e5a1653abe2cc5e89bd319500"
+  },
+  "logEvidence": [
+    "[ModLoader] === 1 mod(s) registered, 1 enabled ===",
+    "probably-stolen-mcp v0.2.7 running=True trust=Match caps=network"
+  ],
+  "limitations": [
+    "No save was loaded and no shop trading, production, inventory manipulation or day progression was tested.",
+    "Inventory and trade reads succeeded at the main menu; that does not validate in-save inventory or trade behavior.",
+    "No settings were changed. Display mode and resolution were read from the game options.",
+    "The stored game resolution was 1920x1080 despite 1280x720 launch arguments; the game UI confirmed Windowed mode.",
+    "A Curl error 42: Callback aborted line appeared when the user closed the game. No failure was observed in the completed MCP calls.",
+    "The long-lived recovery probe terminated with exit 143; reconnect after restart was verified with a fresh MCP process only.",
+    "Flatpak, other Linux distributions and Windows were not re-tested in this session."
+  ]
+}

@@ -6,13 +6,13 @@
 
 ## 开始使用
 
-你需要在 Windows 64 位电脑上安装 Steam 版《深空当铺》，并准备一个支持本地 MCP 服务的 AI 客户端。
+你需要安装 Steam 版《深空当铺》，并准备一个支持本地 stdio MCP 服务的 AI 客户端。支持 Windows x64，或在 Linux x64 上通过 Steam Proton 运行 Windows 版游戏；Python MCP 服务在主机上原生运行。**两个平台共用同一份 Mod ZIP 和版本号。** Proton 设置、自定义前缀和源码构建见 [Linux 指南](docs/linux.zh-CN.md)。
 
 ### 1. 安装 Mod
 
-1. [下载模组压缩包](https://github.com/detyse/probably-stolen-mcp/releases/download/v0.2.7/probably-stolen-mcp-0.2.7-mod.zip)，打开 ZIP。
+1. [下载模组压缩包](https://github.com/detyse/probably-stolen-mcp/releases/download/v0.2.8/probably-stolen-mcp-0.2.8-mod.zip)，打开 ZIP。
 2. 退出游戏。在 Steam 库中右键点击《深空当铺》，选择 **管理 → 浏览本地文件**。
-3. 把 ZIP 里的 **Mods** 文件夹复制到刚打开的游戏目录。如果是更新旧版，Windows 提示文件已存在时选择替换。
+3. 把 ZIP 里的 **Mods** 文件夹复制到刚打开的游戏目录。更新旧版时替换原来的 Mod 文件。
 4. 启动游戏，在**模组（Mods）**菜单中启用 **Probably Stolen MCP**。按提示允许网络连接，以便 AI 客户端连接游戏，然后重启游戏。
 
 如果之前装过 PawnPilot，请按[升级说明](docs/usage-guide.zh-CN.md#3-安装-mod)迁移。
@@ -20,12 +20,22 @@
 ### 2. 连接 AI 客户端
 
 1. [安装 uv](https://docs.astral.sh/uv/getting-started/installation/)。第一次连接时，它会自动准备 Python 和所需的软件包。
-2. [下载 MCP 服务源码](https://github.com/detyse/probably-stolen-mcp/archive/refs/heads/main.zip)，解压到打算长期保留的位置。在包含 `pyproject.toml` 的文件夹中打开 PowerShell。
-3. 运行下面的命令，生成适用于这台电脑的配置。
+2. [下载对应版本的 MCP 服务源码](https://github.com/detyse/probably-stolen-mcp/archive/refs/tags/v0.2.8.zip)，解压到打算长期保留的位置。在包含 `pyproject.toml` 的文件夹中打开终端。
+3. 按操作系统运行命令，生成本机配置。
+
+   **Windows（PowerShell）：**
 
    ```powershell
    .\scripts\Configure-Mcp.ps1
    ```
+
+   **Linux：**
+
+   ```bash
+   python3 scripts/Configure-Mcp.py
+   ```
+
+   Linux 会自动查找常见 Steam 目录及配置的额外游戏库中的 Proton 连接文件，也能识别 Flatpak 路径。自定义位置可在 Python 脚本后添加 `--connection /连接文件的绝对路径/connection.json`。
 
 4. 打开生成的 `artifacts/mcp-config.json`，把其中的 `probably-stolen-mcp` 条目添加到 AI 客户端 MCP 设置的 `mcpServers` 下。如果客户端用表单添加服务，选择 **stdio（本地命令）**，填入文件里的 `command` 和 `args`。
 5. 刷新客户端的 MCP 连接或重启客户端。如果以后移动了源码文件夹，重新运行脚本，并更新客户端配置。
@@ -38,7 +48,14 @@
 
 等它能读到店里的情况，再试试让它开店营业。游戏可能会自动保存这些操作，第一次尝试时可以用测试存档。更多例子见[让 AI 经营一天](docs/usage-guide.zh-CN.md#6-跑完一天)。
 
-0.2.7 是实验版，各版本已经验证的玩法见[能力清单](docs/capabilities.md)。
+0.2.8 是实验版。已有 Linux／Proton 基础实机记录覆盖 Mod 加载、认证连接、主菜单状态与截图、选项打开／滚动／关闭、动作状态查询，以及游戏重启后的新连接；Linux 存档内的交易、生产与完整经营日尚未验证。准确构建版本与范围见[能力清单](docs/capabilities.md)和[实机记录](docs/validation/2026-11-22-linux.json)。
+
+## 0.2.8 新增内容
+
+- Linux 原生 MCP，自动发现 Steam／Proton 连接文件，也可手动指定路径。
+- Linux 配置、构建和测试脚本，以及 Windows／Ubuntu CI。
+- `bash scripts/Run-Game.sh` 使用窗口模式参数启动 Steam 游戏，方便本机测试；游戏保存的分辨率可能覆盖请求的窗口尺寸。
+- 共用一份 Mod 发布包；桥接协议仍为 2，11 个 MCP 工具保持不变。
 
 ## Agent 开发
 

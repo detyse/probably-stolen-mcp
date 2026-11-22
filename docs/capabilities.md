@@ -1,12 +1,20 @@
 # Probably Stolen MCP 当前能力清单
 
-更新：**2026-11-11（亚洲／上海）**。对应仓库 **0.2.7 实验版、桥接协议 2**；新增跨夜实测基线为 Steam App 4348910、Build 26496118、`VERSION 100-Rev12`。此前 Build 26337366 / REV6 的证据保留为历史范围。
+更新：**2026-11-22（亚洲／上海）**。对应仓库 **0.2.8 实验版、桥接协议 2**；历史跨夜实测基线为 Steam App 4348910、Build 26496118、`VERSION 100-Rev12`。此前 Build 26337366 / REV6 的证据保留为历史范围。
 
-0.2.7 Release 仅分发预编译 Mod 本体，ZIP 内为 `Mods/probably-stolen-mcp/` 及清单、两个项目 DLL，可直接解压到游戏目录。Python MCP 从仓库单独运行，通过 `scripts/Configure-Mcp.ps1` 生成本机客户端配置。发布包使用 Build **26525552** 的游戏程序集编译（0 警告、0 错误）；本次打包未运行真实游戏，不增加玩法实测或新版兼容性声明。Python 服务的协议检查与历史实机证据仍分开记录。
+0.2.8 Release 继续只分发预编译 Mod 本体，Windows 与 Linux／Proton 共用 `Mods/probably-stolen-mcp/` 及清单、两个项目 DLL。Python MCP 使用对应版本源码，Windows 通过 `scripts/Configure-Mcp.ps1`、Linux 通过 `python3 scripts/Configure-Mcp.py` 生成本机配置。Linux 实机证据来自本次实现的 0.2.7 开发构建；0.2.8 版本号调整后的发布产物另行编译与协议验证，不把历史证据改标成新二进制的验收结果。
 
 迁移说明：本次功能从旧 PawnPilot 开发目录合入本仓库，代码沿用 PSMcp 命名与 probably-stolen-mcp Mod ID。下方实机证据来自迁移前的同一功能实现，JSON、图片和哈希原样保留；其中旧名称属于历史来源。当前仓库已重新执行构建／协议测试，不能据此声称更名后的 Mod 已重跑全部实机场景。0.2.6 已另行安装该版 Mod 并完成多职业物品实测；完整一天经营仍未在更名包重跑。[迁移验证记录](validation/2026-11-07-migration.json)：128 项检查通过，新目录服务注册 10 个工具；额外实时查询时游戏已关闭，返回 bridge_unavailable。
 
 本文用于直接回答“现在能控制什么”，后续优先查这里。实现细节见 [实现与覆盖说明](mcp-implementation.md)，完整玩法目录见 [132 个交互族](game-interactions.md)，安装与 MCP 工具列表见 [README](../README.zh-CN.md)。设计稿和玩法目录不代表当前完成情况。
+
+## Linux / Steam Proton
+
+新增 Linux 原生 Python MCP 服务入口、Steam/Proton 连接文件发现、Bash 构建与测试、跨平台配置生成器，以及 Windows/Ubuntu CI 矩阵。支持发现普通 Steam、额外库和 Flatpak 路径；Flatpak 沙箱访问与玩法仍需单独验证。Windows 游戏和原有托管 Mod 继续在 Proton 下运行，不是原生 Linux 游戏移植。使用方法见 [Linux 指南](linux.zh-CN.md)。
+
+Linux 自动化验证：45 项 Python 测试、152 项 C# 协议／HTTP／stdio 检查和独立 wheel 帮助检查通过；使用本机 Steam Build 26525552 程序集编译 Mod，0 警告、0 错误。见 [2026-11-21 构建与协议记录](validation/2026-11-21-linux.json)。
+
+2026-11-22 已在 Linux x64 / Proton Experimental、Build 26525552、`VERSION 100-Rev13` 完成基础实机验证：Mod 启动、Linux 原生 Python MCP 认证连接、主菜单状态／控件／实体读取、真实截图、打开选项→滚动显示设置→关闭选项，以及动作状态回查通过。游戏设置确认“窗口化”；游戏关闭并重启后，新的 MCP 进程可连接到新游戏会话。长驻同一 MCP 进程的断线恢复探针未完成，不计入已验证范围。未载入存档，不据此宣称 Linux 交易、生产或完整经营流程通过。见 [2026-11-22 Linux 实机记录](validation/2026-11-22-linux.json)。
 
 ## 开始菜单和选人界面能不能控制？
 
@@ -161,4 +169,4 @@ Agent 可以通过 MCP 自己完成观察、使用工具、判断和提交。MCP
 
 默认外部服务改为 Python 3.11+，原 C# MCP 服务已移除。保留同名 11 个工具、camelCase 参数、结构化结果、图片、令牌重读、快照和 UUID 重试语义。协议仍为 2，Mod 版本仍为 0.2.7。玩家运行 Python MCP 不再需要 .NET Runtime，编译 Mod 和运行 C# 桥接集成测试仍需 .NET SDK。
 
-验证针对 Python 服务和生产 C# HTTP 桥接，游戏对象由替身提供。27 项 Python 测试、152 项跨语言集成检查及独立 wheel 帮助验证通过，见[迁移验证记录](validation/2026-11-08-python-mcp.json)。Python 服务的真实游戏验证尚未进行，之前的实机记录仍对应当时版本。启动和打包见[开发指南](development.zh-CN.md#python-环境与打包)。
+验证针对 Python 服务和生产 C# HTTP 桥接，游戏对象由替身提供。27 项 Python 测试、152 项跨语言集成检查及独立 wheel 帮助验证通过，见[迁移验证记录](validation/2026-11-08-python-mcp.json)。该迁移记录当时尚未进行 Python 服务实机验证；2026-11-22 的 Linux 基础实机结果见本文 Linux 一节，原记录保留其历史范围。启动和打包见[开发指南](development.zh-CN.md#python-环境与打包)。

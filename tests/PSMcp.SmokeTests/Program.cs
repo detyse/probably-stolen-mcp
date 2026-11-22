@@ -172,11 +172,7 @@ try
     var transport = new StdioClientTransport(new StdioClientTransportOptions
     {
         Name = "PSMcp integration test",
-        Command = "python",
-        EnvironmentVariables = new Dictionary<string, string?>
-        {
-            ["PATH"] = Path.GetDirectoryName(python) + Path.PathSeparator + Environment.GetEnvironmentVariable("PATH")
-        },
+        Command = python,
         Arguments = ["-m", "psmcp", "--connection", connectionFile]
     });
     await using var client = await McpClient.CreateAsync(transport, cancellationToken: timeout.Token);

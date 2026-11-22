@@ -11,19 +11,16 @@ from typing import Any
 
 import httpx
 
+from psmcp.paths import MOD_ID, default_connection_path  # noqa: F401 -- preserve existing imports
+
 PROTOCOL_VERSION = 2
-MOD_ID = "probably-stolen-mcp"
 MAX_CONNECTION_BYTES = 16_384
 MAX_REQUEST_BYTES = 16_384
 MAX_RESPONSE_BYTES = 4 * 1024 * 1024
 
 
-def default_connection_path() -> Path:
-    return Path.home() / "AppData/LocalLow/Questing Goose Studio/Probably Stolen/ModData" / MOD_ID / "connection.json"
-
-
 def connection_path(argument: str | None = None) -> Path:
-    return Path(argument or os.environ.get("PSMCP_CONNECTION_FILE") or default_connection_path()).resolve()
+    return Path(argument or os.environ.get("PSMCP_CONNECTION_FILE") or default_connection_path()).expanduser().resolve()
 
 
 def error(code: str, message: str, request_id: str | None = None) -> dict[str, Any]:

@@ -6,13 +6,13 @@ Probably Stolen MCP lets you ask your AI assistant what's in your shop, inspect 
 
 ## Get started
 
-You'll need the Steam version of *Probably Stolen* on Windows x64 and an AI client that supports local MCP servers.
+You'll need the Steam version of *Probably Stolen* and an AI client that supports local stdio MCP servers. Use Windows x64, or Linux x64 with the Windows game running through Steam Proton. The Python MCP server runs natively on the host. **Both platforms use the same Mod ZIP and version.** See the [Linux guide](docs/linux.md) for Proton setup, custom prefixes, and source builds.
 
 ### 1. Install the Mod
 
-1. [Download the mod ZIP](https://github.com/detyse/probably-stolen-mcp/releases/download/v0.2.7/probably-stolen-mcp-0.2.7-mod.zip) and open it.
+1. [Download the mod ZIP](https://github.com/detyse/probably-stolen-mcp/releases/download/v0.2.8/probably-stolen-mcp-0.2.8-mod.zip) and open it.
 2. Close the game. In your Steam library, right-click *Probably Stolen* and choose **Manage → Browse local files**.
-3. Copy the **Mods** folder from the ZIP into the game folder. If you're updating, replace the files when Windows asks.
+3. Copy the **Mods** folder from the ZIP into the game folder. If you're updating, replace the previous Mod files.
 4. Start the game, enable **Probably Stolen MCP** in the **Mods** menu, and accept the network permission so your AI client can connect. Restart the game.
 
 Upgrading from PawnPilot? Follow the [migration steps](docs/usage-guide.md#3-install-the-mod).
@@ -20,12 +20,22 @@ Upgrading from PawnPilot? Follow the [migration steps](docs/usage-guide.md#3-ins
 ### 2. Connect your AI client
 
 1. [Install uv](https://docs.astral.sh/uv/getting-started/installation/). It sets up Python and the required packages the first time your AI client connects.
-2. [Download the MCP server source](https://github.com/detyse/probably-stolen-mcp/archive/refs/heads/main.zip) and unzip it somewhere you can keep it. Open PowerShell in the extracted folder that contains `pyproject.toml`.
-3. Run the following command to generate the settings for your computer.
+2. [Download the matching MCP server source](https://github.com/detyse/probably-stolen-mcp/archive/refs/tags/v0.2.8.zip) and unzip it somewhere you can keep it. Open a terminal in the extracted folder containing `pyproject.toml`.
+3. Generate the settings for your computer.
+
+   **Windows (PowerShell):**
 
    ```powershell
    .\scripts\Configure-Mcp.ps1
    ```
+
+   **Linux:**
+
+   ```bash
+   python3 scripts/Configure-Mcp.py
+   ```
+
+   Linux automatically finds the game's Proton connection file in common Steam roots and configured extra libraries, including Flatpak paths. For a custom location, pass `--connection /absolute/path/to/connection.json` to the Python script.
 
 4. Open the generated `artifacts/mcp-config.json`. In your client's MCP settings, add the `probably-stolen-mcp` entry under `mcpServers`. If the client uses a form, choose **stdio** (local command) and copy the `command` and `args` values.
 5. Refresh the client's MCP connections or restart the client. Keep the server folder where it is. If you move it, run the script again and update the client settings.
@@ -38,7 +48,14 @@ Load a save and try this question.
 
 Once your assistant can see the shop, you can ask it to take an action, such as opening for business. The game may save those changes, so use a test save for your first session. See the [business-day walkthrough](docs/usage-guide.md#6-complete-a-business-day) for a longer example.
 
-Version 0.2.7 is experimental. See [tested features](docs/capabilities.md) for gameplay coverage by version.
+Version 0.2.8 is experimental. The recorded Linux/Proton smoke test covers Mod loading, authenticated connection, main-menu state and screenshots, opening/scrolling/closing options, action-status queries, and a fresh connection after restarting the game. In-save trading, production, and complete business days have not been tested on Linux. See [tested features](docs/capabilities.md) and the [live test record](docs/validation/2026-11-22-linux.json) for the exact build and scope.
+
+## New in 0.2.8
+
+- Native Linux MCP with Steam/Proton connection discovery and explicit connection-file overrides.
+- Linux configuration, build, and test scripts, plus Windows/Ubuntu CI coverage.
+- `bash scripts/Run-Game.sh` launches Steam with windowed-mode arguments for local testing; the game's saved resolution may override the requested size.
+- One shared Mod package; bridge protocol 2 and the 11 MCP tools are unchanged.
 
 ## Building an agent
 

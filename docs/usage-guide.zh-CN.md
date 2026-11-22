@@ -2,7 +2,7 @@
 
 [English](usage-guide.md) · [项目首页](../README.zh-CN.md) · [能力与实测记录](capabilities.md)
 
-适用版本：**0.2.7 开发版 / 桥接协议 2**，Windows x64。本项目让你自己的 AI 客户端操作《Probably Stolen》；模型、模型账号和推理由客户端提供。
+适用版本：**0.2.8 / 桥接协议 2**，本页步骤面向 Windows x64。Linux / Steam Proton 实验支持见 [Linux 指南](linux.zh-CN.md)。本项目让你自己的 AI 客户端操作《Probably Stolen》；模型、模型账号和推理由客户端提供。
 
 这是实验性 Mod。已有经营、展示柜、电话与升级、举报、拾荒、整理和垃圾桶的实机记录；记录来自迁移前构建。0.2.6 更名包已通过 9 个可开局职业与对应物品操作，见[职业实测报告](profession-tests.zh-CN.md)。0.2.7 补充[跨夜生产验证](overnight-tests.zh-CN.md)。完整经营日、完整鉴定和全部夜间地点仍未在更名包全面验收。具体以[能力清单](capabilities.md)为准。
 
@@ -17,11 +17,11 @@
 
 客户端需要能启动本地进程，并访问游戏的连接文件。
 
-本项目使用游戏自带的 Mod 加载器。已有实机记录的基线为 Steam Build **26496118**、画面版本 **VERSION 100-Rev12**。0.2.7 发布包使用 Build **26525552** 的程序集编译；编译成功不能证明已在这个新版游戏中完成实测。
+本项目使用游戏自带的 Mod 加载器。已有实机记录的基线为 Steam Build **26496118**、画面版本 **VERSION 100-Rev12**。Build **26525552**、画面版本 **VERSION 100-Rev13** 另有 Linux／Proton 主菜单连接、截图和菜单动作实测。记录使用的是 0.2.8 版本号调整前的 Linux 支持开发构建，不代表完整玩法或最终发布二进制已验收，见 [Linux 实机记录](validation/2026-11-22-linux.json)。
 
 ## 2. 获取安装文件
 
-从 [Releases](https://github.com/detyse/probably-stolen-mcp/releases/tag/v0.2.7) 下载 `probably-stolen-mcp-0.2.7-mod.zip`。ZIP 仅含 `Mods/probably-stolen-mcp/` 目录及三个已编译 Mod 文件，直接解压到游戏安装目录即可，无需 .NET SDK。
+从 [Releases](https://github.com/detyse/probably-stolen-mcp/releases/tag/v0.2.8) 下载 `probably-stolen-mcp-0.2.8-mod.zip`。ZIP 仅含 `Mods/probably-stolen-mcp/` 目录及三个已编译 Mod 文件，直接解压到游戏安装目录即可，无需 .NET SDK。
 
 Python MCP 服务另行克隆或下载本仓库到固定目录。将 uv 加入 PATH 后，在仓库根目录运行 `./scripts/Configure-Mcp.ps1` 生成 `artifacts/mcp-config.json`；首次启动 MCP 时会联网准备 Python 和依赖。使用预编译 Mod 可跳过 .NET 构建步骤。如需自行编译 Mod，请参考[开发指南](development.zh-CN.md#从源码构建)；源码构建会生成以下文件：
 
