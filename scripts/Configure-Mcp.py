@@ -5,6 +5,7 @@ import argparse
 import json
 import os
 import shutil
+import sys
 from pathlib import Path
 
 
@@ -35,6 +36,8 @@ def main() -> None:
     output = root / "artifacts/mcp-config.json"
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps({"mcpServers": {"probably-stolen-mcp": entry}}, indent=2) + "\n", encoding="utf-8")
+    # Redirected Windows output may use a legacy encoding that cannot show this path.
+    sys.stdout.reconfigure(errors="backslashreplace")
     print(f"MCP client config: {output}")
 
 

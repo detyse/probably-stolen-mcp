@@ -30,10 +30,14 @@ def configuration(tmp_path, monkeypatch):
 
 
 @pytest.mark.integration
-def test_configure_uses_absolute_paths_and_preserves_prefix(configuration, tmp_path, monkeypatch):
+@pytest.mark.parametrize("output_encoding", ["utf-8", "cp1252"])
+def test_configure_uses_absolute_paths_and_preserves_prefix(configuration, tmp_path, monkeypatch, output_encoding):
     root, script, uv = configuration
     monkeypatch.setenv("STEAM_COMPAT_DATA_PATH", str(tmp_path / "custom prefix"))
-    subprocess.run([sys.executable, str(script)], cwd=tmp_path, check=True, capture_output=True)
+    monkeypatch.setenv("PYTHONIOENCODING", output_encoding)
+    result = subprocess.run([sys.executable, str(script)], cwd=tmp_path, capture_output=True)
+    assert result.returncode == 0, result.stderr.decode("utf-8", errors="replace")
+    assert "MCP client config:" in result.stdout.decode(output_encoding)
     entry = json.loads((root / "artifacts/mcp-config.json").read_text())["mcpServers"]["probably-stolen-mcp"]
     assert Path(entry["command"]) == uv
     assert entry["args"] == ["--directory", str(root), "run", "--locked", "--no-dev", "probably-stolen-mcp"]
@@ -45,7 +49,8 @@ def test_configure_connection_overrides_environment(configuration, tmp_path, mon
     root, script, _ = configuration
     monkeypatch.setenv("PSMCP_CONNECTION_FILE", str(tmp_path / "env.json"))
     explicit = tmp_path / "explicit connection.json"
-    subprocess.run([sys.executable, str(script), "--connection", str(explicit)], check=True, capture_output=True)
+    result = subprocess.run([sys.executable, str(script), "--connection", str(explicit)], capture_output=True)
+    assert result.returncode == 0, result.stderr.decode("utf-8", errors="replace")
     entry = json.loads((root / "artifacts/mcp-config.json").read_text())["mcpServers"]["probably-stolen-mcp"]
     assert entry["args"][-2:] == ["--connection", str(explicit)]
     assert "env" not in entry
